@@ -61,3 +61,17 @@ body {
 .min-h-screen {
   min-height: 100vh;
 }
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Navbar styles */
+.navbar-link {
+  transition: all 0.2s ease;
+}
+
+.navbar-link:hover {
+  transform: translateY(-1px);
+}

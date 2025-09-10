@@ -1,0 +1,159 @@
+"use client";
+
+import { Group, Anchor, Text, Container, Box, Burger, Drawer, Stack } from "@mantine/core";
+import { IconHome, IconArticle, IconAddressBook } from "@tabler/icons-react";
+import { useState } from "react";
+
+export default function Navbar() {
+  const [opened, setOpened] = useState(false);
+
+  const navItems = [
+    {
+      href: "#home",
+      icon: IconHome,
+      label: "Home",
+    },
+    {
+      href: "#blog",
+      icon: IconArticle,
+      label: "Blog",
+    },
+    {
+      href: "#contact",
+      icon: IconAddressBook,
+      label: "Contact",
+    },
+  ];
+
+  const NavLinks = () => (
+    <Group gap={32}>
+      {navItems.map((item) => {
+        const IconComponent = item.icon;
+        return (
+          <Anchor
+            key={item.href}
+            href={item.href}
+            c="var(--mantine-color-gray-7)"
+            style={{ 
+              textDecoration: "none", 
+              fontWeight: 500,
+              transition: "color 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "var(--mantine-color-blue-6)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "var(--mantine-color-gray-7)";
+            }}
+          >
+            <Group gap={8}>
+              <IconComponent size={18} />
+              <Text>{item.label}</Text>
+            </Group>
+          </Anchor>
+        );
+      })}
+    </Group>
+  );
+
+  return (
+    <>
+      {/* Desktop Navbar */}
+      <Box
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(10px)",
+          borderBottom: "1px solid var(--mantine-color-gray-2)",
+          padding: "16px 0",
+        }}
+      >
+        <Container size="xl">
+          <Group justify="space-between" align="center">
+            {/* Logo */}
+            <Text
+              size="xl"
+              fw={700}
+              c="var(--mantine-color-blue-6)"
+              style={{ cursor: "pointer" }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              Fabrice
+            </Text>
+
+            {/* Desktop Navigation */}
+            <Box style={{ display: "flex" }} visibleFrom="md">
+              <NavLinks />
+            </Box>
+
+            {/* Mobile Burger Menu */}
+            <Box hiddenFrom="md">
+              <Burger
+                opened={opened}
+                onClick={() => setOpened(true)}
+                size="sm"
+                color="var(--mantine-color-gray-7)"
+              />
+            </Box>
+          </Group>
+        </Container>
+      </Box>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title="Navigation"
+        position="right"
+        size="sm"
+        styles={{
+          content: {
+            backgroundColor: "var(--mantine-color-gray-0)",
+          },
+          header: {
+            backgroundColor: "var(--mantine-color-gray-0)",
+            borderBottom: "1px solid var(--mantine-color-gray-2)",
+          },
+        }}
+      >
+        <Stack gap="lg" mt="xl">
+          {navItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <Anchor
+                key={item.href}
+                href={item.href}
+                c="var(--mantine-color-gray-7)"
+                style={{ 
+                  textDecoration: "none", 
+                  fontWeight: 500,
+                  padding: "12px 16px",
+                  borderRadius: "8px",
+                  transition: "all 0.2s ease",
+                }}
+                onClick={() => setOpened(false)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "var(--mantine-color-gray-1)";
+                  e.currentTarget.style.color = "var(--mantine-color-blue-6)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "var(--mantine-color-gray-7)";
+                }}
+              >
+                <Group gap={12}>
+                  <IconComponent size={20} />
+                  <Text size="lg">{item.label}</Text>
+                </Group>
+              </Anchor>
+            );
+          })}
+        </Stack>
+      </Drawer>
+    </>
+  );
+}

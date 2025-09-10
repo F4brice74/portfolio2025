@@ -14,7 +14,7 @@ export default function Portfolio() {
   return (
     <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)" }}>
       {/* Hero Section */}
-      <Container size="xl" py={80}>
+      <Container id="home" size="xl" py={80} style={{ paddingTop: "120px" }}>
         <Flex direction={{ base: "column", md: "row" }} gap={48} align="center">
           {/* Photo */}
           <Box style={{ flexShrink: 0 }}>
@@ -70,7 +70,7 @@ export default function Portfolio() {
       </Container>
 
       {/* Parcours Professionnel */}
-      <Box py={80} style={{ backgroundColor: "var(--mantine-color-gray-1)" }}>
+      <Box id="blog" py={80} style={{ backgroundColor: "var(--mantine-color-gray-1)" }}>
         <Container size="xl">
           <Stack align="center" gap={48}>
             <Stack align="center" gap={16}>
@@ -282,7 +282,7 @@ export default function Portfolio() {
       </Box>
 
       {/* Footer */}
-      <Box py={48} style={{ backgroundColor: "var(--mantine-color-gray-0)", borderTop: "1px solid var(--mantine-color-gray-3)" }}>
+      <Box id="contact" py={48} style={{ backgroundColor: "var(--mantine-color-gray-0)", borderTop: "1px solid var(--mantine-color-gray-3)" }}>
         <Container size="xl">
           <Flex direction={{ base: "column", md: "row" }} justify="space-between" align="center" gap={24}>
             <Text c="var(--mantine-color-gray-6)" ta={{ base: "center", md: "left" }}>
