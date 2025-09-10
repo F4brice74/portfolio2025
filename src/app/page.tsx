@@ -29,8 +29,8 @@ export default function Portfolio() {
               }}
             >
               <Image
-                src="/placeholder-avatar.svg"
-                alt="Portrait professionnel"
+                src="/MIQUET-SAGE-001-min.png"
+                alt="Fabrice MIQUET-SAGE - Développeur Fullstack"
                 width={320}
                 height={320}
                 fit="cover"
@@ -41,8 +41,8 @@ export default function Portfolio() {
           {/* Introduction */}
           <Stack gap={24} style={{ flex: 1 }}>
             <Stack gap={8}>
-              <Title order={1} size={48} c="var(--mantine-color-gray-9)">
-                Fabrice
+              <Title order={1} size={45} c="var(--mantine-color-gray-9)">
+                Fabrice MIQUET-SAGE
               </Title>
               <Title order={2} size={24} c="var(--mantine-color-blue-6)" fw={500}>
                 Développeur Fullstack TypeScript
@@ -51,18 +51,18 @@ export default function Portfolio() {
 
             <Stack gap={16} c="var(--mantine-color-gray-6)" style={{ lineHeight: 1.6 }}>
               <Text>
-                Passionné par le développement web moderne, je conçois et développe des applications robustes avec
+                Passionné par le développement web moderne, je conçois et développe des applications robustes avec entre autres
                 TypeScript, React et Node.js. Mon approche combine expertise technique et vision stratégique pour livrer
                 des solutions qui répondent aux besoins métier.
               </Text>
               <Text>
-                Fort de plusieurs années d'expérience en gestion de projet, j'accompagne les équipes dans la mise en
-                œuvre de méthodologies agiles et la livraison de produits de qualité. Je privilégie la communication
-                claire, la documentation précise et les bonnes pratiques de développement.
+                Fort de plusieurs années d'expérience en gestion de projet, je m'attache à comprendre les enjeux, les besoins, et les spécificités métiers.
+                J'aime communiquer, exposer des idées, partager en équipe, dans un environnement agile. 
               </Text>
               <Text>
-                Mon objectif : transformer vos idées en applications performantes, maintenables et évolutives, tout en
-                respectant les délais et les contraintes techniques.
+                Mon objectif : Comprendre vos besoins, proposer une solution adaptée et transformer vos idées en applications performantes, maintenables et évolutives, tout en
+                respectant les délais et les contraintes techniques. Je suis volontairement curieux, j'aime apprendre mais surtout j'aime comprendre ce que je fais et pour qui je le fais. 
+                J'accepte volontiers les responsabilités au sein d'une équipe, j'apprécie le contact client, et les échanges entre collègues et services.
               </Text>
             </Stack>
           </Stack>

@@ -82,7 +82,7 @@ export default function Navbar() {
               style={{ cursor: "pointer" }}
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
-              Fabrice
+              Fabrice MIQUET-SAGE
             </Text>
 
             {/* Desktop Navigation */}
