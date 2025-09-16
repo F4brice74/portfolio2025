@@ -33,7 +33,7 @@ export default function HeroSection() {
                             Fabrice MIQUET-SAGE
                         </Title>
                         <Title order={2} size={24} c="var(--mantine-color-blue-6)" fw={500}>
-                            Catalyseur de projets digitaux
+                            Développeur Fullstack - Catalyseur de projets digitaux 
                         </Title>
                     </Stack>
 
@@ -42,13 +42,14 @@ export default function HeroSection() {
                             Transformer vos défis métier en solutions digitales sur mesure
                         </Title>
                         <Text>
-                            Passionné par la résolution de problématiques, je me positionne comme un catalyseur de solutions qui maîtrise l'ensemble de la chaîne de valeur projet : de l'analyse des besoins à la mise en production, en passant par la conception UX/UI et le développement technique.
+                            Passionné par la résolution de problématiques, je me positionne comme un catalyseur de solutions sur l'ensemble de la chaîne de valeur projet : de l'analyse des besoins à la mise en production, en passant par la conception UX/UI et le développement technique.
+                            Développeur Fullstack, je maîtrise les technologies modernes pour créer des solutions robustes, évolutives et parfaitement adaptées à vos utilisateurs.
                         </Text>
                         <Title order={3} size={24}>
                             Mon ADN : La vision globale au service de vos projets
                         </Title>
                         <Text>
-                            Ce qui me motive, c'est l'effervescence créative des échanges inter-équipes, les sessions de brainstorming avec les clients, et cette alchimie particulière qui naît de la collaboration pour élaborer des solutions innovantes. J'adore ces moments où une idée germe, se nourrit des expertises de chacun, puis prend vie pour devenir une solution concrète et performante. Je peux orchestrer ces dynamiques collaboratives en appréhendant chaque projet sous tous ses angles : technique, fonctionnel, humain et business.
+                            Ce qui me motive, c'est l'effervescence créative des échanges inter-équipes, les sessions de brainstorming avec les clients, et cette alchimie particulière qui naît de la collaboration pour élaborer des solutions innovantes. J'adore ces moments où une idée germe, se nourrit des expertises de chacun, puis prend vie pour devenir une solution concrète. Je peux orchestrer ces dynamiques collaboratives en appréhendant chaque projet sous tous ses angles : technique, fonctionnel, humain et business.
                         </Text>
                         <Title order={3} size={24}>
                             Mon engagement
