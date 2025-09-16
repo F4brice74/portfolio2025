@@ -11,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Fabrice Portfolio | Developer & Engineer",
-  description: "Portfolio and blog of Fabrice - Full Stack Developer & Engineer",
+  title: "Fabrice MIQUET-SAGE | Developpeur & Catalyseur de projets digitaux",
+  description: "Portfolio et blog de Fabrice MIQUET-SAGE - FullStack Developpeur & Catalyseur de projets digitaux",
 };
 
 export default function RootLayout({
