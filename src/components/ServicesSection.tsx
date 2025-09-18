@@ -117,22 +117,23 @@ export default function ServicesSection() {
                                 </Text>
                                 <Text fw={400} c="var(--mantine-color-gray-9)" style={{ lineHeight: 1.6 }}>
                                     Alors que l'IA révolutionne la génération de code, notre métier se transforme et nous ne pouvons plus être simplement des codeurs. L'IA s'en chargera bientôt à 100%. C'est pourquoi je me définis plutôt comme un délivreur de solutions plus qu'un développeur, avec une appétence pour la gestion de projet et la relation client, les enjeux UX/UI et marketing. Ma différenciation réside dans ma capacité à :
-                                    <div style={{ paddingTop: 12, marginLeft: 50 }}>
-
-                                        <li>
-                                            Comprendre et analyser les véritables enjeux métier
-                                        </li>
-                                        <li>
-                                            Orchestrer les projets de bout en bout avec une vision 360°
-                                        </li>
-                                        <li>
-                                            Communiquer efficacement avec tous les stakeholders
-                                        </li>
-                                        <li>
-                                            Garantir la cohérence entre besoins business et réalisation technique
-                                        </li>
-                                    </div>
                                 </Text>
+                                <ul style={{ paddingTop: 12, marginLeft: 50 }}>
+
+                                    <li>
+                                        Comprendre et analyser les véritables enjeux métier
+                                    </li>
+                                    <li>
+                                        Orchestrer les projets de bout en bout avec une vision 360°
+                                    </li>
+                                    <li>
+                                        Communiquer efficacement avec tous les stakeholders
+                                    </li>
+                                    <li>
+                                        Garantir la cohérence entre besoins business et réalisation technique
+                                    </li>
+                                </ul>
+
                             </MantineBox>
                         </Stack>
                     </Card>

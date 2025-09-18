@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { MantineProvider, ColorSchemeScript } from '@mantine/core';
+import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import Navbar from '@/components/Navbar';
 
@@ -21,12 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-mantine-color-scheme="light">
       <head>
-        <ColorSchemeScript />
       </head>
-      <body className={inter.variable}>
-        <MantineProvider>
+      <body className={inter.variable} suppressHydrationWarning>
+        <MantineProvider defaultColorScheme="light">
           <Navbar />
           {children}
         </MantineProvider>

@@ -3,18 +3,19 @@
 import { Group, Anchor, Text, Container, Box, Burger, Drawer, Stack } from "@mantine/core";
 import { IconHome, IconArticle, IconAddressBook } from "@tabler/icons-react";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Navbar() {
   const [opened, setOpened] = useState(false);
 
   const navItems = [
     {
-      href: "#home",
+      href: "/",
       icon: IconHome,
       label: "Home",
     },
     {
-      href: "#blog",
+      href: "/blog",
       icon: IconArticle,
       label: "Blog",
     },
@@ -30,14 +31,14 @@ export default function Navbar() {
       {navItems.map((item) => {
         const IconComponent = item.icon;
         return (
-          <Anchor
+          <Link
             key={item.href}
             href={item.href}
-            c="var(--mantine-color-gray-7)"
-            style={{ 
-              textDecoration: "none", 
+            style={{
+              textDecoration: "none",
               fontWeight: 500,
               transition: "color 0.2s ease",
+              color: "var(--mantine-color-gray-7)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "var(--mantine-color-blue-6)";
@@ -50,7 +51,7 @@ export default function Navbar() {
               <IconComponent size={18} />
               <Text>{item.label}</Text>
             </Group>
-          </Anchor>
+          </Link>
         );
       })}
     </Group>
@@ -124,16 +125,16 @@ export default function Navbar() {
           {navItems.map((item) => {
             const IconComponent = item.icon;
             return (
-              <Anchor
+              <Link
                 key={item.href}
                 href={item.href}
-                c="var(--mantine-color-gray-7)"
-                style={{ 
-                  textDecoration: "none", 
+                style={{
+                  textDecoration: "none",
                   fontWeight: 500,
                   padding: "12px 16px",
                   borderRadius: "8px",
                   transition: "all 0.2s ease",
+                  color: "var(--mantine-color-gray-7)",
                 }}
                 onClick={() => setOpened(false)}
                 onMouseEnter={(e) => {
@@ -149,7 +150,7 @@ export default function Navbar() {
                   <IconComponent size={20} />
                   <Text size="lg">{item.label}</Text>
                 </Group>
-              </Anchor>
+              </Link>
             );
           })}
         </Stack>
