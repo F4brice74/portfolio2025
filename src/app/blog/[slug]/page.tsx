@@ -1,17 +1,17 @@
 import { Box, Container, Title, Text, Group, Badge, Divider, Stack, Breadcrumbs, Anchor, Button } from "@mantine/core"
 import { IconCalendar, IconClock, IconUser, IconArrowLeft, IconHome } from "@tabler/icons-react"
 import Link from "next/link"
-import { notFound } from "next/navigation"
 import { getArticleBySlug, getArticles } from "@/lib/articles"
 
 interface BlogPostPageProps {
-    params: {
+    params: Promise<{
         slug: string
-    }
+    }>
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-    const article = await getArticleBySlug(params.slug)
+    const resolvedParams = await params
+    const article = await getArticleBySlug(resolvedParams.slug)
 
     if (!article) {
         return (
@@ -194,7 +194,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
 // Génération des métadonnées pour le SEO
 export async function generateMetadata({ params }: BlogPostPageProps) {
-    const article = await getArticleBySlug(params.slug)
+    const resolvedParams = await params
+    const article = await getArticleBySlug(resolvedParams.slug)
 
     if (!article) {
         return {

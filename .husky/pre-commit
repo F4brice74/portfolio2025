@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Vérifications avant commit
+echo "🔍 Vérification du code avant commit..."
+
+# Vérification TypeScript
+echo "📝 Vérification TypeScript..."
+pnpm run type-check
+if [ $? -ne 0 ]; then
+  echo "❌ Erreurs TypeScript détectées. Commit annulé."
+  exit 1
+fi
+
+# Vérification ESLint
+echo "🔧 Vérification ESLint..."
+pnpm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ Erreurs ESLint détectées. Commit annulé."
+  exit 1
+fi
+
+# # Tests e2e (optionnel - peut être commenté si trop long)
+# echo "🧪 Exécution des tests e2e..."
+# pnpm run test:e2e
+# if [ $? -ne 0 ]; then
+#   echo "❌ Tests e2e échoués. Commit annulé."
+#   exit 1
+# fi
+
+echo "✅ Toutes les vérifications sont passées. Commit autorisé."

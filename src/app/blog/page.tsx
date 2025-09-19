@@ -1,17 +1,18 @@
-import { Box, Container, Title, Text, SimpleGrid, Pagination, Center, Loader, Group } from "@mantine/core"
+import { Box, Container, Title, Text, SimpleGrid, Center, Loader, Group } from "@mantine/core"
 import { Suspense } from "react"
 import ArticleCard from "@/components/ArticleCard"
 import { getArticlesPaginated } from "@/lib/articles"
 import BlogPagination from "@/components/BlogPagination"
 
 interface BlogPageProps {
-    searchParams: {
+    searchParams: Promise<{
         page?: string
-    }
+    }>
 }
 
-export default function BlogPage({ searchParams }: BlogPageProps) {
-    const currentPage = parseInt(searchParams.page || '1', 10)
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+    const resolvedSearchParams = await searchParams
+    const currentPage = parseInt(resolvedSearchParams.page || '1', 10)
 
     return (
         <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)", paddingTop: 80 }}>
@@ -30,7 +31,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
                         <Loader size="lg" />
                     </Center>
                 }>
-                    <BlogContent currentPage={currentPage} />
+                    {await BlogContent({ currentPage })}
                 </Suspense>
             </Container>
         </Box>

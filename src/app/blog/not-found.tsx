@@ -1,5 +1,5 @@
 import { Box, Container, Title, Text, Button, Group } from "@mantine/core"
-import { ArrowLeft, Home } from "@tabler/icons-react"
+import { IconHome } from "@tabler/icons-react"
 import Link from "next/link"
 
 export default function BlogNotFound() {
@@ -21,7 +21,7 @@ export default function BlogNotFound() {
                         <Button
                             component={Link}
                             href="/"
-                            leftSection={<Home size={16} />}
+                            leftSection={<IconHome size={16} />}
                         >
                             Retour à l'accueil
                         </Button>
