@@ -3,7 +3,7 @@ import { IconCalendar, IconClock, IconUser, IconArrowLeft, IconHome } from "@tab
 import Link from "next/link"
 import { getArticleBySlug, getArticles } from "@/lib/articles"
 
-interface BlogPostPageProps {
+type BlogPostPageProps = {
     params: Promise<{
         slug: string
     }>
