@@ -2,6 +2,7 @@ import { Box, Container, Title, Text, SimpleGrid, Pagination, Center, Loader, Gr
 import { Suspense } from "react"
 import ArticleCard from "@/components/ArticleCard"
 import { getArticlesPaginated } from "@/lib/articles"
+import BlogPagination from "@/components/BlogPagination"
 
 interface BlogPageProps {
     searchParams: {
@@ -13,7 +14,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
     const currentPage = parseInt(searchParams.page || '1', 10)
 
     return (
-        <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)" }}>
+        <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)", paddingTop: 80 }}>
             <Container size="lg" py="xl">
                 <Box mb="xl">
                     <Title order={1} ta="center" mb="md">
@@ -63,21 +64,10 @@ async function BlogContent({ currentPage }: { currentPage: number }) {
             )}
 
             {totalPages > 1 && (
-                <>
-                    <Center mt="xl">
-                        <Pagination
-                            total={totalPages}
-                            value={currentPage}
-                            styles={{
-                                control: {
-                                    '&[dataActive]': {
-                                        backgroundColor: 'var(--mantine-color-blue-6)',
-                                    },
-                                },
-                            }}
-                        />
-                    </Center>
-                </>
+                <BlogPagination
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                />
             )}
         </>
     )
