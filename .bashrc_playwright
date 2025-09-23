@@ -1,0 +1,4 @@
+# Alias pour Playwright - à ajouter dans votre ~/.bashrc
+alias playwright-setup="cd /home/fab/perso/portfolio2025 && pnpm exec playwright install --with-deps"
+alias playwright-test="cd /home/fab/perso/portfolio2025 && pnpm test:e2e"
+alias playwright-ui="cd /home/fab/perso/portfolio2025 && pnpm test:e2e:ui"

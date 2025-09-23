@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { ClerkProvider } from '@clerk/nextjs';
 import Navbar from '@/components/Navbar';
 
 const inter = Inter({
@@ -21,15 +22,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-mantine-color-scheme="light">
-      <head>
-      </head>
-      <body className={inter.variable} suppressHydrationWarning>
-        <MantineProvider defaultColorScheme="light">
-          <Navbar />
-          {children}
-        </MantineProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" data-mantine-color-scheme="light">
+        <head>
+        </head>
+        <body className={inter.variable} suppressHydrationWarning>
+          <MantineProvider defaultColorScheme="light">
+            <Navbar />
+            {children}
+          </MantineProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
