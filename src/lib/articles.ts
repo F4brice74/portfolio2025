@@ -661,16 +661,32 @@ export async function getArticles(): Promise<Article[]> {
   )
 }
 
-// Fonction pour récupérer les articles avec pagination
-export async function getArticlesPaginated(page: number = 1, limit: number = 6): Promise<{
+// Fonction pour récupérer les articles avec pagination et filtrage par catégorie
+export async function getArticlesPaginated(
+  page: number = 1, 
+  limit: number = 6, 
+  categorySlug?: string
+): Promise<{
   articles: Article[]
   totalPages: number
   currentPage: number
   totalArticles: number
+  filteredByCategory?: string
 }> {
   await new Promise(resolve => setTimeout(resolve, 100))
   
-  const sortedArticles = mockArticles.sort((a, b) => 
+  let filteredArticles = mockArticles
+  
+  // Filtrer par catégorie si spécifiée
+  if (categorySlug) {
+    const category = mockCategories.find(cat => cat.slug === categorySlug)
+    if (category) {
+      filteredArticles = mockArticles.filter(article => article.category === category.name)
+    }
+  }
+  
+  // Trier par date de publication (plus récent en premier)
+  const sortedArticles = filteredArticles.sort((a, b) => 
     new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   )
   
@@ -684,7 +700,8 @@ export async function getArticlesPaginated(page: number = 1, limit: number = 6):
     articles,
     totalPages,
     currentPage: page,
-    totalArticles
+    totalArticles,
+    filteredByCategory: categorySlug
   }
 }
 
