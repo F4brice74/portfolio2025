@@ -22,15 +22,17 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             Fabrice MIQUET-SAGE
           </Title>
           <Title order={2} size={20} c="var(--mantine-color-blue-6)" fw={500}>
-            Développeur Fullstack - Catalyseur de projets digitaux
+            Développeur Fullstack - Catalyseur de projets
           </Title>
         </Box>
         <Box mb="xl">
-          <Text c="var(--mantine-color-gray-8)">
+          <Text c="var(--mantine-color-gray-8)" mb="md">
             Fort de 15 ans d'expérience en gestion de projet dans  l'audiovisuel, l'événementiel et la communication, complétés par 5 années de développement fullstack, j'ai développé une approche centrée sur les besoins clients et métiers.
-            <br />Ce qui me motive ? Partir d'une feuille blanche, identifier les vrais enjeux, orchestrer les équipes et voir naître des projets qui ont du sens.<br /> À l'heure où l'IA révolutionne le code, ma valeur ajoutée réside dans ma capacité à comprendre, structurer et piloter des projets, de la conception à la livraison.<br />
-            Actuellement dans le développement logiciel chez un leader mondial de l'aéronautique, je cultive une curiosité insatiable pour tout ce qui nous entoure : nouvelles technologies, enjeux sociétaux, environnement, cuisine, musique, politique... Cette ouverture d'esprit nourrit ma créativité et enrichit mon approche projet.<br />
-            Vous trouverez ci-dessous une collection d'articles sans prétention, issus de mes expériences, réflexions et découvertes. Des retours d'expérience techniques aux réflexions sur l'innovation, en passant par des sujets de société qui me tiennent à cœur, ces écrits reflètent ma vision du monde et ma façon d'aborder les défis du quotidien.
+            <br />Ce qui me motive ? Partir d'une feuille blanche, identifier les vrais enjeux, orchestrer les équipes et voir naître des projets qui ont du sens.</Text>
+          <Text c="var(--mantine-color-gray-8)" mb="md"> À l'heure où l'IA révolutionne le code, ma valeur ajoutée réside dans ma capacité à comprendre, structurer et piloter des projets, de la conception à la livraison. Actuellement dans le développement logiciel chez un leader mondial de l'aéronautique, je cultive une curiosité insatiable pour tout ce qui nous entoure : nouvelles technologies, enjeux sociétaux, environnement, cuisine, musique, politique... Cette ouverture d'esprit nourrit ma créativité et enrichit mon approche projet.
+          </Text>
+          <Text c="var(--mantine-color-gray-8)" mb="md">
+            Vous trouverez ci-dessous une collection d'articles, des liens vers des projets, issus de mes expériences, réflexions et découvertes.
           </Text>
         </Box>
         <Suspense fallback={

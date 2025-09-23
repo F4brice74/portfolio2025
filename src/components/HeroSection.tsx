@@ -18,7 +18,7 @@ export default function HeroSection() {
                     >
                         <Image
                             src="/MIQUET-SAGE-001-min.png"
-                            alt="Fabrice MIQUET-SAGE - Catalyseur de projets digitaux"
+                            alt="Fabrice MIQUET-SAGE - Catalyseur de projets"
                             width={320}
                             height={380}
                             fit="cover"
