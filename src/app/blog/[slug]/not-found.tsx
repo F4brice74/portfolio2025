@@ -20,11 +20,11 @@ export default function NotFound() {
                     <Group justify="center" gap="md">
                         <Button
                             component={Link}
-                            href="/blog"
+                            href="/"
                             leftSection={<IconArrowLeft size={16} />}
                             variant="outline"
                         >
-                            Retour au blog
+                            Retour à l'accueil
                         </Button>
                         <Button
                             component={Link}

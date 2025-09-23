@@ -1,7 +1,7 @@
 "use client";
 
 import { Group, Anchor, Text, Container, Box, Burger, Drawer, Stack } from "@mantine/core";
-import { IconHome, IconArticle, IconAddressBook } from "@tabler/icons-react";
+import { IconArticle, IconAddressBook } from "@tabler/icons-react";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -11,16 +11,11 @@ export default function Navbar() {
   const navItems = [
     {
       href: "/",
-      icon: IconHome,
-      label: "Home",
-    },
-    {
-      href: "/blog",
       icon: IconArticle,
-      label: "Blog",
+      label: "Accueil",
     },
     {
-      href: "#contact",
+      href: "/contact",
       icon: IconAddressBook,
       label: "Contact",
     },

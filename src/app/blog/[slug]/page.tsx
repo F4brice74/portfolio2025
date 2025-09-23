@@ -30,11 +30,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         <Group justify="center" gap="md">
                             <Button
                                 component={Link}
-                                href="/blog"
+                                href="/"
                                 leftSection={<IconArrowLeft size={16} />}
                                 variant="outline"
                             >
-                                Retour au blog
+                                Retour à l'accueil
                             </Button>
                             <Button
                                 component={Link}
@@ -67,7 +67,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
     const breadcrumbs = [
         { title: 'Accueil', href: '/' },
-        { title: 'Blog', href: '/blog' },
         { title: article.title, href: '#' },
     ]
 
@@ -93,14 +92,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <Group mb="xl">
                     <Anchor
                         component={Link}
-                        href="/blog"
+                        href="/"
                         c="blue"
                         size="sm"
                         style={{ textDecoration: "none" }}
                     >
                         <Group gap={4}>
                             <IconArrowLeft size={16} />
-                            Retour au blog
+                            Retour à l'accueil
                         </Group>
                     </Anchor>
                 </Group>

@@ -1,16 +1,82 @@
-import { Box } from "@mantine/core"
-import HeroSection from "@/components/HeroSection"
-import ParcoursProfessionnel from "@/components/ParcoursProfessionnel"
-import ServicesSection from "@/components/ServicesSection"
-import Footer from "@/components/Footer"
+import { Box, Container, Title, Text, SimpleGrid, Center, Loader, Group } from "@mantine/core"
+import { Suspense } from "react"
+import ArticleCard from "@/components/ArticleCard"
+import { getArticlesPaginated } from "@/lib/articles"
+import BlogPagination from "@/components/BlogPagination"
 
-export default function Portfolio() {
+interface BlogPageProps {
+  searchParams: Promise<{
+    page?: string
+  }>
+}
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const resolvedSearchParams = await searchParams
+  const currentPage = parseInt(resolvedSearchParams.page || '1', 10)
+
   return (
-    <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)" }}>
-      <HeroSection />
-      {/* <ParcoursProfessionnel /> */}
-      <ServicesSection />
-      <Footer />
+    <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)", paddingTop: 80 }}>
+      <Container size="lg" py="xl">
+        <Box mb="xl" ta="center">
+          <Title order={1} size={35} c="var(--mantine-color-gray-9)">
+            Fabrice MIQUET-SAGE
+          </Title>
+          <Title order={2} size={20} c="var(--mantine-color-blue-6)" fw={500}>
+            Développeur Fullstack - Catalyseur de projets digitaux
+          </Title>
+        </Box>
+        <Box mb="xl">
+          <Text c="var(--mantine-color-gray-8)">
+            Fort de 15 ans d'expérience en gestion de projet dans  l'audiovisuel, l'événementiel et la communication, complétés par 5 années de développement fullstack, j'ai développé une approche centrée sur les besoins clients et métiers.
+            <br />Ce qui me motive ? Partir d'une feuille blanche, identifier les vrais enjeux, orchestrer les équipes et voir naître des projets qui ont du sens.<br /> À l'heure où l'IA révolutionne le code, ma valeur ajoutée réside dans ma capacité à comprendre, structurer et piloter des projets, de la conception à la livraison.<br />
+            Actuellement dans le développement logiciel chez un leader mondial de l'aéronautique, je cultive une curiosité insatiable pour tout ce qui nous entoure : nouvelles technologies, enjeux sociétaux, environnement, cuisine, musique, politique... Cette ouverture d'esprit nourrit ma créativité et enrichit mon approche projet.<br />
+            Vous trouverez ci-dessous une collection d'articles sans prétention, issus de mes expériences, réflexions et découvertes. Des retours d'expérience techniques aux réflexions sur l'innovation, en passant par des sujets de société qui me tiennent à cœur, ces écrits reflètent ma vision du monde et ma façon d'aborder les défis du quotidien.
+          </Text>
+        </Box>
+        <Suspense fallback={
+          <Center py="xl">
+            <Loader size="lg" />
+          </Center>
+        }>
+          {await BlogContent({ currentPage })}
+        </Suspense>
+      </Container>
     </Box>
+  )
+}
+
+async function BlogContent({ currentPage }: { currentPage: number }) {
+  const { articles, totalPages, totalArticles } = await getArticlesPaginated(currentPage, 6)
+
+  return (
+    <>
+      <Group justify="space-between" mb="md">
+        <Text size="sm" c="dimmed">
+          {totalArticles} article{totalArticles > 1 ? 's' : ''} au total
+        </Text>
+        <Text size="sm" c="dimmed">
+          Page {currentPage} sur {totalPages}
+        </Text>
+      </Group>
+
+      <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
+        {articles.map((article) => (
+          <ArticleCard key={article.id} article={article} />
+        ))}
+      </SimpleGrid>
+
+      {articles.length === 0 && (
+        <Center py="xl">
+          <Text c="dimmed">Aucun article disponible pour le moment.</Text>
+        </Center>
+      )}
+
+      {totalPages > 1 && (
+        <BlogPagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+        />
+      )}
+    </>
   )
 }

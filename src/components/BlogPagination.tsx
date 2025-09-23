@@ -26,7 +26,7 @@ export default function BlogPagination({ totalPages, currentPage }: BlogPaginati
         }
 
         const queryString = params.toString()
-        const newUrl = queryString ? `/blog?${queryString}` : '/blog'
+        const newUrl = queryString ? `/?${queryString}` : '/'
 
         router.push(newUrl)
     }
