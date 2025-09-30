@@ -1,4 +1,4 @@
-import { Container, Title, Text, Grid, Card, Group, Badge, Stack, Button } from "@mantine/core";
+import { Container, Title, Text, Grid, Card, Group, Badge, Stack, Button, GridCol } from "@mantine/core";
 import { IconArticle, IconEye, IconEdit, IconPlus, IconTrendingUp, IconSettings } from "@tabler/icons-react";
 import Link from "next/link";
 import { getArticles } from "@/lib/articles";
@@ -29,7 +29,7 @@ export default async function AdminDashboard() {
 
             {/* Stats Cards */}
             <Grid>
-                <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+                <GridCol span={{ base: 12, sm: 6, md: 3 }}>
                     <Card shadow="sm" padding="lg" radius="md" withBorder>
                         <Group justify="space-between" mb="xs">
                             <Text size="sm" fw={500} c="dimmed">
@@ -41,9 +41,9 @@ export default async function AdminDashboard() {
                             {stats.totalArticles}
                         </Text>
                     </Card>
-                </Grid.Col>
+                </GridCol>
 
-                <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+                <GridCol span={{ base: 12, sm: 6, md: 3 }}>
                     <Card shadow="sm" padding="lg" radius="md" withBorder>
                         <Group justify="space-between" mb="xs">
                             <Text size="sm" fw={500} c="dimmed">
@@ -55,9 +55,9 @@ export default async function AdminDashboard() {
                             {stats.publishedArticles}
                         </Text>
                     </Card>
-                </Grid.Col>
+                </GridCol>
 
-                <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+                <GridCol span={{ base: 12, sm: 6, md: 3 }}>
                     <Card shadow="sm" padding="lg" radius="md" withBorder>
                         <Group justify="space-between" mb="xs">
                             <Text size="sm" fw={500} c="dimmed">
@@ -69,9 +69,8 @@ export default async function AdminDashboard() {
                             {stats.draftArticles}
                         </Text>
                     </Card>
-                </Grid.Col>
-
-                <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+                </GridCol>
+                <GridCol span={{ base: 12, sm: 6, md: 3 }}>
                     <Card shadow="sm" padding="lg" radius="md" withBorder>
                         <Group justify="space-between" mb="xs">
                             <Text size="sm" fw={500} c="dimmed">
@@ -83,7 +82,7 @@ export default async function AdminDashboard() {
                             {stats.totalViews}
                         </Text>
                     </Card>
-                </Grid.Col>
+                </GridCol>
             </Grid>
 
             {/* Recent Articles */}

@@ -2,6 +2,7 @@ import { Container, Title, Text, Card, Group, Badge, Button, Table, Stack, Actio
 import { IconPlus, IconEdit, IconTrash, IconEye, IconCalendar, IconArticle } from "@tabler/icons-react";
 import Link from "next/link";
 import { getArticles } from "@/lib/articles";
+import { DeleteArticleButton } from "@/components/admin/DeleteArticleButton";
 
 export default async function AdminArticlesPage() {
     const articles = await getArticles();
@@ -107,14 +108,10 @@ export default async function AdminArticlesPage() {
                                         >
                                             <IconEdit size={16} />
                                         </ActionIcon>
-                                        <ActionIcon
-                                            variant="subtle"
-                                            color="red"
-                                            size="sm"
-                                            title="Supprimer l'article"
-                                        >
-                                            <IconTrash size={16} />
-                                        </ActionIcon>
+                                        <DeleteArticleButton
+                                            articleId={article.id}
+                                            articleTitle={article.title}
+                                        />
                                     </Group>
                                 </Table.Td>
                             </Table.Tr>
