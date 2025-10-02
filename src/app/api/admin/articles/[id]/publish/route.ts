@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { ArticleQueries } from '@/lib/db/queries';
+import { ArticleService } from '@/lib/articles';
 
 // PATCH /api/admin/articles/[id]/publish - Toggle publication status
 export async function PATCH(
@@ -25,7 +25,7 @@ export async function PATCH(
         const { published } = body;
 
         // Get current article
-        const currentArticle = await ArticleQueries.getById(articleId);
+        const currentArticle = await ArticleService.getById(articleId);
         if (!currentArticle) {
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
         }
@@ -34,11 +34,11 @@ export async function PATCH(
         const wasPublished = currentArticle.published;
         const isNowPublished = published;
 
-        const updatedArticle = await ArticleQueries.update(articleId, {
+        const updatedArticle = await ArticleService.update(articleId, {
             published: isNowPublished,
             publishedAt: isNowPublished && !wasPublished 
                 ? new Date() 
-                : (!isNowPublished ? null : currentArticle.publishedAt),
+                : (!isNowPublished ? null : (currentArticle.publishedAt ? new Date(currentArticle.publishedAt) : null)),
         });
 
         if (!updatedArticle) {

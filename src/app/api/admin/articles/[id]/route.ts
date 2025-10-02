@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { ArticleQueries, CategoryQueries } from '@/lib/db/queries';
+import { ArticleService, CategoryService } from '@/lib/articles';
 
 // GET /api/admin/articles/[id] - Get single article for editing
 export async function GET(
@@ -21,7 +21,7 @@ export async function GET(
             return NextResponse.json({ error: 'Invalid article ID' }, { status: 400 });
         }
         
-        const article = await ArticleQueries.getById(articleId);
+        const article = await ArticleService.getById(articleId);
         
         if (!article) {
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
@@ -77,22 +77,13 @@ export async function PUT(
         }
 
         // Check if article exists
-        const currentArticle = await ArticleQueries.getById(articleId);
+        const currentArticle = await ArticleService.getById(articleId);
         if (!currentArticle) {
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
         }
 
-        // Check if slug already exists (excluding current article)
-        const slugExists = await ArticleQueries.slugExists(slug, articleId);
-        if (slugExists) {
-            return NextResponse.json(
-                { error: 'Un article avec ce slug existe déjà' },
-                { status: 409 }
-            );
-        }
-
         // Get category ID by name
-        const categories = await CategoryQueries.getAll();
+        const categories = await CategoryService.getAll();
         const categoryObj = categories.find(cat => cat.name === category);
         if (!categoryObj) {
             return NextResponse.json(
@@ -116,10 +107,10 @@ export async function PUT(
             published: published || false,
             publishedAt: isNowPublished && !wasPublished 
                 ? new Date() 
-                : currentArticle.publishedAt,
+                : (currentArticle.publishedAt ? new Date(currentArticle.publishedAt) : null),
         };
 
-        const updatedArticle = await ArticleQueries.update(articleId, updateData);
+        const updatedArticle = await ArticleService.update(articleId, updateData);
 
         if (!updatedArticle) {
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
@@ -128,6 +119,15 @@ export async function PUT(
         return NextResponse.json(updatedArticle);
     } catch (error) {
         console.error('Error updating article:', error);
+        
+        // Handle validation errors from service
+        if (error instanceof Error && error.message.includes('slug existe déjà')) {
+            return NextResponse.json(
+                { error: error.message },
+                { status: 409 }
+            );
+        }
+        
         return NextResponse.json(
             { error: 'Internal server error' },
             { status: 500 }
@@ -154,7 +154,7 @@ export async function DELETE(
             return NextResponse.json({ error: 'Invalid article ID' }, { status: 400 });
         }
         
-        const success = await ArticleQueries.delete(articleId);
+        const success = await ArticleService.delete(articleId);
         if (!success) {
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });
         }

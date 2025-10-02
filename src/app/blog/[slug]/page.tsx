@@ -134,7 +134,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <Stack gap="md" mb="xl">
                     <Group>
                         <Badge color="blue" variant="light" size="lg">
-                            {article.category}
+                            {article.category?.name || 'Non catégorisé'}
                         </Badge>
                     </Group>
 

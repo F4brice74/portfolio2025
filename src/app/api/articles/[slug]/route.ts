@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ArticleQueries } from '@/lib/db/queries';
+import { ArticleService } from '@/lib/articles';
 
 // GET /api/articles/[slug] - Get published article by slug for public pages
 export async function GET(
@@ -9,8 +9,8 @@ export async function GET(
     try {
         const { slug } = await params;
         
-        // Get published article by slug
-        const article = await ArticleQueries.getBySlug(slug);
+        // Get article by slug via service
+        const article = await ArticleService.getBySlug(slug);
         
         // Log article for debugging
         console.log('=== API GET /api/articles/[slug] (PUBLIC) ===');

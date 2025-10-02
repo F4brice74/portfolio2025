@@ -1,27 +1,28 @@
 /**
- * @deprecated Ce fichier est déprécié. Utilisez plutôt @/lib/articles
+ * Repository - Accès aux données (couche DB)
  * 
- * Migration vers la couche d'abstraction :
- * - ArticleQueries → ArticleService (from '@/lib/articles')
- * - CategoryQueries → CategoryService (from '@/lib/articles')
- * 
- * Avantages de la nouvelle approche :
- * - Types unifiés et cohérents
- * - Meilleure séparation des responsabilités
- * - Facilite les tests et la maintenance
- * - Compatible avec Server Components et API Routes
- * 
- * Ce fichier sera supprimé dans une future version.
+ * Responsabilités :
+ * - Exécuter les requêtes Drizzle
+ * - Retourner les données BRUTES (format DB)
+ * - Pas de transformation métier
+ * - Pas de logique applicative
  */
 
-import { eq, desc, and, sql, inArray } from 'drizzle-orm';
-import { db } from './index';
-import { articles, categories, articleTags, type ArticleWithCategory, type CategoryWithCount } from './schema';
+import 'server-only'; // Empêche l'import côté client
 
-// Article queries
-export class ArticleQueries {
-  // Get all articles with categories and tags
-  static async getAll(): Promise<ArticleWithCategory[]> {
+import { eq, desc, and, sql, inArray } from 'drizzle-orm';
+import { db } from '@/lib/db';
+import { articles, categories, articleTags } from '@/lib/db/schema';
+import type { ArticleWithCategory } from '@/lib/db/schema';
+
+/**
+ * Repository pour les articles
+ */
+export class ArticleRepository {
+  /**
+   * Récupère tous les articles avec leurs catégories et tags
+   */
+  static async findAll(): Promise<ArticleWithCategory[]> {
     const result = await db
       .select({
         article: articles,
@@ -45,8 +46,10 @@ export class ArticleQueries {
     }));
   }
 
-  // Get published articles only
-  static async getPublished(): Promise<ArticleWithCategory[]> {
+  /**
+   * Récupère uniquement les articles publiés
+   */
+  static async findPublished(): Promise<ArticleWithCategory[]> {
     const result = await db
       .select({
         article: articles,
@@ -69,8 +72,10 @@ export class ArticleQueries {
     }));
   }
 
-  // Get article by ID
-  static async getById(id: number): Promise<ArticleWithCategory | null> {
+  /**
+   * Récupère un article par ID
+   */
+  static async findById(id: number): Promise<ArticleWithCategory | null> {
     const result = await db
       .select({
         article: articles,
@@ -96,8 +101,10 @@ export class ArticleQueries {
     };
   }
 
-  // Get article by slug
-  static async getBySlug(slug: string): Promise<ArticleWithCategory | null> {
+  /**
+   * Récupère un article par slug
+   */
+  static async findBySlug(slug: string): Promise<ArticleWithCategory | null> {
     const result = await db
       .select({
         article: articles,
@@ -123,7 +130,38 @@ export class ArticleQueries {
     };
   }
 
-  // Create new article
+  /**
+   * Récupère les articles d'une catégorie
+   */
+  static async findByCategorySlug(categorySlug: string): Promise<ArticleWithCategory[]> {
+    const result = await db
+      .select({
+        article: articles,
+        category: categories,
+      })
+      .from(articles)
+      .leftJoin(categories, eq(articles.categoryId, categories.id))
+      .where(and(
+        eq(categories.slug, categorySlug),
+        eq(articles.published, true)
+      ))
+      .orderBy(desc(articles.publishedAt));
+
+    const articleIds = result.map(r => r.article.id);
+    const tags = articleIds.length > 0 
+      ? await db.select().from(articleTags).where(inArray(articleTags.articleId, articleIds))
+      : [];
+
+    return result.map(({ article, category }) => ({
+      ...article,
+      category,
+      tags: tags.filter(tag => tag.articleId === article.id).map(tag => tag.tag),
+    }));
+  }
+
+  /**
+   * Crée un nouvel article
+   */
   static async create(data: {
     title: string;
     slug: string;
@@ -165,10 +203,12 @@ export class ArticleQueries {
     }
 
     // Return with category and tags
-    return this.getById(newArticle.id) as Promise<ArticleWithCategory>;
+    return this.findById(newArticle.id) as Promise<ArticleWithCategory>;
   }
 
-  // Update article
+  /**
+   * Met à jour un article
+   */
   static async update(id: number, data: Partial<{
     title: string;
     slug: string;
@@ -212,16 +252,20 @@ export class ArticleQueries {
       }
     }
 
-    return this.getById(id);
+    return this.findById(id);
   }
 
-  // Delete article
+  /**
+   * Supprime un article
+   */
   static async delete(id: number): Promise<boolean> {
     const result = await db.delete(articles).where(eq(articles.id, id)).returning();
     return result.length > 0;
   }
 
-  // Check if slug exists
+  /**
+   * Vérifie si un slug existe
+   */
   static async slugExists(slug: string, excludeId?: number): Promise<boolean> {
     const conditions = excludeId 
       ? and(eq(articles.slug, slug), sql`${articles.id} != ${excludeId}`)
@@ -237,10 +281,14 @@ export class ArticleQueries {
   }
 }
 
-// Category queries
-export class CategoryQueries {
-  // Get all categories with article counts
-  static async getAll(): Promise<CategoryWithCount[]> {
+/**
+ * Repository pour les catégories
+ */
+export class CategoryRepository {
+  /**
+   * Récupère toutes les catégories avec le nombre d'articles
+   */
+  static async findAll() {
     const result = await db
       .select({
         category: categories,
@@ -251,14 +299,13 @@ export class CategoryQueries {
       .groupBy(categories.id)
       .orderBy(categories.name);
 
-    return result.map(({ category, articleCount }) => ({
-      ...category,
-      articleCount: articleCount || 0,
-    }));
+    return result;
   }
 
-  // Get category by slug
-  static async getBySlug(slug: string): Promise<CategoryWithCount | null> {
+  /**
+   * Récupère une catégorie par slug
+   */
+  static async findBySlug(slug: string) {
     const result = await db
       .select({
         category: categories,
@@ -272,15 +319,13 @@ export class CategoryQueries {
 
     if (result.length === 0) return null;
 
-    const { category, articleCount } = result[0];
-    return {
-      ...category,
-      articleCount: articleCount || 0,
-    };
+    return result[0];
   }
 
-  // Get category by ID
-  static async getById(id: number): Promise<CategoryWithCount | null> {
+  /**
+   * Récupère une catégorie par ID
+   */
+  static async findById(id: number) {
     const result = await db
       .select({
         category: categories,
@@ -294,10 +339,7 @@ export class CategoryQueries {
 
     if (result.length === 0) return null;
 
-    const { category, articleCount } = result[0];
-    return {
-      ...category,
-      articleCount: articleCount || 0,
-    };
+    return result[0];
   }
 }
+

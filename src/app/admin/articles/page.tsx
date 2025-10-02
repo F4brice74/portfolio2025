@@ -2,14 +2,13 @@ import { Title, Text, Card, Group, Badge, Button, Table, Stack, ActionIcon } fro
 import { IconPlus, IconEdit, IconEye, IconCalendar, IconArticle } from "@tabler/icons-react";
 import Link from "next/link";
 import { DeleteArticleButton } from "@/components/admin/DeleteArticleButton";
-import type { ArticleWithCategory } from "@/lib/db/schema";
-import { ArticleQueries } from "@/lib/db/queries";
+import { ArticleService, type Article } from "@/lib/articles";
 
 export default async function AdminArticlesPage() {
-    // Fetch articles directly from database (server-side)
-    const articles = await ArticleQueries.getAll();
+    // Fetch articles via service layer
+    const articles = await ArticleService.getAll();
 
-    const formatDate = (date: string | Date) => {
+    const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString('fr-FR', {
             year: 'numeric',
             month: 'short',
@@ -52,7 +51,7 @@ export default async function AdminArticlesPage() {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {articles.map((article: ArticleWithCategory) => (
+                        {articles.map((article: Article) => (
                             <Table.Tr key={article.id}>
                                 <Table.Td>
                                     <div>

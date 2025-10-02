@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { ArticleQueries, CategoryQueries } from '@/lib/db/queries';
+import { ArticleService, CategoryService } from '@/lib/articles';
 
 // GET /api/admin/articles - List all articles for admin
 export async function GET() {
@@ -11,8 +11,8 @@ export async function GET() {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        // Get all articles from database
-        const articles = await ArticleQueries.getAll();
+        // Get all articles via service
+        const articles = await ArticleService.getAll();
         console.log('Admin getAll articles:', articles.length, 'articles');
         return NextResponse.json({ articles });
     } catch (error) {
@@ -53,17 +53,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Check if slug already exists
-        const slugExists = await ArticleQueries.slugExists(slug);
-        if (slugExists) {
-            return NextResponse.json(
-                { error: 'Un article avec ce slug existe déjà' },
-                { status: 409 }
-            );
-        }
-
         // Get category ID by name
-        const categories = await CategoryQueries.getAll();
+        const categories = await CategoryService.getAll();
         const categoryObj = categories.find(cat => cat.name === category);
         if (!categoryObj) {
             return NextResponse.json(
@@ -72,15 +63,14 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Create new article
-        const newArticle = await ArticleQueries.create({
+        // Create new article via service
+        const newArticle = await ArticleService.create({
             title,
             slug,
             excerpt,
             content,
             featuredImage: featuredImage || undefined,
             published: published || false,
-            publishedAt: published ? new Date() : null,
             categoryId: categoryObj.id,
             authorName: 'Fabrice MIQUET-SAGE',
             authorEmail: 'fabrice@example.com',
@@ -90,6 +80,15 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(newArticle, { status: 201 });
     } catch (error) {
         console.error('Error creating article:', error);
+        
+        // Handle validation errors from service
+        if (error instanceof Error && error.message.includes('slug existe déjà')) {
+            return NextResponse.json(
+                { error: error.message },
+                { status: 409 }
+            );
+        }
+        
         return NextResponse.json(
             { error: 'Internal server error' },
             { status: 500 }
