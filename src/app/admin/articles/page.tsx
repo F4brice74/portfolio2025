@@ -2,21 +2,14 @@ import { Title, Text, Card, Group, Badge, Button, Table, Stack, ActionIcon } fro
 import { IconPlus, IconEdit, IconEye, IconCalendar, IconArticle } from "@tabler/icons-react";
 import Link from "next/link";
 import { DeleteArticleButton } from "@/components/admin/DeleteArticleButton";
-import type { ApiArticle } from "@/types/article";
+import type { ArticleWithCategory } from "@/lib/db/schema";
+import { ArticleQueries } from "@/lib/db/queries";
 
 export default async function AdminArticlesPage() {
-    // Fetch articles from API
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/admin/articles`, {
-        cache: 'no-store'
-    });
-    
-    if (!response.ok) {
-        throw new Error('Failed to fetch articles');
-    }
-    
-    const { articles }: { articles: ApiArticle[] } = await response.json();
+    // Fetch articles directly from database (server-side)
+    const articles = await ArticleQueries.getAll();
 
-    const formatDate = (date: string) => {
+    const formatDate = (date: string | Date) => {
         return new Date(date).toLocaleDateString('fr-FR', {
             year: 'numeric',
             month: 'short',
@@ -59,7 +52,7 @@ export default async function AdminArticlesPage() {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {articles.map((article: ApiArticle) => (
+                        {articles.map((article: ArticleWithCategory) => (
                             <Table.Tr key={article.id}>
                                 <Table.Td>
                                     <div>

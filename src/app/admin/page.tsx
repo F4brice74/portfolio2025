@@ -1,24 +1,17 @@
 import { Title, Text, Grid, Card, Group, Badge, Stack, Button, GridCol } from "@mantine/core";
 import { IconArticle, IconEye, IconEdit, IconPlus, IconTrendingUp, IconSettings } from "@tabler/icons-react";
 import Link from "next/link";
-import type { ApiArticle } from "@/types/article";
+import type { ArticleWithCategory } from "@/lib/db/schema";
+import { ArticleQueries } from "@/lib/db/queries";
 
 export default async function AdminDashboard() {
-    // Fetch articles from API
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/admin/articles`, {
-        cache: 'no-store'
-    });
-    
-    if (!response.ok) {
-        throw new Error('Failed to fetch articles');
-    }
-    
-    const { articles }: { articles: ApiArticle[] } = await response.json();
+    // Fetch articles directly from database (server-side)
+    const articles = await ArticleQueries.getAll();
 
     const stats = {
         totalArticles: articles.length,
-        publishedArticles: articles.filter((article: ApiArticle) => article.publishedAt).length,
-        draftArticles: articles.filter((article: ApiArticle) => !article.publishedAt).length,
+        publishedArticles: articles.filter((article: ArticleWithCategory) => article.publishedAt).length,
+        draftArticles: articles.filter((article: ArticleWithCategory) => !article.publishedAt).length,
         totalViews: 0, // À implémenter plus tard
     };
 
@@ -109,7 +102,7 @@ export default async function AdminDashboard() {
                 </Group>
 
                 <Stack gap="sm">
-                    {recentArticles.map((article: ApiArticle) => (
+                    {recentArticles.map((article: ArticleWithCategory) => (
                         <Card key={article.id} padding="md" radius="md" withBorder>
                             <Group justify="space-between">
                                 <div style={{ flex: 1 }}>
@@ -128,7 +121,7 @@ export default async function AdminDashboard() {
                                         </Badge>
                                     </Group>
                                     <Text size="xs" c="dimmed">
-                                        {new Date(article.publishedAt || article.updatedAt).toLocaleDateString('fr-FR')}
+                                        {(article.publishedAt ? new Date(article.publishedAt) : new Date(article.updatedAt)).toLocaleDateString('fr-FR')}
                                     </Text>
                                 </div>
                                 <Group gap="xs">

@@ -1,4 +1,4 @@
-import { eq, desc, and, sql } from 'drizzle-orm';
+import { eq, desc, and, sql, inArray } from 'drizzle-orm';
 import { db } from './index';
 import { articles, categories, articleTags, type ArticleWithCategory, type CategoryWithCount } from './schema';
 
@@ -18,7 +18,7 @@ export class ArticleQueries {
     // Get tags for all articles
     const articleIds = result.map(r => r.article.id);
     const tags = articleIds.length > 0 
-      ? await db.select().from(articleTags).where(sql`${articleTags.articleId} = ANY(${articleIds})`)
+      ? await db.select().from(articleTags).where(inArray(articleTags.articleId, articleIds))
       : [];
 
     // Combine data
@@ -43,7 +43,7 @@ export class ArticleQueries {
 
     const articleIds = result.map(r => r.article.id);
     const tags = articleIds.length > 0 
-      ? await db.select().from(articleTags).where(sql`${articleTags.articleId} = ANY(${articleIds})`)
+      ? await db.select().from(articleTags).where(inArray(articleTags.articleId, articleIds))
       : [];
 
     return result.map(({ article, category }) => ({
