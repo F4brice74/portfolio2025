@@ -1,9 +1,10 @@
 import { Box, Container, Title, Text, SimpleGrid, Center, Loader, Group } from "@mantine/core"
 import { Suspense } from "react"
 import ArticleCard from "@/components/ArticleCard"
-import { getArticlesPaginated, getCategories } from "@/lib/articles"
+// Removed mock data imports - now using API calls
 import BlogPagination from "@/components/BlogPagination"
 import CategoryFilter from "@/components/CategoryFilter"
+import type { ApiArticle, Category, Article } from "@/types/article"
 
 interface BlogPageProps {
   searchParams: Promise<{
@@ -51,12 +52,38 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 }
 
 async function BlogContent({ currentPage, selectedCategory }: { currentPage: number, selectedCategory?: string }) {
-  const [articlesData, categories] = await Promise.all([
-    getArticlesPaginated(currentPage, 6, selectedCategory),
-    getCategories()
-  ])
+  // Fetch articles from API
+  const articlesResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles`, {
+    cache: 'no-store' // Ensure fresh data
+  })
 
-  const { articles, totalPages, totalArticles, filteredByCategory } = articlesData
+  if (!articlesResponse.ok) {
+    throw new Error('Failed to fetch articles')
+  }
+
+  const { articles: allArticles }: { articles: ApiArticle[] } = await articlesResponse.json()
+
+  // Simple pagination and filtering
+  const filteredArticles = selectedCategory
+    ? allArticles.filter((article: ApiArticle) => article.category?.slug === selectedCategory)
+    : allArticles
+
+  const startIndex = (currentPage - 1) * 6
+  const endIndex = startIndex + 6
+  const articles = filteredArticles.slice(startIndex, endIndex)
+  const totalArticles = filteredArticles.length
+  const totalPages = Math.ceil(totalArticles / 6)
+  const filteredByCategory = selectedCategory
+
+  // Extract unique categories from articles
+  const categories = Array.from(
+    new Map(
+      allArticles
+        .map((article: ApiArticle) => article.category)
+        .filter((cat): cat is Category => cat !== null)
+        .map((cat: Category) => [cat.slug, cat])
+    ).values()
+  ) as Category[]
 
   return (
     <>
@@ -69,7 +96,7 @@ async function BlogContent({ currentPage, selectedCategory }: { currentPage: num
         <Text size="sm" c="dimmed">
           {filteredByCategory ? (
             <>
-              {totalArticles} article{totalArticles > 1 ? 's' : ''} dans la catégorie "{categories.find(cat => cat.slug === filteredByCategory)?.name}"
+              {totalArticles} article{totalArticles > 1 ? 's' : ''} dans la catégorie "{categories.find((cat: Category) => cat.slug === filteredByCategory)?.name}"
             </>
           ) : (
             <>
@@ -83,8 +110,8 @@ async function BlogContent({ currentPage, selectedCategory }: { currentPage: num
       </Group>
 
       <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
-        {articles.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+        {articles.map((article: ApiArticle) => (
+          <ArticleCard key={article.id} article={article as Article} />
         ))}
       </SimpleGrid>
 
@@ -92,7 +119,7 @@ async function BlogContent({ currentPage, selectedCategory }: { currentPage: num
         <Center py="xl">
           <Text c="dimmed">
             {filteredByCategory ?
-              `Aucun article trouvé dans la catégorie "${categories.find(cat => cat.slug === filteredByCategory)?.name}".` :
+              `Aucun article trouvé dans la catégorie "${categories.find((cat: Category) => cat.slug === filteredByCategory)?.name}".` :
               "Aucun article disponible pour le moment."
             }
           </Text>

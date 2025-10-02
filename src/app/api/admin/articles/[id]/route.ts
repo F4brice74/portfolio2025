@@ -105,7 +105,7 @@ export async function PUT(
         const wasPublished = currentArticle.published;
         const isNowPublished = published;
 
-        const updatedArticle = await ArticleQueries.update(articleId, {
+        const updateData = {
             title,
             slug,
             excerpt,
@@ -117,7 +117,9 @@ export async function PUT(
             publishedAt: isNowPublished && !wasPublished 
                 ? new Date() 
                 : currentArticle.publishedAt,
-        });
+        };
+
+        const updatedArticle = await ArticleQueries.update(articleId, updateData);
 
         if (!updatedArticle) {
             return NextResponse.json({ error: 'Article not found' }, { status: 404 });

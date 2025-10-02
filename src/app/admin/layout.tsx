@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { Container, Title, Text, Group, Button } from "@mantine/core";
+import { Container, Title, Group, Button } from "@mantine/core";
 import { IconArrowLeft, IconSettings, IconArticle, IconDashboard } from "@tabler/icons-react";
 import Link from "next/link";
 

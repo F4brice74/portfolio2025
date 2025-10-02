@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Title, Text, Card, Stack, LoadingOverlay, Alert } from "@mantine/core";
+import { useState, useEffect, useCallback } from 'react';
+import { Title, Text, Card, Stack, LoadingOverlay, Alert, Button, Group } from "@mantine/core";
 import { ArticleForm } from "./ArticleForm";
-import { IconInfoCircle } from '@tabler/icons-react';
+import { IconInfoCircle, IconRefresh } from '@tabler/icons-react';
 import type { ArticleWithCategory } from '@/lib/db/schema';
 
 interface EditArticleClientPageProps {
@@ -15,35 +15,35 @@ export function EditArticleClientPage({ articleId }: EditArticleClientPageProps)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchArticle = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch(`/api/admin/articles/${articleId}`);
+    const fetchArticle = useCallback(async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(`/api/admin/articles/${articleId}`);
 
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        setError('Article non trouvé');
-                    } else if (response.status === 401) {
-                        setError('Vous devez être connecté pour accéder à cette page');
-                    } else {
-                        setError('Erreur lors du chargement de l\'article');
-                    }
-                    return;
+            if (!response.ok) {
+                if (response.status === 404) {
+                    setError('Article non trouvé');
+                } else if (response.status === 401) {
+                    setError('Vous devez être connecté pour accéder à cette page');
+                } else {
+                    setError('Erreur lors du chargement de l\'article');
                 }
-
-                const articleData = await response.json();
-                setArticle(articleData);
-            } catch (error) {
-                console.error('Error fetching article:', error);
-                setError('Erreur lors du chargement de l\'article');
-            } finally {
-                setLoading(false);
+                return;
             }
-        };
 
-        fetchArticle();
+            const articleData = await response.json();
+            setArticle(articleData);
+        } catch (error) {
+            console.error('Error fetching article:', error);
+            setError('Erreur lors du chargement de l\'article');
+        } finally {
+            setLoading(false);
+        }
     }, [articleId]);
+
+    useEffect(() => {
+        fetchArticle();
+    }, [articleId, fetchArticle]);
 
     if (loading) {
         return (
@@ -111,12 +111,24 @@ export function EditArticleClientPage({ articleId }: EditArticleClientPageProps)
         <Stack gap="xl">
             {/* Page Header */}
             <div>
-                <Title order={1} size="h1" mb="sm">
-                    Modifier l'Article
-                </Title>
-                <Text c="dimmed" size="lg">
-                    Éditez votre article "{article.title}"
-                </Text>
+                <Group justify="space-between" align="flex-start">
+                    <div>
+                        <Title order={1} size="h1" mb="sm">
+                            Modifier l'Article
+                        </Title>
+                        <Text c="dimmed" size="lg">
+                            Éditez votre article "{article.title}"
+                        </Text>
+                    </div>
+                    <Button
+                        variant="outline"
+                        leftSection={<IconRefresh size={16} />}
+                        onClick={fetchArticle}
+                        loading={loading}
+                    >
+                        Actualiser
+                    </Button>
+                </Group>
             </div>
 
             {/* Article Form */}
@@ -129,6 +141,7 @@ export function EditArticleClientPage({ articleId }: EditArticleClientPageProps)
                     }}
                     isEditing={true}
                     articleId={articleId}
+                    onArticleUpdated={fetchArticle}
                 />
             </Card>
         </Stack>

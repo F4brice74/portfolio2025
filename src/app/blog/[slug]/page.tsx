@@ -1,7 +1,8 @@
 import { Box, Container, Title, Text, Group, Badge, Divider, Stack, Breadcrumbs, Anchor, Button } from "@mantine/core"
 import { IconCalendar, IconClock, IconUser, IconArrowLeft, IconHome } from "@tabler/icons-react"
 import Link from "next/link"
-import { getArticleBySlug, getArticles } from "@/lib/articles"
+// Removed mock data imports - now using API calls
+import type { ApiArticle } from "@/types/article"
 
 type BlogPostPageProps = {
     params: Promise<{
@@ -11,7 +12,38 @@ type BlogPostPageProps = {
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const resolvedParams = await params
-    const article = await getArticleBySlug(resolvedParams.slug)
+
+    // Fetch article from API
+    const articleResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles/${resolvedParams.slug}`, {
+        cache: 'no-store'
+    })
+
+    if (!articleResponse.ok) {
+        return (
+            <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)" }}>
+                <Container size="md" py="xl">
+                    <Box ta="center">
+                        <Title order={1} size="h1" mb="md" c="blue">
+                            404
+                        </Title>
+                        <Title order={2} size="h2" mb="md">
+                            Article non trouvé
+                        </Title>
+                        <Text size="lg" c="dimmed" mb="xl">
+                            L'article que vous recherchez n'existe pas ou a été supprimé.
+                        </Text>
+                        <Group justify="center" gap="md">
+                            <Button component={Link} href="/" leftSection={<IconHome size={16} />}>
+                                Retour à l'accueil
+                            </Button>
+                        </Group>
+                    </Box>
+                </Container>
+            </Box>
+        )
+    }
+
+    const article = await articleResponse.json()
 
     if (!article) {
         return (
@@ -58,12 +90,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         })
     }
 
-    const getReadingTime = (content: string) => {
-        const wordsPerMinute = 200
-        const wordCount = content.split(/\s+/).length
-        const readingTime = Math.ceil(wordCount / wordsPerMinute)
-        return `${readingTime} min de lecture`
-    }
 
     const breadcrumbs = [
         { title: 'Accueil', href: '/' },
@@ -123,11 +149,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         </Group>
                         <Group gap={4}>
                             <IconClock size={16} />
-                            <Text size="sm">{getReadingTime(article.content)}</Text>
+                            <Text size="sm">{article.readingTime} min de lecture</Text>
                         </Group>
                         <Group gap={4}>
                             <IconUser size={16} />
-                            <Text size="sm">{article.author.name}</Text>
+                            <Text size="sm">{article.authorName}</Text>
                         </Group>
                     </Group>
                 </Stack>
@@ -178,7 +204,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         <Divider mb="md" />
                         <Group gap="xs">
                             <Text size="sm" fw={500}>Tags:</Text>
-                            {article.tags.map((tag) => (
+                            {article.tags.map((tag: string) => (
                                 <Badge key={tag} variant="outline" size="sm">
                                     {tag}
                                 </Badge>
@@ -194,33 +220,58 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 // Génération des métadonnées pour le SEO
 export async function generateMetadata({ params }: BlogPostPageProps) {
     const resolvedParams = await params
-    const article = await getArticleBySlug(resolvedParams.slug)
 
-    if (!article) {
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles/${resolvedParams.slug}`, {
+            cache: 'no-store'
+        })
+
+        if (!response.ok) {
+            return {
+                title: 'Article non trouvé',
+            }
+        }
+
+        const article = await response.json()
+
+        return {
+            title: `${article.title} | Fabrice MIQUET-SAGE`,
+            description: article.excerpt,
+            openGraph: {
+                title: article.title,
+                description: article.excerpt,
+                type: 'article',
+                publishedTime: article.publishedAt,
+                authors: [article.authorName],
+                tags: article.tags,
+            },
+        }
+    } catch (error) {
+        console.error('Error generating metadata:', error)
         return {
             title: 'Article non trouvé',
         }
-    }
-
-    return {
-        title: `${article.title} | Fabrice MIQUET-SAGE`,
-        description: article.excerpt,
-        openGraph: {
-            title: article.title,
-            description: article.excerpt,
-            type: 'article',
-            publishedTime: article.publishedAt,
-            authors: [article.author.name],
-            tags: article.tags,
-        },
     }
 }
 
 // Génération des pages statiques pour tous les articles
 export async function generateStaticParams() {
-    const articles = await getArticles()
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles`, {
+            cache: 'no-store'
+        })
 
-    return articles.map((article) => ({
-        slug: article.slug,
-    }))
+        if (!response.ok) {
+            return []
+        }
+
+        const { articles } = await response.json()
+
+        return articles.map((article: ApiArticle) => ({
+            slug: article.slug,
+        }))
+    } catch (error) {
+        console.error('Error generating static params:', error)
+        return []
+    }
 }

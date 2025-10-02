@@ -21,18 +21,18 @@ export default function CategoryFilter({ categories, selectedCategory }: Categor
 
   const handleCategoryChange = (categorySlug: string | null) => {
     setValue(categorySlug)
-    
+
     const params = new URLSearchParams(searchParams.toString())
-    
+
     if (categorySlug) {
       params.set('category', categorySlug)
     } else {
       params.delete('category')
     }
-    
+
     // Reset to page 1 when filtering
     params.delete('page')
-    
+
     const newUrl = params.toString() ? `?${params.toString()}` : ''
     router.push(`/${newUrl}`)
   }
@@ -42,16 +42,16 @@ export default function CategoryFilter({ categories, selectedCategory }: Categor
     const params = new URLSearchParams(searchParams.toString())
     params.delete('category')
     params.delete('page')
-    
+
     const newUrl = params.toString() ? `?${params.toString()}` : ''
     router.push(`/${newUrl}`)
   }
 
   const selectData = [
     { value: '', label: 'Toutes les catégories' },
-    ...categories.map(category => ({
+    ...categories.map((category: Category) => ({
       value: category.slug,
-      label: `${category.name} (${category.articleCount})`
+      label: `${category.name}`
     }))
   ]
 
@@ -91,7 +91,7 @@ export default function CategoryFilter({ categories, selectedCategory }: Categor
           </Badge>
         )}
       </Group>
-      
+
       {value && (
         <Text size="xs" c="dimmed">
           Filtrage actif

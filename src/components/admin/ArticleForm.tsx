@@ -37,9 +37,10 @@ interface ArticleFormProps {
     initialData?: Partial<ArticleFormData>;
     isEditing?: boolean;
     articleId?: string;
+    onArticleUpdated?: () => void;
 }
 
-export function ArticleForm({ initialData, isEditing = false, articleId }: ArticleFormProps) {
+export function ArticleForm({ initialData, isEditing = false, articleId, onArticleUpdated }: ArticleFormProps) {
     const [loading, setLoading] = useState(false);
     const [previewMode, setPreviewMode] = useState(false);
     const router = useRouter();
@@ -109,6 +110,11 @@ export function ArticleForm({ initialData, isEditing = false, articleId }: Artic
                 color: 'green',
                 icon: <IconCheck size={16} />,
             });
+
+            // If editing, call the callback to refresh the article data
+            if (isEditing && onArticleUpdated) {
+                onArticleUpdated();
+            }
 
             // Redirect to the article or back to the list
             if (values.published) {

@@ -1,11 +1,20 @@
-import { Container, Title, Text, Card, Group, Badge, Button, Table, Stack, ActionIcon } from "@mantine/core";
-import { IconPlus, IconEdit, IconTrash, IconEye, IconCalendar, IconArticle } from "@tabler/icons-react";
+import { Title, Text, Card, Group, Badge, Button, Table, Stack, ActionIcon } from "@mantine/core";
+import { IconPlus, IconEdit, IconEye, IconCalendar, IconArticle } from "@tabler/icons-react";
 import Link from "next/link";
-import { getArticles } from "@/lib/articles";
 import { DeleteArticleButton } from "@/components/admin/DeleteArticleButton";
+import type { ApiArticle } from "@/types/article";
 
 export default async function AdminArticlesPage() {
-    const articles = await getArticles();
+    // Fetch articles from API
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/admin/articles`, {
+        cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+        throw new Error('Failed to fetch articles');
+    }
+    
+    const { articles }: { articles: ApiArticle[] } = await response.json();
 
     const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString('fr-FR', {
@@ -50,7 +59,7 @@ export default async function AdminArticlesPage() {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {articles.map((article) => (
+                        {articles.map((article: ApiArticle) => (
                             <Table.Tr key={article.id}>
                                 <Table.Td>
                                     <div>
@@ -64,7 +73,7 @@ export default async function AdminArticlesPage() {
                                 </Table.Td>
                                 <Table.Td>
                                     <Badge size="sm" color="blue">
-                                        {article.category}
+                                        {article.category?.name || 'Sans catégorie'}
                                     </Badge>
                                 </Table.Td>
                                 <Table.Td>
@@ -109,7 +118,7 @@ export default async function AdminArticlesPage() {
                                             <IconEdit size={16} />
                                         </ActionIcon>
                                         <DeleteArticleButton
-                                            articleId={article.id}
+                                            articleId={article.id.toString()}
                                             articleTitle={article.title}
                                         />
                                     </Group>

@@ -1,6 +1,6 @@
 import { Card, Image, Text, Badge, Group, Stack, CardSection } from '@mantine/core';
 import Link from 'next/link';
-import { Article } from '@/types/article';
+import { Article, ApiArticle } from '@/types/article';
 
 const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('fr-FR', {
@@ -10,7 +10,7 @@ const formatDate = (date: string) => {
     });
 };
 
-export default function ArticleCard({ article }: { article: Article }) {
+export default function ArticleCard({ article }: { article: Article | ApiArticle }) {
     return (
         <Card
             shadow="sm"
@@ -33,10 +33,10 @@ export default function ArticleCard({ article }: { article: Article }) {
             <Stack gap="sm" style={{ flex: 1 }}>
                 <Group justify="space-between" mt="md">
                     <Badge color="blue" variant="light">
-                        {article.category}
+                        {typeof article.category === 'string' ? article.category : article.category?.name || 'Sans catégorie'}
                     </Badge>
                     <Text size="xs" c="dimmed">
-                        {formatDate(article.publishedAt)}
+                        {formatDate(article.publishedAt || article.createdAt)}
                     </Text>
                 </Group>
 
@@ -50,7 +50,7 @@ export default function ArticleCard({ article }: { article: Article }) {
 
                 <Group justify="space-between" mt="auto">
                     <Group gap="xs">
-                        <Text size="xs" c="dimmed">📅 {formatDate(article.publishedAt)}</Text>
+                        <Text size="xs" c="dimmed">📅 {formatDate(article.publishedAt || article.createdAt)}</Text>
                     </Group>
                     <Group gap="xs">
                         <Text size="xs" c="dimmed">⏱️ {article.readingTime} min de lecture</Text>

@@ -1,8 +1,8 @@
-import { loadEnvConfig } from '@next/env';
+import { config } from 'dotenv';
+import { resolve } from 'path';
 
 // Load environment variables
-const projectDir = process.cwd();
-loadEnvConfig(projectDir);
+config({ path: resolve(process.cwd(), '.env.local') });
 
 import { db } from './index';
 import { categories, articles, articleTags } from './schema';

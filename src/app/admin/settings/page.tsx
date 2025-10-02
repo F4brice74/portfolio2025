@@ -1,4 +1,4 @@
-import { Container, Title, Text, Card, Stack, Group, Button, TextInput, Textarea, Switch, Divider } from "@mantine/core";
+import { Title, Text, Card, Stack, Group, Button, TextInput, Textarea, Switch, Divider } from "@mantine/core";
 import { IconSettings, IconUser, IconBell, IconShield, IconDeviceFloppy } from "@tabler/icons-react";
 
 export default function AdminSettingsPage() {

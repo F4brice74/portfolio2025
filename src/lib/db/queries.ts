@@ -1,4 +1,4 @@
-import { eq, desc, and, ilike, sql } from 'drizzle-orm';
+import { eq, desc, and, sql } from 'drizzle-orm';
 import { db } from './index';
 import { articles, categories, articleTags, type ArticleWithCategory, type CategoryWithCount } from './schema';
 
@@ -39,7 +39,7 @@ export class ArticleQueries {
       .from(articles)
       .leftJoin(categories, eq(articles.categoryId, categories.id))
       .where(eq(articles.published, true))
-      .orderBy(desc(articles.publishedAt));
+      .orderBy(desc(articles.createdAt));
 
     const articleIds = result.map(r => r.article.id);
     const tags = articleIds.length > 0 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Group, Anchor, Text, Container, Box, Burger, Drawer, Stack } from "@mantine/core";
+import { Group, Text, Container, Box, Burger, Drawer, Stack } from "@mantine/core";
 import { IconArticle, IconAddressBook, IconSettings } from "@tabler/icons-react";
 import { useState } from "react";
 import Link from "next/link";

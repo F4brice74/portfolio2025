@@ -1,15 +1,24 @@
-import { Container, Title, Text, Grid, Card, Group, Badge, Stack, Button, GridCol } from "@mantine/core";
+import { Title, Text, Grid, Card, Group, Badge, Stack, Button, GridCol } from "@mantine/core";
 import { IconArticle, IconEye, IconEdit, IconPlus, IconTrendingUp, IconSettings } from "@tabler/icons-react";
 import Link from "next/link";
-import { getArticles } from "@/lib/articles";
+import type { ApiArticle } from "@/types/article";
 
 export default async function AdminDashboard() {
-    const articles = await getArticles();
+    // Fetch articles from API
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/admin/articles`, {
+        cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+        throw new Error('Failed to fetch articles');
+    }
+    
+    const { articles }: { articles: ApiArticle[] } = await response.json();
 
     const stats = {
         totalArticles: articles.length,
-        publishedArticles: articles.filter(article => article.publishedAt).length,
-        draftArticles: articles.filter(article => !article.publishedAt).length,
+        publishedArticles: articles.filter((article: ApiArticle) => article.publishedAt).length,
+        draftArticles: articles.filter((article: ApiArticle) => !article.publishedAt).length,
         totalViews: 0, // À implémenter plus tard
     };
 
@@ -100,7 +109,7 @@ export default async function AdminDashboard() {
                 </Group>
 
                 <Stack gap="sm">
-                    {recentArticles.map((article) => (
+                    {recentArticles.map((article: ApiArticle) => (
                         <Card key={article.id} padding="md" radius="md" withBorder>
                             <Group justify="space-between">
                                 <div style={{ flex: 1 }}>
@@ -109,7 +118,7 @@ export default async function AdminDashboard() {
                                     </Text>
                                     <Group gap="xs" mb="xs">
                                         <Badge size="xs" color="blue">
-                                            {article.category}
+                                            {article.category?.name || 'Sans catégorie'}
                                         </Badge>
                                         <Badge
                                             size="xs"

@@ -13,6 +13,7 @@ export async function GET() {
 
         // Get all articles from database
         const articles = await ArticleQueries.getAll();
+        console.log('Admin getAll articles:', articles.length, 'articles');
         return NextResponse.json({ articles });
     } catch (error) {
         console.error('Error fetching articles:', error);
