@@ -1,6 +1,6 @@
-import { Card, Image, Text, Badge, Group, Stack, CardSection } from '@mantine/core';
+import { Article } from '@/lib/articles/types';
+import { Badge, Card, CardSection, Group, Image, Stack, Text } from '@mantine/core';
 import Link from 'next/link';
-import { Article, ApiArticle } from '@/types/article';
 
 const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('fr-FR', {
@@ -10,7 +10,7 @@ const formatDate = (date: string) => {
     });
 };
 
-export default function ArticleCard({ article }: { article: Article | ApiArticle }) {
+export default function ArticleCard({ article }: { article: Article }) {
     return (
         <Card
             shadow="sm"

@@ -1,10 +1,11 @@
-import { Box, Container, Title, Text, SimpleGrid, Center, Loader, Group } from "@mantine/core"
-import { Suspense } from "react"
 import ArticleCard from "@/components/ArticleCard"
+import { Box, Center, Container, Group, Loader, SimpleGrid, Text, Title } from "@mantine/core"
+import { Suspense } from "react"
 // Removed mock data imports - now using API calls
 import BlogPagination from "@/components/BlogPagination"
 import CategoryFilter from "@/components/CategoryFilter"
-import type { ApiArticle, Category, Article } from "@/types/article"
+import { ArticleService } from "@/lib/articles"
+import type { Category } from "@/lib/articles/types"
 
 interface BlogPageProps {
   searchParams: Promise<{
@@ -52,20 +53,12 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 }
 
 async function BlogContent({ currentPage, selectedCategory }: { currentPage: number, selectedCategory?: string }) {
-  // Fetch articles from API with revalidation cache
-  const articlesResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles`, {
-    next: { revalidate: 60 } // Cache for 60 seconds
-  })
-
-  if (!articlesResponse.ok) {
-    throw new Error('Failed to fetch articles')
-  }
-
-  const { articles: allArticles }: { articles: ApiArticle[] } = await articlesResponse.json()
+  // Fetch articles directly from service (no need for API call)
+  const allArticles = await ArticleService.getPublished()
 
   // Simple pagination and filtering
   const filteredArticles = selectedCategory
-    ? allArticles.filter((article: ApiArticle) => article.category?.slug === selectedCategory)
+    ? allArticles.filter((article) => article.category?.slug === selectedCategory)
     : allArticles
 
   const startIndex = (currentPage - 1) * 6
@@ -79,9 +72,9 @@ async function BlogContent({ currentPage, selectedCategory }: { currentPage: num
   const categories = Array.from(
     new Map(
       allArticles
-        .map((article: ApiArticle) => article.category)
+        .map((article) => article.category)
         .filter((cat): cat is Category => cat !== null)
-        .map((cat: Category) => [cat.slug, cat])
+        .map((cat) => [cat.slug, cat])
     ).values()
   ) as Category[]
 
@@ -110,8 +103,8 @@ async function BlogContent({ currentPage, selectedCategory }: { currentPage: num
       </Group>
 
       <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }}>
-        {articles.map((article: ApiArticle) => (
-          <ArticleCard key={article.id} article={article as Article} />
+        {articles.map((article) => (
+          <ArticleCard key={article.id} article={article} />
         ))}
       </SimpleGrid>
 
@@ -119,7 +112,7 @@ async function BlogContent({ currentPage, selectedCategory }: { currentPage: num
         <Center py="xl">
           <Text c="dimmed">
             {filteredByCategory ?
-              `Aucun article trouvé dans la catégorie "${categories.find((cat: Category) => cat.slug === filteredByCategory)?.name}".` :
+              `Aucun article trouvé dans la catégorie "${categories.find((cat) => cat.slug === filteredByCategory)?.name}".` :
               "Aucun article disponible pour le moment."
             }
           </Text>

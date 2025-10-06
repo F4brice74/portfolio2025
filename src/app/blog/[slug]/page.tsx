@@ -1,8 +1,8 @@
-import { Box, Container, Title, Text, Group, Badge, Divider, Stack, Breadcrumbs, Anchor, Button } from "@mantine/core"
-import { IconCalendar, IconClock, IconUser, IconArrowLeft, IconHome } from "@tabler/icons-react"
+import { Anchor, Badge, Box, Breadcrumbs, Button, Container, Divider, Group, Stack, Text, Title } from "@mantine/core"
+import { IconArrowLeft, IconCalendar, IconClock, IconHome, IconUser } from "@tabler/icons-react"
 import Link from "next/link"
 // Removed mock data imports - now using API calls
-import type { ApiArticle } from "@/types/article"
+import { ArticleService } from "@/lib/articles"
 
 type BlogPostPageProps = {
     params: Promise<{
@@ -13,39 +13,10 @@ type BlogPostPageProps = {
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const resolvedParams = await params
 
-    // Fetch article from API with revalidation cache
-    const articleResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles/${resolvedParams.slug}`, {
-        next: { revalidate: 60 } // Cache for 60 seconds
-    })
+    // Fetch article directly from service (no need for API call)
+    const article = await ArticleService.getBySlug(resolvedParams.slug)
 
-    if (!articleResponse.ok) {
-        return (
-            <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)" }}>
-                <Container size="md" py="xl">
-                    <Box ta="center">
-                        <Title order={1} size="h1" mb="md" c="blue">
-                            404
-                        </Title>
-                        <Title order={2} size="h2" mb="md">
-                            Article non trouvé
-                        </Title>
-                        <Text size="lg" c="dimmed" mb="xl">
-                            L'article que vous recherchez n'existe pas ou a été supprimé.
-                        </Text>
-                        <Group justify="center" gap="md">
-                            <Button component={Link} href="/" leftSection={<IconHome size={16} />}>
-                                Retour à l'accueil
-                            </Button>
-                        </Group>
-                    </Box>
-                </Container>
-            </Box>
-        )
-    }
-
-    const article = await articleResponse.json()
-
-    if (!article) {
+    if (!article || !article.published) {
         return (
             <Box style={{ minHeight: "100vh", backgroundColor: "var(--mantine-color-gray-0)" }}>
                 <Container size="md" py="xl">
@@ -145,7 +116,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <Group gap="xl" c="dimmed">
                         <Group gap={4}>
                             <IconCalendar size={16} />
-                            <Text size="sm">{formatDate(article.publishedAt)}</Text>
+                            <Text size="sm">{formatDate(article.publishedAt || '')}</Text>
                         </Group>
                         <Group gap={4}>
                             <IconClock size={16} />
@@ -222,17 +193,14 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
     const resolvedParams = await params
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles/${resolvedParams.slug}`, {
-            next: { revalidate: 60 } // Cache for 60 seconds
-        })
+        // Fetch article directly from service (no need for API call)
+        const article = await ArticleService.getBySlug(resolvedParams.slug)
 
-        if (!response.ok) {
+        if (!article || !article.published) {
             return {
                 title: 'Article non trouvé',
             }
         }
-
-        const article = await response.json()
 
         return {
             title: `${article.title} | Fabrice MIQUET-SAGE`,
@@ -263,17 +231,10 @@ export async function generateStaticParams() {
     }
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles`, {
-            next: { revalidate: 3600 } // Cache for 1 hour
-        })
+        // Fetch articles directly from service (no need for API call)
+        const articles = await ArticleService.getPublished()
 
-        if (!response.ok) {
-            return []
-        }
-
-        const { articles } = await response.json()
-
-        return articles.map((article: ApiArticle) => ({
+        return articles.map((article) => ({
             slug: article.slug,
         }))
     } catch (error) {

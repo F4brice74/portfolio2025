@@ -1,9 +1,9 @@
 'use client'
 
-import { Select, Group, Text, Badge } from "@mantine/core"
-import { Category } from "@/types/article"
+import { Category } from "@/lib/articles/types"
+import { Badge, Group, Select, Text } from "@mantine/core"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 
 interface CategoryFilterProps {
   categories: Category[]
