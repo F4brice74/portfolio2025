@@ -1,8 +1,9 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { Container, Title, Group, Button } from "@mantine/core";
-import { IconArrowLeft, IconSettings, IconArticle, IconDashboard } from "@tabler/icons-react";
+import { Container, Title, Group, Button, Alert } from "@mantine/core";
+import { IconArrowLeft, IconSettings, IconArticle, IconDashboard, IconAlertCircle } from "@tabler/icons-react";
 import Link from "next/link";
+import { isAdmin } from "@/lib/auth/admin-check";
 
 export default async function AdminLayout({
     children,
@@ -14,6 +15,36 @@ export default async function AdminLayout({
 
     if (!userId) {
         redirect("/");
+    }
+
+    // Vérifier si l'utilisateur est admin
+    const user = await currentUser();
+    const userEmail = user?.emailAddresses[0]?.emailAddress;
+
+    if (!isAdmin(userId, userEmail)) {
+        return (
+            <Container size="sm" py="xl">
+                <Alert 
+                    icon={<IconAlertCircle size={24} />} 
+                    title="Accès refusé" 
+                    color="red"
+                    variant="filled"
+                >
+                    Vous n'êtes pas autorisé à accéder à l'administration.
+                    <br />
+                    Seul l'administrateur du site peut accéder à cette section.
+                </Alert>
+                <Group justify="center" mt="xl">
+                    <Button
+                        component={Link}
+                        href="/"
+                        leftSection={<IconArrowLeft size={16} />}
+                    >
+                        Retour à l'accueil
+                    </Button>
+                </Group>
+            </Container>
+        );
     }
 
     const adminNavItems = [

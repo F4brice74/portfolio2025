@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { ArticleService, CategoryService } from '@/lib/articles';
+import { requireAdmin } from '@/lib/auth/api-auth';
 
 // GET /api/admin/articles/[id] - Get single article for editing
 export async function GET(
@@ -8,11 +8,9 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        // Check authentication
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+        // Check admin authorization
+        const authError = await requireAdmin();
+        if (authError) return authError;
 
         const { id } = await params;
         const articleId = parseInt(id);
@@ -43,11 +41,9 @@ export async function PUT(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        // Check authentication
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+        // Check admin authorization
+        const authError = await requireAdmin();
+        if (authError) return authError;
 
         const { id } = await params;
         const articleId = parseInt(id);
@@ -141,11 +137,9 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        // Check authentication
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+        // Check admin authorization
+        const authError = await requireAdmin();
+        if (authError) return authError;
 
         const { id } = await params;
         const articleId = parseInt(id);

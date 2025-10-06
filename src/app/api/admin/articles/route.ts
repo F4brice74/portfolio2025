@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { ArticleService, CategoryService } from '@/lib/articles';
+import { requireAdmin } from '@/lib/auth/api-auth';
 
 // GET /api/admin/articles - List all articles for admin
 export async function GET() {
     try {
-        // Check authentication
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+        // Check admin authorization
+        const authError = await requireAdmin();
+        if (authError) return authError;
 
         // Get all articles via service
         const articles = await ArticleService.getAll();
@@ -27,11 +25,9 @@ export async function GET() {
 // POST /api/admin/articles - Create new article
 export async function POST(request: NextRequest) {
     try {
-        // Check authentication
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+        // Check admin authorization
+        const authError = await requireAdmin();
+        if (authError) return authError;
 
         const body = await request.json();
         const {

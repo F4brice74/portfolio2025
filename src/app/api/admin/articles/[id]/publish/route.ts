@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { ArticleService } from '@/lib/articles';
+import { requireAdmin } from '@/lib/auth/api-auth';
 
 // PATCH /api/admin/articles/[id]/publish - Toggle publication status
 export async function PATCH(
@@ -8,11 +8,9 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        // Check authentication
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
+        // Check admin authorization
+        const authError = await requireAdmin();
+        if (authError) return authError;
 
         const { id } = await params;
         const articleId = parseInt(id);
