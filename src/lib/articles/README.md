@@ -177,6 +177,134 @@ const updated = await ArticleService.update(articleId, {
 const articles = await ArticleService.getByCategorySlug('developpement');
 ```
 
+## 🏷️ Abstraction de la propriété `category`
+
+### ⚠️ IMPORTANT : `category` est un objet, pas une string !
+
+Le type `Article` contient une propriété `category` qui est un **objet** de type `Category | null`, pas une simple chaîne de caractères.
+
+```typescript
+export interface Article {
+  // ... autres propriétés
+  category: Category | null;  // ⚠️ C'est un objet !
+  categoryId: number | null;
+  // ...
+}
+
+export interface Category {
+  id: number;
+  name: string;          // ✅ Utilisez category.name pour afficher
+  slug: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+```
+
+### ✅ Utilisation correcte dans les composants React
+
+#### ❌ MAUVAIS - Provoque une erreur React
+
+```typescript
+export default function ArticlePage({ article }: { article: Article }) {
+  return (
+    <Badge>
+      {article.category}  {/* ❌ ERREUR: Objects are not valid as a React child */}
+    </Badge>
+  );
+}
+```
+
+**Erreur retournée** :
+```
+Error: Objects are not valid as a React child (found: object with keys {id, name, slug, description, createdAt, updatedAt})
+```
+
+#### ✅ CORRECT - Accéder à la propriété `name`
+
+```typescript
+export default function ArticlePage({ article }: { article: Article }) {
+  return (
+    <Badge>
+      {article.category?.name || 'Non catégorisé'}  {/* ✅ CORRECT */}
+    </Badge>
+  );
+}
+```
+
+### 📋 Exemples d'utilisation
+
+#### Afficher le nom de la catégorie
+
+```typescript
+<Text>{article.category?.name}</Text>
+```
+
+#### Afficher avec fallback
+
+```typescript
+<Badge>{article.category?.name || 'Sans catégorie'}</Badge>
+```
+
+#### Vérifier si une catégorie existe
+
+```typescript
+{article.category && (
+  <Link href={`/blog/category/${article.category.slug}`}>
+    {article.category.name}
+  </Link>
+)}
+```
+
+#### Utiliser plusieurs propriétés
+
+```typescript
+{article.category && (
+  <div>
+    <Badge>{article.category.name}</Badge>
+    {article.category.description && (
+      <Text size="sm" c="dimmed">{article.category.description}</Text>
+    )}
+  </div>
+)}
+```
+
+#### Dans un composant liste
+
+```typescript
+export default function ArticleList({ articles }: { articles: Article[] }) {
+  return (
+    <div>
+      {articles.map((article) => (
+        <Card key={article.id}>
+          <Title>{article.title}</Title>
+          <Badge color="blue">
+            {article.category?.name || 'Non catégorisé'}
+          </Badge>
+        </Card>
+      ))}
+    </div>
+  );
+}
+```
+
+### 🔍 Pourquoi cette abstraction ?
+
+1. **Richesse de l'information** : Avoir l'objet complet permet d'accéder au slug, description, etc.
+2. **Flexibilité** : Vous pouvez créer des liens vers les pages de catégorie
+3. **Type safety** : TypeScript vous protège contre les erreurs
+4. **Cohérence** : Même structure partout dans l'application
+
+### 🎯 Récapitulatif
+
+| Usage | Code | Résultat |
+|-------|------|----------|
+| ❌ Incorrect | `{article.category}` | Erreur React |
+| ✅ Nom simple | `{article.category?.name}` | Affiche le nom |
+| ✅ Avec fallback | `{article.category?.name \|\| 'Sans catégorie'}` | Affiche le nom ou fallback |
+| ✅ Slug pour URL | `{article.category?.slug}` | Affiche le slug |
+| ✅ Vérification | `{article.category && ...}` | Conditionnel |
+
 ## ⚠️ Bonnes pratiques
 
 ### DO ✅
@@ -185,6 +313,7 @@ const articles = await ArticleService.getByCategorySlug('developpement');
 - Utiliser les types exportés (`Article`, `Category`, etc.)
 - Passer par le Service dans les Server Components
 - Gérer les erreurs du Service
+- **Toujours accéder à `category.name` pour afficher la catégorie** (voir section ci-dessous)
 
 ### DON'T ❌
 
@@ -192,6 +321,7 @@ const articles = await ArticleService.getByCategorySlug('developpement');
 - Utiliser `ArticleQueries` (déprécié)
 - Appeler le Service depuis un Client Component
 - Court-circuiter les couches
+- **❌ JAMAIS rendre directement `article.category` dans React** (c'est un objet !)
 
 ## 🔄 Migration depuis l'ancien code
 

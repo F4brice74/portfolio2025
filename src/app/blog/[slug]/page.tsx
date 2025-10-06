@@ -13,9 +13,9 @@ type BlogPostPageProps = {
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const resolvedParams = await params
 
-    // Fetch article from API
+    // Fetch article from API with revalidation cache
     const articleResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles/${resolvedParams.slug}`, {
-        cache: 'no-store'
+        next: { revalidate: 60 } // Cache for 60 seconds
     })
 
     if (!articleResponse.ok) {
@@ -223,7 +223,7 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles/${resolvedParams.slug}`, {
-            cache: 'no-store'
+            next: { revalidate: 60 } // Cache for 60 seconds
         })
 
         if (!response.ok) {
@@ -255,10 +255,16 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 }
 
 // Génération des pages statiques pour tous les articles
+// Désactivé en développement pour améliorer les performances
 export async function generateStaticParams() {
+    // Skip in development for better performance
+    if (process.env.NODE_ENV === 'development') {
+        return []
+    }
+
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles`, {
-            cache: 'no-store'
+            next: { revalidate: 3600 } // Cache for 1 hour
         })
 
         if (!response.ok) {

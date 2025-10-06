@@ -52,9 +52,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 }
 
 async function BlogContent({ currentPage, selectedCategory }: { currentPage: number, selectedCategory?: string }) {
-  // Fetch articles from API
+  // Fetch articles from API with revalidation cache
   const articlesResponse = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/articles`, {
-    cache: 'no-store' // Ensure fresh data
+    next: { revalidate: 60 } // Cache for 60 seconds
   })
 
   if (!articlesResponse.ok) {
