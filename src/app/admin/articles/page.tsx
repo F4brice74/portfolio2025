@@ -1,4 +1,4 @@
-import { Title, Text, Card, Group, Badge, Button, Table, Stack, ActionIcon } from "@mantine/core";
+import { Title, Text, Card, Group, Badge, Button, Stack, ActionIcon, Table } from "@mantine/core";
 import { IconPlus, IconEdit, IconEye, IconCalendar, IconArticle } from "@tabler/icons-react";
 import Link from "next/link";
 import { DeleteArticleButton } from "@/components/admin/DeleteArticleButton";
@@ -41,19 +41,19 @@ export default async function AdminArticlesPage() {
             {/* Articles Table */}
             <Card shadow="sm" padding="lg" radius="md" withBorder>
                 <Table>
-                    <Table.Thead>
-                        <Table.Tr>
-                            <Table.Th>Titre</Table.Th>
-                            <Table.Th>Catégorie</Table.Th>
-                            <Table.Th>Statut</Table.Th>
-                            <Table.Th>Date de publication</Table.Th>
-                            <Table.Th>Actions</Table.Th>
-                        </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Catégorie</th>
+                            <th>Statut</th>
+                            <th>Date de publication</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {articles.map((article: Article) => (
-                            <Table.Tr key={article.id}>
-                                <Table.Td>
+                            <tr key={article.id}>
+                                <td>
                                     <div>
                                         <Text fw={500} size="sm" mb="xs">
                                             {article.title}
@@ -62,21 +62,21 @@ export default async function AdminArticlesPage() {
                                             {article.excerpt}
                                         </Text>
                                     </div>
-                                </Table.Td>
-                                <Table.Td>
+                                </td>
+                                <td>
                                     <Badge size="sm" color="blue">
                                         {article.category?.name || 'Sans catégorie'}
                                     </Badge>
-                                </Table.Td>
-                                <Table.Td>
+                                </td>
+                                <td>
                                     <Badge
                                         size="sm"
                                         color={article.publishedAt ? "green" : "orange"}
                                     >
                                         {article.publishedAt ? "Publié" : "Brouillon"}
                                     </Badge>
-                                </Table.Td>
-                                <Table.Td>
+                                </td>
+                                <td>
                                     <Group gap="xs">
                                         <IconCalendar size={14} color="var(--mantine-color-gray-6)" />
                                         <Text size="sm">
@@ -86,8 +86,8 @@ export default async function AdminArticlesPage() {
                                             }
                                         </Text>
                                     </Group>
-                                </Table.Td>
-                                <Table.Td>
+                                </td>
+                                <td>
                                     <Group gap="xs">
                                         <ActionIcon
                                             component={Link}
@@ -114,10 +114,10 @@ export default async function AdminArticlesPage() {
                                             articleTitle={article.title}
                                         />
                                     </Group>
-                                </Table.Td>
-                            </Table.Tr>
+                                </td>
+                            </tr>
                         ))}
-                    </Table.Tbody>
+                    </tbody>
                 </Table>
             </Card>
 

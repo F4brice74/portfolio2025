@@ -1,26 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import {
-    TextInput,
-    Textarea,
-    Select,
+    Alert,
     Button,
+    Grid,
+    GridCol,
     Group,
+    LoadingOverlay,
+    Select,
     Stack,
     Switch,
     TagsInput,
     Text,
-    Grid,
-    GridCol,
-    Alert,
-    LoadingOverlay
+    TextInput,
+    Textarea
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { IconCheck, IconX, IconInfoCircle } from '@tabler/icons-react';
+import { IconCheck, IconInfoCircle, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import { RichTextEditor } from '@/components/admin/RichTextEditor';
+import { useState } from 'react';
 
 interface ArticleFormData {
     title: string;

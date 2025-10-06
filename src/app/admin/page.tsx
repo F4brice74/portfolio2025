@@ -1,4 +1,5 @@
-import { Title, Text, Grid, Card, Group, Badge, Stack, Button, GridCol } from "@mantine/core";
+import { Title, Text, Grid, Card, Group, Badge, Stack, Button } from "@mantine/core";
+import { GridCol } from "@mantine/core";
 import { IconArticle, IconEye, IconEdit, IconPlus, IconTrendingUp, IconSettings } from "@tabler/icons-react";
 import Link from "next/link";
 import { ArticleService, type Article } from "@/lib/articles";
