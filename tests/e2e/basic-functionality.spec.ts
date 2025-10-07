@@ -8,10 +8,13 @@ test.describe('Basic Functionality Tests', () => {
     await expect(page).toHaveURL('/');
     
     // Vérifier que le titre principal est présent (plus spécifique)
-    await expect(page.getByRole('heading', { name: 'Fabrice MIQUET-SAGE' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    
+    // Vérifier que le sous-titre est présent
+    await expect(page.getByRole('heading', { name: 'Développement web mais pas que...' })).toBeVisible();
     
     // Vérifier que la page contient du contenu
-    await expect(page.getByText('Développeur Fullstack - Catalyseur de projets')).toBeVisible();
+    await expect(page.getByText(/Partir d'une feuille blanche/)).toBeVisible();
   });
 
   test('Navigation works on desktop', async ({ page }) => {

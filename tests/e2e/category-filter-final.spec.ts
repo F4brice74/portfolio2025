@@ -95,7 +95,7 @@ test.describe('Category Filter - US-003 (Final)', () => {
     // Should be on article page
     await expect(page).toHaveURL(/\/blog\/[a-z0-9-]+/);
     
-    // Navigate back to blog
+    // Navigate back to homepage
     await page.goBack();
     
     // Filter should still be applied

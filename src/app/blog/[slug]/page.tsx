@@ -3,6 +3,7 @@ import { IconArrowLeft, IconCalendar, IconClock, IconHome, IconUser } from "@tab
 import Link from "next/link"
 // Removed mock data imports - now using API calls
 import { ArticleService } from "@/lib/articles"
+import { MarkdownRenderer } from "@/components/MarkdownRenderer"
 
 type BlogPostPageProps = {
     params: Promise<{
@@ -147,12 +148,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 )}
 
                 {/* Article Content */}
-                <Box
-                    style={{
-                        lineHeight: 1.7,
-                        fontSize: '18px',
-                    }}
-                >
+                <Box>
                     <Text
                         size="lg"
                         c="dimmed"
@@ -162,11 +158,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         {article.excerpt}
                     </Text>
 
-                    <div
-                        dangerouslySetInnerHTML={{
-                            __html: article.content.replace(/\n/g, '<br />')
-                        }}
-                    />
+                    <MarkdownRenderer content={article.content} />
                 </Box>
 
                 {/* Tags */}

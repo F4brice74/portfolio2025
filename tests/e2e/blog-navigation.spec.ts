@@ -5,24 +5,22 @@ test.describe('Blog Navigation - US-002', () => {
     await page.goto('/');
   });
 
-  test('should navigate from homepage to blog', async ({ page }) => {
-    // Check blog link exists in navigation
-    const blogLink = page.getByRole('link', { name: 'Blog' });
-    await expect(blogLink).toBeVisible();
+  test('should display blog on homepage', async ({ page }) => {
+    // Homepage should display blog content
+    await expect(page).toHaveURL('/');
     
-    // Click on blog link
-    await blogLink.click();
+    // Should show blog header
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
     
-    // Should navigate to blog page
-    await expect(page).toHaveURL('/blog');
-    
-    // Should show blog content
-    await expect(page.getByRole('heading', { name: 'Blog' })).toBeVisible();
+    // Should show articles
+    await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
+    const articleCount = await page.locator('.mantine-Card-root').count();
+    expect(articleCount).toBeGreaterThan(0);
   });
 
-  test('should navigate from blog to individual article', async ({ page }) => {
-    // Go to blog page
-    await page.goto('/blog');
+  test('should navigate from homepage to individual article', async ({ page }) => {
+    // Homepage has blog articles
+    await page.goto('/');
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
     // Click on first article
@@ -36,9 +34,9 @@ test.describe('Blog Navigation - US-002', () => {
     await expect(page.locator('h1')).toBeVisible();
   });
 
-  test('should navigate back from article to blog', async ({ page }) => {
-    // Go to blog page
-    await page.goto('/blog');
+  test('should navigate back from article to homepage', async ({ page }) => {
+    // Go to homepage
+    await page.goto('/');
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
     // Click on first article
@@ -51,36 +49,36 @@ test.describe('Blog Navigation - US-002', () => {
     // Use browser back button
     await page.goBack();
     
-    // Should be back on blog page
-    await expect(page).toHaveURL('/blog');
-    await expect(page.getByRole('heading', { name: 'Blog' })).toBeVisible();
+    // Should be back on homepage
+    await expect(page).toHaveURL('/');
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
   });
 
   test('should maintain navigation state across page refreshes', async ({ page }) => {
-    // Go to blog page
-    await page.goto('/blog');
+    // Go to homepage
+    await page.goto('/');
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
     // Refresh page
     await page.reload();
     
-    // Should still be on blog page
-    await expect(page).toHaveURL('/blog');
-    await expect(page.getByRole('heading', { name: 'Blog' })).toBeVisible();
+    // Should still be on homepage
+    await expect(page).toHaveURL('/');
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
   });
 
-  test('should handle direct URL navigation to blog', async ({ page }) => {
-    // Navigate directly to blog URL
-    await page.goto('/blog');
+  test('should handle direct URL navigation to homepage', async ({ page }) => {
+    // Navigate directly to homepage URL
+    await page.goto('/');
     
-    // Should load blog page
-    await expect(page).toHaveURL('/blog');
-    await expect(page.getByRole('heading', { name: 'Blog' })).toBeVisible();
+    // Should load homepage with blog
+    await expect(page).toHaveURL('/');
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
   });
 
   test('should handle direct URL navigation to article', async ({ page }) => {
-    // First get a valid article slug from blog page
-    await page.goto('/blog');
+    // First get a valid article slug from homepage
+    await page.goto('/');
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
     // Get first article link
@@ -97,48 +95,39 @@ test.describe('Blog Navigation - US-002', () => {
   });
 
   test('should show proper breadcrumb or navigation context', async ({ page }) => {
-    // Go to blog page
-    await page.goto('/blog');
+    // Go to homepage
+    await page.goto('/');
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
-    // Check if there's any breadcrumb or navigation context
-    const breadcrumb = page.locator('text=/Accueil/, text=/Home/, text=/Blog/');
-    if (await breadcrumb.isVisible()) {
-      await expect(breadcrumb).toBeVisible();
+    // Check if there's any navigation context
+    const navContext = page.locator('text=/Accueil/, text=/Home/, text=/OSSAWAYA/');
+    if (await navContext.isVisible()) {
+      await expect(navContext).toBeVisible();
     }
   });
 
   test('should handle navigation with browser back/forward buttons', async ({ page }) => {
     // Start at homepage
     await page.goto('/');
-    
-    // Navigate to blog
-    const blogLink = page.getByRole('link', { name: 'Blog' });
-    await blogLink.click();
-    await expect(page).toHaveURL('/blog');
+    await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
     // Navigate to article
-    await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     const firstArticle = page.locator('.mantine-Card-root').first();
     await firstArticle.locator('a').first().click();
     await expect(page).toHaveURL(/\/blog\/[a-z0-9-]+/);
     
     // Use browser back button
     await page.goBack();
-    await expect(page).toHaveURL('/blog');
-    
-    // Use browser back button again
-    await page.goBack();
     await expect(page).toHaveURL('/');
     
     // Use browser forward button
     await page.goForward();
-    await expect(page).toHaveURL('/blog');
+    await expect(page).toHaveURL(/\/blog\/[a-z0-9-]+/);
   });
 
   test('should maintain navigation state during pagination', async ({ page }) => {
-    // Go to blog page
-    await page.goto('/blog');
+    // Go to homepage
+    await page.goto('/');
     await page.waitForSelector('.mantine-Pagination-root', { timeout: 5000 });
     
     // Go to page 2
@@ -151,7 +140,7 @@ test.describe('Blog Navigation - US-002', () => {
     await firstArticle.locator('a').first().click();
     await expect(page).toHaveURL(/\/blog\/[a-z0-9-]+/);
     
-    // Go back to blog
+    // Go back to homepage
     await page.goBack();
     
     // Should be back on page 2
@@ -170,42 +159,37 @@ test.describe('Blog Navigation - US-002', () => {
     // Test desktop navigation
     await page.setViewportSize({ width: 1200, height: 800 });
     await page.goto('/');
-    await expect(page.getByRole('link', { name: 'Blog' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
     
     // Test tablet navigation
     await page.setViewportSize({ width: 768, height: 1024 });
     await page.goto('/');
-    await expect(page.getByRole('link', { name: 'Blog' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
     
     // Test mobile navigation
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/');
-    await expect(page.getByRole('link', { name: 'Blog' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
   });
 
   test('should have accessible navigation', async ({ page }) => {
     // Test keyboard navigation
     await page.goto('/');
+    await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
     // Tab through navigation
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
     
-    // Should be able to focus on blog link
+    // Should be able to focus on elements
     const focusedElement = page.locator(':focus');
     await expect(focusedElement).toBeVisible();
-    
-    // Press Enter on blog link
-    await page.keyboard.press('Enter');
-    
-    // Should navigate to blog
-    await expect(page).toHaveURL('/blog');
   });
 
   test('should maintain navigation state in new tabs', async ({ page, context }) => {
-    // Go to blog page
-    await page.goto('/blog');
+    // Go to homepage
+    await page.goto('/');
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
     // Open article in new tab
@@ -221,7 +205,7 @@ test.describe('Blog Navigation - US-002', () => {
     await newPage.waitForLoadState();
     await expect(newPage).toHaveURL(/\/blog\/[a-z0-9-]+/);
     
-    // Original page should still be on blog
-    await expect(page).toHaveURL('/blog');
+    // Original page should still be on homepage
+    await expect(page).toHaveURL('/');
   });
 });

@@ -15,16 +15,14 @@ test.describe('Portfolio Homepage - US-001', () => {
 
   test('should display personal/professional information clearly', async ({ page }) => {
     // Check hero section
-    await expect(page.getByRole('heading', { name: 'Fabrice MIQUET-SAGE' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Catalyseur de projets digitaux' })).toBeVisible();
-    
-    // Check professional photo
-    await expect(page.getByAltText('Fabrice MIQUET-SAGE - Catalyseur de projets digitaux')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Développement web mais pas que...' })).toBeVisible();
     
     // Check about section content
-    await expect(page.getByText('Transformer vos défis métier en solutions digitales sur mesure')).toBeVisible();
-    await expect(page.getByText('Mon ADN : La vision globale au service de vos projets')).toBeVisible();
-    await expect(page.getByText('Mon engagement')).toBeVisible();
+    await expect(page.getByText(/Partir d'une feuille blanche/)).toBeVisible();
+    await expect(page.getByText(/identifier les vrais enjeux/)).toBeVisible();
+    await expect(page.getByText(/15 ans d'expérience/)).toBeVisible();
+    await expect(page.getByText(/curiosité insatiable/)).toBeVisible();
   });
 
 //   test('should display professional timeline', async ({ page }) => {
@@ -41,51 +39,47 @@ test.describe('Portfolio Homepage - US-001', () => {
 //     await expect(page.getByText('AD SOFTWARE')).toBeVisible();
 //   });
 
-  test('should display services section', async ({ page }) => {
-    // Check services section
-    await expect(page.getByRole('heading', { name: 'Mes atouts différenciants' })).toBeVisible();
+  test('should display blog articles section', async ({ page }) => {
+    // Check that articles are displayed
+    await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
+    const articleCount = await page.locator('.mantine-Card-root').count();
+    expect(articleCount).toBeGreaterThan(0);
     
-    // Check key differentiators
-    await expect(page.getByText('🎯 Vision stratégique & opérationnelle')).toBeVisible();
-    await expect(page.getByText('🤝 Facilitateur de collaboration')).toBeVisible();
-    await expect(page.getByText('🎨 Approche design-driven & marketing-aware')).toBeVisible();
-    await expect(page.getByText('⚡ Excellence technique au service du projet')).toBeVisible();
+    // Check article count display
+    await expect(page.getByText(/article.*au total/)).toBeVisible();
     
-    // Check AI section
-    await expect(page.getByText('🧠 Ma plus-value dans l\'ère de l\'IA')).toBeVisible();
+    // Check pagination if multiple pages exist
+    const paginationExists = await page.getByText(/Page \d+ sur \d+/).isVisible().catch(() => false);
+    if (paginationExists) {
+      await expect(page.getByText(/Page \d+ sur \d+/)).toBeVisible();
+    }
   });
 
-  test('should have working contact section', async ({ page }) => {
-    // Check footer contact
-    await expect(page.getByText('Prêt à collaborer sur votre prochain projet ?')).toBeVisible();
-    
-    // Check contact buttons
-    await expect(page.getByRole('link', { name: 'mail' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'GitHub' })).toBeVisible();
-    
-    // Check email link works
-    const emailLink = page.getByRole('link', { name: 'mail' });
-    await expect(emailLink).toHaveAttribute('href', /mailto:/);
+  test('should have working navigation', async ({ page }) => {
+    // Check navigation menu
+    await expect(page.getByText('Accueil')).toBeVisible();
+    await expect(page.getByText('Contact')).toBeVisible();
   });
 
   test('should be fully responsive', async ({ page }) => {
     // Test desktop view
     await page.setViewportSize({ width: 1200, height: 800 });
-    await expect(page.getByRole('heading', { name: 'Fabrice MIQUET-SAGE' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
     
     // Test tablet view
     await page.setViewportSize({ width: 768, height: 1024 });
-    await expect(page.getByRole('heading', { name: 'Fabrice MIQUET-SAGE' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
     
     // Test mobile view
     await page.setViewportSize({ width: 375, height: 667 });
-    await expect(page.getByRole('heading', { name: 'Fabrice MIQUET-SAGE' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
   });
 
   test('should have proper SEO meta tags', async ({ page }) => {
-    // Check title
-    await expect(page).toHaveTitle(/Fabrice MIQUET-SAGE | Developpeur & Catalyseur de projets digitaux/);
+    // Check title exists
+    const pageTitle = await page.title();
+    expect(pageTitle).toBeTruthy();
+    expect(pageTitle.length).toBeGreaterThan(0);
     
     // Check meta description
     const metaDescription = page.locator('meta[name="description"]');

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Blog Pagination - US-002', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/blog');
+    await page.goto('/');
     await page.waitForSelector('.mantine-Pagination-root', { timeout: 5000 });
   });
 
@@ -45,7 +45,7 @@ test.describe('Blog Pagination - US-002', () => {
     await page1Button.click();
     
     // Should navigate back to page 1
-    await expect(page).toHaveURL(/\/blog(\?page=1)?$/);
+    await expect(page).toHaveURL(/^\/(\?page=1)?$/);
     
     // Should show page 1 info
     await expect(page.getByText('Page 1 sur 2')).toBeVisible();
@@ -89,7 +89,7 @@ test.describe('Blog Pagination - US-002', () => {
 
   test('should handle direct URL navigation to page 2', async ({ page }) => {
     // Navigate directly to page 2
-    await page.goto('/blog?page=2');
+    await page.goto('/?page=2');
     await page.waitForSelector('.mantine-Pagination-root', { timeout: 5000 });
     
     // Should show page 2
@@ -103,7 +103,7 @@ test.describe('Blog Pagination - US-002', () => {
 
   test('should handle invalid page numbers gracefully', async ({ page }) => {
     // Navigate to invalid page
-    await page.goto('/blog?page=999');
+    await page.goto('/?page=999');
     await page.waitForLoadState('networkidle');
     
     // Should either redirect to page 1 or show appropriate message

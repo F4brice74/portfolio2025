@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Blog Article Pages - US-002', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to blog first to get a valid article URL
-    await page.goto('/blog');
+    // Navigate to homepage (which is the blog) to get a valid article URL
+    await page.goto('/');
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
   });
 
@@ -67,16 +67,16 @@ test.describe('Blog Article Pages - US-002', () => {
     const firstArticle = page.locator('.mantine-Card-root').first();
     await firstArticle.locator('a').first().click();
     
-    // Look for back button or navigation
-    const backButton = page.locator('text=/Retour au blog/, text=/←/, text=/Back/').first();
+    // Look for back button or navigation - it should go to homepage (which is the blog)
+    const backButton = page.locator('text=/Retour/, text=/←/, text=/Back/, text=/Accueil/').first();
     
     if (await backButton.isVisible()) {
       await backButton.click();
-      await expect(page).toHaveURL('/blog');
+      await expect(page).toHaveURL('/');
     } else {
       // If no back button, test browser back
       await page.goBack();
-      await expect(page).toHaveURL('/blog');
+      await expect(page).toHaveURL('/');
     }
   });
 
@@ -165,7 +165,7 @@ test.describe('Blog Article Pages - US-002', () => {
     
     // Test first few articles
     for (let i = 0; i < Math.min(3, articleCount); i++) {
-      await page.goto('/blog');
+      await page.goto('/');
       await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
       
       const articleLink = page.locator('.mantine-Card-root a').nth(i);

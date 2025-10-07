@@ -175,7 +175,7 @@ export class ArticleRepository {
     authorEmail: string;
     tags: string[];
   }): Promise<ArticleWithCategory> {
-    const readingTime = Math.ceil(data.content.length / 200);
+    const readingTime = Math.ceil(data.content.length / 600);
 
     // Create article
     const [newArticle] = await db.insert(articles).values({
@@ -223,7 +223,7 @@ export class ArticleRepository {
     const updateData: Record<string, unknown> = { ...data };
     
     if (data.content) {
-      updateData.readingTime = Math.ceil(data.content.length / 200);
+      updateData.readingTime = Math.ceil(data.content.length / 600);
     }
     updateData.updatedAt = new Date();
 
