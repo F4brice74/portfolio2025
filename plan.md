@@ -217,10 +217,17 @@ This development plan covers the creation of an evolutionary portfolio website b
   - Build article list with filtering and sorting ✅
   - Design article creation and editing forms ✅
   - Implement draft preview and publish controls ✅
-- [~] Implement WYSIWYG editor
-  - Integrate rich text editor (TinyMCE or similar) (basic Textarea with Markdown support)
-  - Add image insertion and formatting tools (TODO)
-  - Create content preview functionality (TODO)
+- [x] Implement Markdown support and rendering
+  - ✅ Create MarkdownRenderer component with react-markdown
+  - ✅ Support GitHub Flavored Markdown (GFM) with tables, lists, code blocks
+  - ✅ Implement syntax highlighting with highlight.js
+  - ✅ Add dark/light theme support for code blocks
+  - ✅ Create MarkdownPreview component for admin interface
+  - ✅ Add MarkdownGuide component with usage instructions
+  - ✅ Integrate with existing article display system
+  - ✅ Add comprehensive E2E tests for Markdown rendering
+  - [ ] Add image insertion and formatting tools (TODO - requires image upload system)
+  - [ ] Create content preview functionality (TODO - can be added to admin interface)
 - [ ] Build image management system
   - Create image upload interface with drag-and-drop (TODO)
   - Design image library with search and filtering (TODO)
@@ -454,14 +461,15 @@ Focus on US-005 through US-009 and content management:
 ### ✅ What's Working
 - **Full Blog System**: List, filter, read articles
 - **Admin Panel**: Create, edit, delete, publish/unpublish articles
+- **Markdown Support**: Complete Markdown rendering with syntax highlighting
 - **Authentication**: Clerk integration with protected routes
 - **Database**: NeonDB + Drizzle ORM with migrations
 - **UI**: Responsive design with Mantine UI + dark mode
-- **Tests**: E2E Playwright tests for auth & security
+- **Tests**: E2E Playwright tests for auth, security & Markdown rendering
 
 ### ⚠️ What's Partial
 - **Portfolio Phase 1**: Basic intro exists, needs dedicated sections
-- **Editor**: Simple Textarea with Markdown, needs rich WYSIWYG
+- **Editor**: Markdown support complete, needs image upload integration
 - **SEO**: Basic meta tags, needs OpenGraph, structured data, sitemap
 - **Search**: Category filter works, needs full-text search
 
