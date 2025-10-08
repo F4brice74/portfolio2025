@@ -15,7 +15,7 @@ test.describe('Portfolio Homepage - US-001', () => {
 
   test('should display personal/professional information clearly', async ({ page }) => {
     // Check hero section
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Développement web mais pas que...' })).toBeVisible();
     
     // Check about section content
@@ -64,15 +64,15 @@ test.describe('Portfolio Homepage - US-001', () => {
   test('should be fully responsive', async ({ page }) => {
     // Test desktop view
     await page.setViewportSize({ width: 1200, height: 800 });
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
     
     // Test tablet view
     await page.setViewportSize({ width: 768, height: 1024 });
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
     
     // Test mobile view
     await page.setViewportSize({ width: 375, height: 667 });
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
   });
 
   test('should have proper SEO meta tags', async ({ page }) => {

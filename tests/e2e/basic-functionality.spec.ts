@@ -8,7 +8,7 @@ test.describe('Basic Functionality Tests', () => {
     await expect(page).toHaveURL('/');
     
     // Vérifier que le titre principal est présent (plus spécifique)
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
     
     // Vérifier que le sous-titre est présent
     await expect(page.getByRole('heading', { name: 'Développement web mais pas que...' })).toBeVisible();

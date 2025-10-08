@@ -15,7 +15,7 @@ test.describe('Blog Page - US-002', () => {
 
   test('should display blog header and description', async ({ page }) => {
     // Check main title
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
     
     // Check description
     await expect(page.getByText(/Partir d'une feuille blanche/)).toBeVisible();

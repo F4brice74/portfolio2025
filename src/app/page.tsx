@@ -24,7 +24,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <Container size="lg" py="xl">
         <Box mb="xl" ta="center">
           <Title order={1} size={35} c="var(--mantine-color-gray-9)">
-            OSSAWAYA 
+            OSSAWAYAS
           </Title>
           <Title order={2} size={20} c="var(--mantine-color-blue-6)" fw={500}>
             Développement web mais pas que...

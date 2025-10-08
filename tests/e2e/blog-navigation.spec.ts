@@ -10,7 +10,7 @@ test.describe('Blog Navigation - US-002', () => {
     await expect(page).toHaveURL('/');
     
     // Should show blog header
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
     
     // Should show articles
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
@@ -51,7 +51,7 @@ test.describe('Blog Navigation - US-002', () => {
     
     // Should be back on homepage
     await expect(page).toHaveURL('/');
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
   });
 
   test('should maintain navigation state across page refreshes', async ({ page }) => {
@@ -64,7 +64,7 @@ test.describe('Blog Navigation - US-002', () => {
     
     // Should still be on homepage
     await expect(page).toHaveURL('/');
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
   });
 
   test('should handle direct URL navigation to homepage', async ({ page }) => {
@@ -73,7 +73,7 @@ test.describe('Blog Navigation - US-002', () => {
     
     // Should load homepage with blog
     await expect(page).toHaveURL('/');
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
   });
 
   test('should handle direct URL navigation to article', async ({ page }) => {
@@ -100,7 +100,7 @@ test.describe('Blog Navigation - US-002', () => {
     await page.waitForSelector('.mantine-Card-root', { timeout: 5000 });
     
     // Check if there's any navigation context
-    const navContext = page.locator('text=/Accueil/, text=/Home/, text=/OSSAWAYA/');
+    const navContext = page.locator('text=/Accueil/, text=/Home/, text=/OSSAWAYAS/');
     if (await navContext.isVisible()) {
       await expect(navContext).toBeVisible();
     }
@@ -159,17 +159,17 @@ test.describe('Blog Navigation - US-002', () => {
     // Test desktop navigation
     await page.setViewportSize({ width: 1200, height: 800 });
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
     
     // Test tablet navigation
     await page.setViewportSize({ width: 768, height: 1024 });
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
     
     // Test mobile navigation
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'OSSAWAYA' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'OSSAWAYAS' })).toBeVisible();
   });
 
   test('should have accessible navigation', async ({ page }) => {
