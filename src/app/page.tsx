@@ -30,16 +30,16 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             Développement web mais pas que...
           </Title>
         </Box>
-        <Box mb="xl">
+        {/* <Box mb="xl">
           <Text c="var(--mantine-color-gray-8)" mb="md">
-            Partir d'une feuille blanche, identifier les vrais enjeux, orchestrer les équipes et voir naître des projets qui ont du sens, voila ce qui me motive. <br /> Fort de 15 ans d'expérience en gestion de projet dans de domaine de la communication, et 5 années de développement fullstack, À l'heure où l'IA révolutionne le code, ma valeur ajoutée réside dans ma capacité à comprendre, structurer et piloter des projets.<br/>Je cultive une curiosité insatiable pour tout ce qui nous entoure : nouvelles technologies, enjeux sociétaux, environnement, cuisine, musique, politique... Cette ouverture d'esprit nourrit ma créativité et enrichit mon approche projet..
+            Développement, nouvelles technologies, enjeux sociétaux, environnement, cuisine, musique, politique... Cette ouverture d'esprit nourrit ma créativité et enrichit mon approche projet..
            </Text>
           <Text c="var(--mantine-color-gray-8)" mb="md"> 
           </Text>
           <Text c="var(--mantine-color-gray-8)" mb="md">
             Vous trouverez ci-dessous une collection d'articles, des liens vers des projets, issus de mes expériences, réflexions et découvertes.
           </Text>
-        </Box>
+        </Box> */}
         <Suspense fallback={
           <Center py="xl">
             <Loader size="lg" />
