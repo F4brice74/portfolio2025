@@ -1,19 +1,16 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Authentication Basic Tests', () => {
-  test('Authentication buttons are present and clickable', async ({ page }) => {
+  test('Authentication button is present and clickable', async ({ page }) => {
     await page.goto('/');
     
-    // Vérifier que les boutons d'authentification sont présents
+    // Vérifier que le bouton de connexion est présent
     const signInButton = page.locator('button:has-text("Connexion"), [data-clerk="sign-in-button"]');
-    const signUpButton = page.locator('button:has-text("Inscription"), [data-clerk="sign-up-button"]');
     
     await expect(signInButton).toBeVisible();
-    await expect(signUpButton).toBeVisible();
     
-    // Vérifier que les boutons sont cliquables
+    // Vérifier que le bouton est cliquable
     await expect(signInButton).toBeEnabled();
-    await expect(signUpButton).toBeEnabled();
   });
 
   test('Admin link is not visible when not authenticated', async ({ page }) => {
@@ -34,7 +31,7 @@ test.describe('Authentication Basic Tests', () => {
     }
   });
 
-  test('Authentication buttons work on mobile', async ({ page }) => {
+  test('Authentication button works on mobile', async ({ page }) => {
     // Configuration mobile
     await page.setViewportSize({ width: 375, height: 667 });
     
@@ -46,11 +43,9 @@ test.describe('Authentication Basic Tests', () => {
       await burgerButton.click();
     }
     
-    // Vérifier que les boutons d'auth sont dans le menu mobile
+    // Vérifier que le bouton de connexion est dans le menu mobile
     const signInButton = page.locator('button:has-text("Connexion"), [data-clerk="sign-in-button"]');
-    const signUpButton = page.locator('button:has-text("Inscription"), [data-clerk="sign-up-button"]');
     
     await expect(signInButton).toBeVisible();
-    await expect(signUpButton).toBeVisible();
   });
 });

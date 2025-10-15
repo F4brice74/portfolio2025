@@ -44,45 +44,9 @@ test.describe('Authentication Error Handling', () => {
     await expect(page.getByText(/Password is required/i)).toBeVisible();
   });
 
-  test('Invalid email format shows error', async ({ page }) => {
-    await page.goto('/');
-    
-    // 1. Cliquer sur inscription
-    await page.getByText('Inscription').click();
-    await expect(page.getByText('Create your account')).toBeVisible();
-    
-    // 2. Remplir avec un email invalide
-    await page.fill('[name="emailAddress"]', 'invalid-email');
-    await page.fill('[name="password"]', 'ValidPassword123!');
-    await page.fill('[name="firstName"]', 'Test');
-    await page.fill('[name="lastName"]', 'User');
-    
-    // 3. Cliquer sur inscription
-    await page.getByRole('button', { name: 'Create account' }).click();
-    
-    // 4. Vérifier le message d'erreur pour l'email
-    await expect(page.getByText(/Invalid email|Please enter a valid email/i)).toBeVisible();
-  });
+  // Test d'inscription supprimé - l'inscription n'est plus disponible
 
-  test('Weak password shows error', async ({ page }) => {
-    await page.goto('/');
-    
-    // 1. Cliquer sur inscription
-    await page.getByText('Inscription').click();
-    await expect(page.getByText('Create your account')).toBeVisible();
-    
-    // 2. Remplir avec un mot de passe faible
-    await page.fill('[name="emailAddress"]', 'test@example.com');
-    await page.fill('[name="password"]', '123');
-    await page.fill('[name="firstName"]', 'Test');
-    await page.fill('[name="lastName"]', 'User');
-    
-    // 3. Cliquer sur inscription
-    await page.getByRole('button', { name: 'Create account' }).click();
-    
-    // 4. Vérifier le message d'erreur pour le mot de passe
-    await expect(page.getByText(/Password is too short|Password must be at least/i)).toBeVisible();
-  });
+  // Test d'inscription supprimé - l'inscription n'est plus disponible
 
   test('Network error handling', async ({ page }) => {
     // 1. Simuler une erreur réseau

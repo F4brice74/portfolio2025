@@ -19,24 +19,7 @@ test.describe('Authentication Performance', () => {
     await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
   });
 
-  test('Sign up modal loads quickly', async ({ page }) => {
-    await page.goto('/');
-    
-    // 1. Mesurer le temps de chargement de la modal d'inscription
-    const startTime = Date.now();
-    await page.getByText('Inscription').click();
-    await expect(page.getByText('Create your account')).toBeVisible();
-    const loadTime = Date.now() - startTime;
-    
-    // Vérifier que la modal se charge en moins de 2 secondes
-    expect(loadTime).toBeLessThan(2000);
-    
-    // 2. Vérifier que tous les éléments sont visibles
-    await expect(page.getByRole('textbox', { name: 'Email address' })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'Password' })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'First name' })).toBeVisible();
-    await expect(page.getByRole('textbox', { name: 'Last name' })).toBeVisible();
-  });
+  // Test d'inscription supprimé - l'inscription n'est plus disponible
 
   test('Authentication process completes quickly', async ({ page }) => {
     await page.goto('/');

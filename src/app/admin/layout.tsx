@@ -1,7 +1,7 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Container, Title, Group, Button, Alert } from "@mantine/core";
-import { IconArrowLeft, IconSettings, IconArticle, IconDashboard, IconAlertCircle } from "@tabler/icons-react";
+import { IconArrowLeft, IconSettings, IconArticle, IconDashboard, IconAlertCircle, IconCategory } from "@tabler/icons-react";
 import Link from "next/link";
 import { isAdmin } from "@/lib/auth/admin-check";
 
@@ -24,9 +24,9 @@ export default async function AdminLayout({
     if (!isAdmin(userId, userEmail)) {
         return (
             <Container size="sm" py="xl">
-                <Alert 
-                    icon={<IconAlertCircle size={24} />} 
-                    title="Accès refusé" 
+                <Alert
+                    icon={<IconAlertCircle size={24} />}
+                    title="Accès refusé"
                     color="red"
                     variant="filled"
                 >
@@ -57,6 +57,11 @@ export default async function AdminLayout({
             href: "/admin/articles",
             icon: IconArticle,
             label: "Articles",
+        },
+        {
+            href: "/admin/categories",
+            icon: IconCategory,
+            label: "Catégories",
         },
         {
             href: "/admin/settings",

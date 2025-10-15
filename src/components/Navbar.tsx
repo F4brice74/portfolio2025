@@ -4,7 +4,7 @@ import { Group, Text, Container, Box, Burger, Drawer, Stack } from "@mantine/cor
 import { IconArticle, IconAddressBook, IconSettings } from "@tabler/icons-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Navbar() {
   const [opened, setOpened] = useState(false);
@@ -105,44 +105,24 @@ export default function Navbar() {
                 {isMounted && (
                   <>
                     <SignedOut>
-                      <Group gap="sm">
-                        <SignInButton mode="modal">
-                          <Text
-                            style={{
-                              cursor: "pointer",
-                              fontWeight: 500,
-                              color: "var(--mantine-color-gray-7)",
-                              transition: "color 0.2s ease",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.color = "var(--mantine-color-blue-6)";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.color = "var(--mantine-color-gray-7)";
-                            }}
-                          >
-                            Connexion
-                          </Text>
-                        </SignInButton>
-                        <SignUpButton mode="modal">
-                          <Text
-                            style={{
-                              cursor: "pointer",
-                              fontWeight: 500,
-                              color: "var(--mantine-color-blue-6)",
-                              transition: "color 0.2s ease",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.color = "var(--mantine-color-blue-7)";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.color = "var(--mantine-color-blue-6)";
-                            }}
-                          >
-                            Inscription
-                          </Text>
-                        </SignUpButton>
-                      </Group>
+                      <SignInButton mode="modal">
+                        <Text
+                          style={{
+                            cursor: "pointer",
+                            fontWeight: 500,
+                            color: "var(--mantine-color-gray-7)",
+                            transition: "color 0.2s ease",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = "var(--mantine-color-blue-6)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = "var(--mantine-color-gray-7)";
+                          }}
+                        >
+                          Connexion
+                        </Text>
+                      </SignInButton>
                     </SignedOut>
 
                     <SignedIn>
@@ -254,56 +234,30 @@ export default function Navbar() {
           {isMounted && (
             <Box mt="md" pt="md" style={{ borderTop: "1px solid var(--mantine-color-gray-2)" }}>
               <SignedOut>
-                <Stack gap="sm">
-                  <SignInButton mode="modal">
-                    <Text
-                      style={{
-                        cursor: "pointer",
-                        fontWeight: 500,
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                        transition: "all 0.2s ease",
-                        color: "var(--mantine-color-gray-7)",
-                        textAlign: "center",
-                      }}
-                      onClick={() => setOpened(false)}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "var(--mantine-color-gray-1)";
-                        e.currentTarget.style.color = "var(--mantine-color-blue-6)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                        e.currentTarget.style.color = "var(--mantine-color-gray-7)";
-                      }}
-                    >
-                      Connexion
-                    </Text>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
-                    <Text
-                      style={{
-                        cursor: "pointer",
-                        fontWeight: 500,
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                        transition: "all 0.2s ease",
-                        color: "var(--mantine-color-blue-6)",
-                        textAlign: "center",
-                      }}
-                      onClick={() => setOpened(false)}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "var(--mantine-color-blue-0)";
-                        e.currentTarget.style.color = "var(--mantine-color-blue-7)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                        e.currentTarget.style.color = "var(--mantine-color-blue-6)";
-                      }}
-                    >
-                      Inscription
-                    </Text>
-                  </SignUpButton>
-                </Stack>
+                <SignInButton mode="modal">
+                  <Text
+                    style={{
+                      cursor: "pointer",
+                      fontWeight: 500,
+                      padding: "12px 16px",
+                      borderRadius: "8px",
+                      transition: "all 0.2s ease",
+                      color: "var(--mantine-color-gray-7)",
+                      textAlign: "center",
+                    }}
+                    onClick={() => setOpened(false)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = "var(--mantine-color-gray-1)";
+                      e.currentTarget.style.color = "var(--mantine-color-blue-6)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.color = "var(--mantine-color-gray-7)";
+                    }}
+                  >
+                    Connexion
+                  </Text>
+                </SignInButton>
               </SignedOut>
 
               <SignedIn>

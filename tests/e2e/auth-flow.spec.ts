@@ -1,28 +1,25 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Authentication Flow', () => {
-  test('Complete authentication flow - sign up, sign in, sign out', async ({ page }) => {
+  test('Complete authentication flow - sign in, sign out', async ({ page }) => {
     // 1. Naviguer vers la page d'accueil
     await page.goto('/');
     
-    // 2. Vérifier que les boutons de connexion sont visibles
+    // 2. Vérifier que le bouton de connexion est visible
     await expect(page.getByText('Connexion')).toBeVisible();
-    await expect(page.getByText('Inscription')).toBeVisible();
     
-    // 3. Tester l'inscription
-    await page.getByText('Inscription').click();
+    // 3. Tester la connexion
+    await page.getByText('Connexion').click();
     
-    // Attendre que la modal d'inscription s'ouvre
-    await expect(page.getByText('Create your account')).toBeVisible();
+    // Attendre que la modal de connexion s'ouvre
+    await expect(page.getByText('Sign in to your account')).toBeVisible();
     
-    // Remplir le formulaire d'inscription
-    await page.fill('[name="emailAddress"]', 'test@example.com');
+    // Remplir le formulaire de connexion
+    await page.fill('[name="identifier"]', 'test@example.com');
     await page.fill('[name="password"]', 'TestPassword123!');
-    await page.fill('[name="firstName"]', 'Test');
-    await page.fill('[name="lastName"]', 'User');
     
-    // Cliquer sur le bouton d'inscription
-    await page.getByRole('button', { name: 'Create account' }).click();
+    // Cliquer sur le bouton de connexion
+    await page.getByRole('button', { name: 'Sign in' }).click();
     
     // Attendre la redirection et vérifier que l'utilisateur est connecté
     await expect(page.getByRole('button', { name: 'User menu' })).toBeVisible();
@@ -43,7 +40,6 @@ test.describe('Authentication Flow', () => {
     
     // 8. Vérifier que l'utilisateur est déconnecté
     await expect(page.getByText('Connexion')).toBeVisible();
-    await expect(page.getByText('Inscription')).toBeVisible();
     await expect(page.getByText('Admin')).not.toBeVisible();
   });
 

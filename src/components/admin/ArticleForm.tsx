@@ -20,7 +20,7 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconInfoCircle, IconX } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ArticleFormData {
     title: string;
@@ -40,9 +40,18 @@ interface ArticleFormProps {
     onArticleUpdated?: () => void;
 }
 
+interface Category {
+    id: number;
+    name: string;
+    slug: string;
+    description?: string;
+    articleCount: number;
+}
+
 export function ArticleForm({ initialData, isEditing = false, articleId, onArticleUpdated }: ArticleFormProps) {
     const [loading, setLoading] = useState(false);
-    const [previewMode, setPreviewMode] = useState(false);
+    const [categories, setCategories] = useState<{ value: string; label: string }[]>([]);
+    const [categoriesLoading, setCategoriesLoading] = useState(true);
     const router = useRouter();
 
     const form = useForm<ArticleFormData>({
@@ -64,6 +73,45 @@ export function ArticleForm({ initialData, isEditing = false, articleId, onArtic
             category: (value) => (!value ? 'La catégorie est requise' : null),
         },
     });
+
+    // Fetch categories from API
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                setCategoriesLoading(true);
+                const response = await fetch('/api/admin/categories');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch categories');
+                }
+                const data = await response.json();
+                const formattedCategories = data.categories.map((cat: Category) => ({
+                    value: cat.name,
+                    label: cat.name
+                }));
+                setCategories(formattedCategories);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                notifications.show({
+                    title: 'Erreur',
+                    message: 'Impossible de charger les catégories',
+                    color: 'red',
+                    icon: <IconX size={16} />,
+                });
+                // Fallback to hardcoded categories
+                setCategories([
+                    { value: 'Développement', label: 'Développement' },
+                    { value: 'Architecture', label: 'Architecture' },
+                    { value: 'Performance', label: 'Performance' },
+                    { value: 'Sécurité', label: 'Sécurité' },
+                    { value: 'DevOps', label: 'DevOps' },
+                ]);
+            } finally {
+                setCategoriesLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     // Auto-generate slug from title
     const handleTitleChange = (value: string) => {
@@ -123,6 +171,7 @@ export function ArticleForm({ initialData, isEditing = false, articleId, onArtic
                 router.push('/admin/articles');
             }
         } catch (error) {
+            console.error('Error saving article:', error);
             notifications.show({
                 title: 'Erreur',
                 message: 'Une erreur est survenue lors de la sauvegarde',
@@ -144,13 +193,6 @@ export function ArticleForm({ initialData, isEditing = false, articleId, onArtic
         form.onSubmit(handleSubmit)();
     };
 
-    const categories = [
-        { value: 'Développement', label: 'Développement' },
-        { value: 'Architecture', label: 'Architecture' },
-        { value: 'Performance', label: 'Performance' },
-        { value: 'Sécurité', label: 'Sécurité' },
-        { value: 'DevOps', label: 'DevOps' },
-    ];
 
     return (
         <div style={{ position: 'relative' }}>
@@ -185,6 +227,7 @@ export function ArticleForm({ initialData, isEditing = false, articleId, onArtic
                                     label="Catégorie"
                                     placeholder="Sélectionnez une catégorie"
                                     data={categories}
+                                    disabled={categoriesLoading}
                                     required
                                     {...form.getInputProps('category')}
                                 />

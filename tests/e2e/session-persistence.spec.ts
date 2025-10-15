@@ -20,7 +20,6 @@ test.describe('Session Persistence', () => {
     await expect(page.getByRole('button', { name: 'User menu' })).toBeVisible();
     await expect(page.getByText('Admin')).toBeVisible();
     await expect(page.getByText('Connexion')).not.toBeVisible();
-    await expect(page.getByText('Inscription')).not.toBeVisible();
   });
 
   test('Session persists across different pages', async ({ page }) => {
@@ -125,6 +124,5 @@ test.describe('Session Persistence', () => {
     await page.goto('/admin');
     await expect(page).toHaveURL('/');
     await expect(page.getByText('Connexion')).toBeVisible();
-    await expect(page.getByText('Inscription')).toBeVisible();
   });
 });
