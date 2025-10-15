@@ -64,11 +64,19 @@ The platform prioritizes quick time-to-market with iterative improvements, moder
   - Category-based filtering and sorting capabilities
   - PostgreSQL database integration via NeonDB
 
+- **Factory projects showcase** (Priority: Medium)
+  - Dedicated section for showcasing personal projects and work samples
+  - Individual project pages accessible via /factory/[project-slug] URLs
+  - Projects not listed in main navigation but discoverable through articles
+  - Rich project descriptions with images, technologies, and links
+  - Integration with blog articles for project presentations
+
 - **Content management** (Priority: Medium)
   - WYSIWYG editor for article creation and editing
   - Image upload and management system
   - Draft and publish workflow for articles
   - Category and tag management
+  - Factory project creation and management interface
 
 - **Authentication system** (Priority: Medium)
   - Clerk-based authentication for back-office access
@@ -96,6 +104,10 @@ The platform prioritizes quick time-to-market with iterative improvements, moder
   - Fast page transitions and mobile-optimized reading experience
 - **Filter content**: Users apply category filters to find relevant articles quickly
   - Intuitive filter interface with clear visual feedback and URL state preservation
+- **Explore factory projects**: Visitors discover projects through article links or direct URLs
+  - Project pages showcase detailed descriptions, technologies, and visual elements
+  - Seamless integration between blog articles and project presentations
+  - Projects remain discoverable through search engines despite not being in main navigation
 
 ### 5.3. Advanced features & edge cases
 - SEO optimization with meta tags, structured data, and sitemap generation
@@ -139,20 +151,21 @@ Fabrice is a developer who wants to establish a professional online presence and
 ## 8. Technical considerations
 ### 8.1. Integration points
 - NeonDB PostgreSQL database for article storage and metadata
+- Factory projects stored in same database with dedicated schema
 - Clerk authentication service for admin access management
 - Free-tier image storage service (Cloudinary or similar)
 - Vercel hosting platform with automatic deployments
 - GitHub repository with CI/CD pipeline integration
 
 ### 8.2. Data storage & privacy
-- PostgreSQL schema for articles, categories, and metadata
+- PostgreSQL schema for articles, categories, factory projects, and metadata
 - Image storage with CDN delivery and optimization
 - Minimal personal data collection, GDPR compliance considerations
 - Secure API endpoints with proper authentication middleware
 - Regular database backups and disaster recovery planning
 
 ### 8.3. Scalability & performance
-- Next.js static generation for portfolio pages and blog content
+- Next.js static generation for portfolio pages, blog content, and factory projects
 - Database connection pooling for efficient resource usage
 - Image optimization and lazy loading for fast page loads
 - CDN distribution through Vercel's global network
@@ -167,7 +180,7 @@ Fabrice is a developer who wants to establish a professional online presence and
 
 ## 9. Milestones & sequencing
 ### 9.1. Project estimate
-- Medium: 4-6 weeks total across all three phases
+- Medium: 5-7 weeks total across all four phases
 
 ### 9.2. Team size & composition
 - Small Team: 1 person (full-stack developer/product owner)
@@ -180,6 +193,8 @@ Fabrice is a developer who wants to establish a professional online presence and
   - Key deliverables: Blog article display, NeonDB setup, category filtering, individual article pages, image storage integration
 - **Phase 3**: Admin back-office with content management (1-2 weeks)
   - Key deliverables: Clerk authentication, WYSIWYG editor, article CRUD operations, image upload functionality
+- **Phase 4**: Factory projects showcase (1 week)
+  - Key deliverables: Factory project schema, project pages, admin management interface, article integration
 
 ## 10. User stories
 
@@ -290,3 +305,39 @@ Fabrice is a developer who wants to establish a professional online presence and
   - Blog articles load within 3 seconds including images
   - Static assets are properly cached and compressed
   - Progressive loading techniques are implemented for images and content
+
+### 10.13. Discover factory projects through articles
+- **ID**: US-013
+- **Description**: As a blog reader, I want to discover factory projects through article links so that I can explore detailed work samples
+- **Acceptance criteria**:
+  - Articles can contain links to factory projects using /factory/[project-slug] URLs
+  - Project links are clearly identified and styled differently from regular links
+  - Clicking a project link opens the dedicated project page
+  - Project pages load within 3 seconds with optimized images and content
+
+### 10.14. View factory project details
+- **ID**: US-014
+- **Description**: As a site visitor, I want to view detailed factory project pages so that I can understand the work and technologies used
+- **Acceptance criteria**:
+  - Project pages display title, description, technologies, and visual elements
+  - Images are optimized and load progressively for fast viewing
+  - Project pages include links to live demos or repositories when available
+  - Mobile-responsive design ensures proper viewing on all devices
+
+### 10.15. Access factory projects via direct URLs
+- **ID**: US-015
+- **Description**: As a visitor with a direct link, I want to access factory projects via their unique URLs so that I can view specific work samples
+- **Acceptance criteria**:
+  - Factory projects are accessible via /factory/[project-slug] URLs
+  - URLs are SEO-friendly and include relevant keywords
+  - Direct access works without requiring navigation through other pages
+  - 404 handling provides helpful navigation back to main content
+
+### 10.16. Manage factory projects in admin
+- **ID**: US-016
+- **Description**: As the site owner, I want to create and manage factory projects so that I can showcase my work effectively
+- **Acceptance criteria**:
+  - Admin interface allows creation of new factory projects
+  - Project form includes fields for title, description, technologies, images, and links
+  - Projects can be saved as draft or published immediately
+  - Edit and delete functionality is available for existing projects

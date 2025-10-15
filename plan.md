@@ -1,10 +1,10 @@
 # Evolutionary Portfolio with Blog Platform - Development Plan
 
 ## Overview
-This development plan covers the creation of an evolutionary portfolio website built with Next.js, progressing through three phases: static portfolio, dynamic blog system, and admin back-office. The platform will serve as a professional showcase and content publishing platform with modern development practices and cost-effective hosting.
+This development plan covers the creation of an evolutionary portfolio website built with Next.js, progressing through four phases: static portfolio, dynamic blog system, admin back-office, and factory projects showcase. The platform will serve as a professional showcase and content publishing platform with modern development practices and cost-effective hosting.
 
 **Tech Stack**: Next.js, Mantine UI, PostgreSQL (NeonDB), Clerk Authentication, Vercel Hosting
-**Timeline**: 4-6 weeks total
+**Timeline**: 5-7 weeks total (Phase 4 added for factory projects)
 **Team**: 1 full-stack developer
 
 ## 1. Project Setup
@@ -482,11 +482,134 @@ Focus on US-005 through US-009 and content management:
 - **Performance**: No lazy loading, advanced caching strategies
 
 ### 🎯 Next Priorities
-1. **HIGH**: Implement Cloudinary image upload (US-008)
-2. **HIGH**: Improve WYSIWYG editor with Tiptap or TinyMCE
-3. **HIGH**: Complete Portfolio Phase 1 sections
-4. **MEDIUM**: Full-text search functionality
-5. **MEDIUM**: Complete SEO optimization (sitemap, structured data)
-6. **LOW**: Analytics and monitoring setup
+1. **HIGH**: Implement Factory Projects Phase 4 (US-013 to US-016) - Approche Hybride
+   - Structure de données statiques pour les projets factory
+   - Pages factory avec routing Next.js
+   - Amélioration MarkdownRenderer pour liens factory
+   - Intégration avec le système d'articles existant
+2. **HIGH**: Implement Cloudinary image upload (US-008)
+3. **HIGH**: Improve WYSIWYG editor with Tiptap or TinyMCE
+4. **HIGH**: Complete Portfolio Phase 1 sections
+5. **MEDIUM**: Full-text search functionality
+6. **MEDIUM**: Complete SEO optimization (sitemap, structured data)
+7. **LOW**: Analytics and monitoring setup
+
+---
+
+## Factory Projects Implementation Details (Phase 4) - Approche Hybride
+
+### 🎯 Architecture Hybride (RECOMMANDÉE)
+L'approche hybride combine le meilleur des deux mondes :
+- **Pages de présentation** intégrées dans ossawayas.com/factory/[slug]
+- **Projets autonomes** déployés séparément pour les démos interactives
+- **SEO unifié** sous le domaine principal ossawayas.com
+- **Maintenance centralisée** avec données statiques
+
+### 📁 Structure de Données Statiques (pas de BDD)
+- [ ] Create static data structure in `src/data/factory-projects.ts`:
+  ```typescript
+  interface FactoryProject {
+    title: string;
+    description: string;
+    technologies: string[];
+    images: string[];
+    links: {
+      demo?: string;      // Lien vers démo autonome (ex: projet-ia.vercel.app)
+      github?: string;    // Repository GitHub
+      docs?: string;      // Documentation technique
+      live?: string;      // Version production si différente
+    };
+    content: string;      // Markdown pour présentation détaillée
+    featured_image?: string;
+  }
+  
+  export const factoryProjects = {
+    'mon-projet-ia': { ... },
+    'ma-demo-react': { ... }
+  }
+  ```
+
+### 🌐 Pages Publiques (Pas d'API nécessaire)
+- [ ] Public pages (statically generated):
+  - `src/app/factory/[slug]/page.tsx` - Factory project detail page
+  - `generateStaticParams()` pour générer toutes les pages au build
+  - Gestion 404 pour slugs inexistants
+- [ ] Components:
+  - `src/components/FactoryProject.tsx` - Project display component
+  - `src/components/TechnologyBadge.tsx` - Technology tag component
+  - `src/components/ProjectLinks.tsx` - External links (demo, GitHub, docs)
+
+### 🔗 Intégration avec Articles (US-013)
+- [ ] Article integration:
+  - Amélioration du MarkdownRenderer pour détecter `/factory/[slug]` URLs
+  - Styling spécial pour les liens factory (icône, couleur distinctive)
+  - Preview cards au survol (optionnel)
+  - Cross-linking automatique entre articles et projets
+
+### 🎨 Exemple de Structure
+```
+ossawayas.com/factory/mon-projet-ia/
+├── 📋 Présentation complète du projet
+├── 🖼️ Screenshots et démos visuelles  
+├── 🛠️ Technologies utilisées (badges)
+├── 📝 Explication technique détaillée (Markdown)
+├── 🔗 Liens externes :
+│   ├── 🚀 Démo live (projet-ia.vercel.app)
+│   ├── 📁 Code source (github.com/fab/projet-ia)
+│   └── 📖 Documentation technique
+└── 🧭 Navigation breadcrumb
+```
+
+### 🚀 Workflow de Publication
+1. **Développer le projet** → Déployer sur domaine séparé (ex: `projet-ia.vercel.app`)
+2. **Créer screenshots** et assets visuels
+3. **Ajouter l'entrée** dans `src/data/factory-projects.ts`
+4. **Écrire l'article de blog** avec lien vers `/factory/mon-projet-ia`
+5. **Build automatique** → Pages statiques générées
+6. **Déploiement Vercel** → Disponible sur ossawayas.com/factory/
+
+### 📊 Avantages de cette Approche
+✅ **SEO unifié** : Toute l'autorité sous ossawayas.com
+✅ **Performance** : Pages statiques générées au build
+✅ **Simplicité** : Pas de base de données à maintenir
+✅ **Flexibilité** : Projets externes restent autonomes
+✅ **Maintenance** : Juste ajouter des entrées dans le fichier de données
+✅ **Coût** : Aucun coût supplémentaire
+✅ **Expérience** : Navigation fluide depuis les articles
+
+### 🎯 User Stories Implementation
+- **US-013**: Factory project discovery through articles
+  - Détection automatique des liens `/factory/[slug]` dans MarkdownRenderer
+  - Styling distinctif avec icônes et couleurs spéciales
+- **US-014**: Factory project detail pages
+  - Pages statiques avec layout responsive
+  - Galeries d'images optimisées
+  - Badges technologies et liens externes
+- **US-015**: Direct URL access
+  - Routing Next.js pour `/factory/[slug]` pattern
+  - Gestion 404 pour projets inexistants
+  - Breadcrumb navigation
+- **US-016**: Admin management (optionnel)
+  - Gestion via fichiers statiques (pas d'interface admin nécessaire)
+  - Ajout de projets par modification du fichier de données
+
+### Phase 4: Factory Projects Showcase (Week 7) - Priority: MEDIUM
+Focus on US-013 through US-016 and factory projects:
+- [x] Static data structure for factory projects ✅
+- [x] Factory project pages and routing (/factory/[slug]) ✅
+- [x] MarkdownRenderer enhancement for factory links ✅
+- [x] Integration with existing article system ✅
+- [x] SEO optimization for factory pages ✅
+- [x] US-013: Discover factory projects through articles ✅
+- [x] US-014: View factory project details ✅
+  - Next.js Image optimization with lazy loading
+  - Responsive design with clamp() typography
+  - Mobile-first layout
+- [x] US-015: Access factory projects via direct URLs ✅
+  - Complete SEO metadata (OpenGraph, Twitter Cards)
+  - Custom 404 page
+  - Static generation (SSG)
+
+**Status**: 75% Complete - US-013/014/015 implemented, US-016 optional (static data management)
 
 This comprehensive plan ensures systematic development from basic portfolio to full content management system, with each phase building upon the previous one while delivering immediate value.

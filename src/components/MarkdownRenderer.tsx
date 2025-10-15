@@ -32,7 +32,7 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
                     ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css'
                     : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css'
                 document.head.appendChild(link)
-            } catch (e) {
+            } catch {
                 // Ignore errors
             }
         }
@@ -198,25 +198,45 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
                             {children}
                         </pre>
                     ),
-                    a: ({ href, children }) => (
-                        <a
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                                color: 'var(--mantine-color-blue-6)',
-                                textDecoration: 'none'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.textDecoration = 'underline'
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.textDecoration = 'none'
-                            }}
-                        >
-                            {children}
-                        </a>
-                    ),
+                    a: ({ href, children }) => {
+                        // Détecter les liens vers la section factory
+                        const isFactoryLink = href?.startsWith('/factory/')
+
+                        return (
+                            <a
+                                href={href}
+                                target={isFactoryLink ? undefined : "_blank"}
+                                rel={isFactoryLink ? undefined : "noopener noreferrer"}
+                                style={{
+                                    color: isFactoryLink ? 'var(--mantine-color-violet-6)' : 'var(--mantine-color-blue-6)',
+                                    textDecoration: 'none',
+                                    fontWeight: isFactoryLink ? 600 : 400,
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '0.25rem',
+                                    padding: isFactoryLink ? '0.125rem 0.5rem' : '0',
+                                    borderRadius: isFactoryLink ? '4px' : '0',
+                                    backgroundColor: isFactoryLink ? (colorScheme === 'dark' ? 'var(--mantine-color-violet-9)' : 'var(--mantine-color-violet-0)') : 'transparent',
+                                    transition: 'all 0.2s ease'
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.textDecoration = 'underline'
+                                    if (isFactoryLink) {
+                                        e.currentTarget.style.backgroundColor = colorScheme === 'dark' ? 'var(--mantine-color-violet-8)' : 'var(--mantine-color-violet-1)'
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.textDecoration = 'none'
+                                    if (isFactoryLink) {
+                                        e.currentTarget.style.backgroundColor = colorScheme === 'dark' ? 'var(--mantine-color-violet-9)' : 'var(--mantine-color-violet-0)'
+                                    }
+                                }}
+                            >
+                                {isFactoryLink && '🏭 '}
+                                {children}
+                            </a>
+                        )
+                    },
                     img: ({ src, alt }) => (
                         <img
                             src={src}
