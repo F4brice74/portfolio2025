@@ -3,8 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
-import { ClerkProvider } from '@clerk/nextjs';
-import Navbar from '@/components/Navbar';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,8 +10,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Fabrice MIQUET-SAGE | Developpeur & Catalyseur de projets digitaux",
-  description: "Portfolio et blog de Fabrice MIQUET-SAGE - FullStack Developpeur & Catalyseur de projets digitaux",
+  title: "Ossawayas | Automatisation IA pour TPE et PME",
+  description: "Automatisez plusieurs heures de travail répétitif par semaine. Ossawayas crée des systèmes IA et d'automatisation sur mesure pour les TPE, Artisans, Indépendants, PME.",
+  keywords: ["automatisation", "IA", "intelligence artificielle", "TPE", "PME", "Artisans", "Indépendants", "Make", "n8n", "agent IA"],
+  openGraph: {
+    title: "Ossawayas | Automatisation IA pour TPE, Artisans, Indépendants, PME",
+    description: "Automatisez plusieurs heures de travail répétitif par semaine avec des solutions sur mesure.",
+    type: "website",
+    locale: "fr_FR",
+  },
 };
 
 export default function RootLayout({
@@ -22,17 +27,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" data-mantine-color-scheme="light">
-        <head>
-        </head>
-        <body className={inter.variable} suppressHydrationWarning>
-          <MantineProvider defaultColorScheme="light">
-            <Navbar />
-            {children}
-          </MantineProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="fr" data-mantine-color-scheme="light">
+      <head />
+      <body className={inter.variable} suppressHydrationWarning>
+        <MantineProvider defaultColorScheme="light">
+          {children}
+        </MantineProvider>
+      </body>
+    </html>
   );
 }
