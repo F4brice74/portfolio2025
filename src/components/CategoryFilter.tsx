@@ -34,7 +34,7 @@ export default function CategoryFilter({ categories, selectedCategory }: Categor
     params.delete('page')
 
     const newUrl = params.toString() ? `?${params.toString()}` : ''
-    router.push(`/${newUrl}`)
+    router.push(`/blog${newUrl}`)
   }
 
   const clearFilter = () => {
@@ -44,7 +44,7 @@ export default function CategoryFilter({ categories, selectedCategory }: Categor
     params.delete('page')
 
     const newUrl = params.toString() ? `?${params.toString()}` : ''
-    router.push(`/${newUrl}`)
+    router.push(`/blog${newUrl}`)
   }
 
   const selectData = [
@@ -72,16 +72,16 @@ export default function CategoryFilter({ categories, selectedCategory }: Categor
           w={250}
           styles={{
             input: {
-              borderColor: 'var(--mantine-color-blue-3)',
+              borderColor: 'var(--mantine-color-gray-4)',
               '&:focus': {
-                borderColor: 'var(--mantine-color-blue-5)',
-              }
-            }
+                borderColor: 'var(--ossawayas-navy)',
+              },
+            },
           }}
         />
         {value && (
           <Badge
-            color="blue"
+            color="navy"
             variant="light"
             size="sm"
             style={{ cursor: 'pointer' }}

@@ -3,12 +3,14 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   Container, Title, Text, Box, Group, Badge, Anchor, Button,
-  Stack, TextInput, Textarea, SimpleGrid, Loader,
+  Stack, TextInput, Textarea, SimpleGrid, Loader, Paper,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconCircleCheck, IconSend } from '@tabler/icons-react';
+import { IconCircleCheck, IconSend, IconCalendar } from '@tabler/icons-react';
 
 const CAL_LINK = 'fabrice-miquet-sage/20min';
+
+const badges = ['Gratuit', '20 minutes', 'Sans engagement'];
 
 interface LeadForm {
   nom: string;
@@ -39,7 +41,6 @@ function CalEmbed() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Script officiel Cal.com embed (version inline)
     if (!window.Cal) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const cal: CalFunction = function (...args: any[]) {
@@ -70,7 +71,7 @@ function CalEmbed() {
   }, []);
 
   return (
-    <Box style={{ position: 'relative' }}>
+    <Box pos="relative">
       {!ready && (
         <Stack align="center" py="xl">
           <Loader size="md" />
@@ -125,108 +126,131 @@ export default function FinalCTA() {
   };
 
   return (
-    <Box id="contact" py={80}>
-      <Container size="lg">
-        <Box
-          p={{ base: 'xl', md: 60 }}
-          style={{
-            backgroundColor: 'var(--mantine-color-gray-0)',
-            border: '1px solid var(--mantine-color-gray-2)',
-            borderRadius: 'var(--mantine-radius-lg)',
-          }}
-        >
-          <Stack align="center" mb={40}>
-            <Title order={2} ta="center">Prêt à récupérer vos 10h par semaine ?</Title>
-            <Text size="lg" c="dimmed" maw={520} ta="center">
+    <Box id="contact" py={{ base: 72, md: 96 }} className="section-bg" style={{ borderTop: '1px solid var(--ossawayas-border)' }}>
+      <Container size="sm">
+        <Paper shadow="lg" radius="xl" withBorder style={{ overflow: 'hidden', backgroundColor: 'var(--ossawayas-card)' }}>
+          <Box bg="navy.7" px="xl" py={40} ta="center" c="white">
+            <Title order={2} c="white">
+              Prêt à récupérer vos 10h par semaine ?
+            </Title>
+            <Text size="sm" maw={420} mx="auto" mt="sm" c="gray.3" lh={1.6}>
               {submitted
-                ? 'Merci ! Choisissez maintenant votre créneau ci-dessous.'
-                : 'Remplissez le formulaire — le calendrier s\'ouvrira directement sur cette page.'}
+                ? 'Choisissez maintenant votre créneau ci-dessous.'
+                : 'Remplissez le formulaire — nous revenons vers vous sous 48h pour caler un appel découverte.'}
             </Text>
-            <Group gap="sm">
-              {['✓ Gratuit', '✓ 20 minutes', '✓ Sans engagement'].map(label => (
-                <Badge key={label} variant="outline" color="blue" size="lg" radius="xl">
-                  {label}
-                </Badge>
-              ))}
-            </Group>
-          </Stack>
+            {!submitted && (
+              <Group justify="center" gap="xs" mt="lg">
+                {badges.map((label) => (
+                  <Badge
+                    key={label}
+                    variant="outline"
+                    color="gray"
+                    size="lg"
+                    radius="xl"
+                    leftSection={<IconCircleCheck size={12} />}
+                    styles={{
+                      root: {
+                        backgroundColor: 'rgba(255,255,255,0.08)',
+                        borderColor: 'rgba(255,255,255,0.15)',
+                        color: 'white',
+                      },
+                    }}
+                  >
+                    {label}
+                  </Badge>
+                ))}
+              </Group>
+            )}
+          </Box>
 
-          {submitted ? (
-            /* --- Calendrier Cal.com inline --- */
-            <Box>
-              <Stack align="center" gap="xs" mb="xl">
-                <IconCircleCheck size={40} color="var(--mantine-color-green-6)" />
-                <Title order={4} c="green.7">Formulaire envoyé ! Choisissez votre créneau :</Title>
-              </Stack>
-              <CalEmbed />
-            </Box>
-          ) : (
-            /* --- Formulaire --- */
-            <form onSubmit={form.onSubmit(handleSubmit)} noValidate>
-              <Stack gap="md" maw={640} mx="auto">
-                <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-                  <TextInput
-                    label="Prénom"
-                    placeholder="Marie"
-                    required
-                    {...form.getInputProps('prenom')}
-                  />
-                  <TextInput
-                    label="Nom"
-                    placeholder="Dupont"
-                    required
-                    {...form.getInputProps('nom')}
-                  />
-                </SimpleGrid>
-
-                <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-                  <TextInput
-                    label="Société"
-                    placeholder="Acme SAS"
-                    {...form.getInputProps('societe')}
-                  />
-                  <TextInput
-                    label="Téléphone"
-                    placeholder="+33 6 00 00 00 00"
-                    required
-                    {...form.getInputProps('telephone')}
-                  />
-                </SimpleGrid>
-
-                <Textarea
-                  label="Vos besoins"
-                  placeholder="Ex : je perds 2h par jour à ressaisir des devis manuellement, j'aimerais automatiser ça…"
-                  autosize
-                  minRows={4}
-                  {...form.getInputProps('besoins')}
-                />
-
-                {error && <Text c="red" size="sm">{error}</Text>}
-
-                <Button
-                  type="submit"
-                  size="lg"
-                  loading={loading}
-                  rightSection={<IconSend size={16} />}
-                  fullWidth
+          <Box px="xl" py="xl">
+            {submitted ? (
+              <Stack align="center" gap="md">
+                <Box
+                  w={56}
+                  h={56}
+                  style={{
+                    borderRadius: '50%',
+                    backgroundColor: 'color-mix(in srgb, var(--ossawayas-success) 12%, transparent)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
                 >
-                  Envoyer ma demande
-                </Button>
-
-                <Text size="xs" c="dimmed" ta="center">
-                  Le calendrier de réservation apparaîtra ici après l&apos;envoi.
+                  <IconCalendar size={28} color="var(--ossawayas-success)" />
+                </Box>
+                <Title order={3} ta="center">Demande envoyée</Title>
+                <Text size="sm" c="dimmed" ta="center" maw={360} lh={1.6}>
+                  Merci. Choisissez votre créneau pour l&apos;appel découverte gratuit.
                 </Text>
+                <Box w="100%" mt="md">
+                  <CalEmbed />
+                </Box>
               </Stack>
-            </form>
-          )}
+            ) : (
+              <form onSubmit={form.onSubmit(handleSubmit)} noValidate>
+                <Stack gap="md">
+                  <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+                    <TextInput
+                      label="Prénom"
+                      placeholder="Marie"
+                      required
+                      {...form.getInputProps('prenom')}
+                    />
+                    <TextInput
+                      label="Nom"
+                      placeholder="Dupont"
+                      required
+                      {...form.getInputProps('nom')}
+                    />
+                  </SimpleGrid>
 
-          <Text mt="xl" size="sm" c="dimmed" ta="center" mb={0}>
-            Questions ? Écrivez à{' '}
-            <Anchor href="mailto:contact@ossawayas.com" c="blue.6">
-              contact@ossawayas.com
-            </Anchor>
-          </Text>
-        </Box>
+                  <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
+                    <TextInput
+                      label="Société"
+                      placeholder="Votre entreprise"
+                      {...form.getInputProps('societe')}
+                    />
+                    <TextInput
+                      label="Téléphone"
+                      placeholder="+33 6 00 00 00 00"
+                      required
+                      {...form.getInputProps('telephone')}
+                    />
+                  </SimpleGrid>
+
+                  <Textarea
+                    label="Vos besoins"
+                    placeholder="Décrivez en quelques mots le processus qui vous fait perdre le plus de temps…"
+                    minRows={4}
+                    autosize
+                    {...form.getInputProps('besoins')}
+                  />
+
+                  {error && <Text c="red" size="sm">{error}</Text>}
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    color="navy"
+                    loading={loading}
+                    rightSection={<IconSend size={16} />}
+                    fullWidth
+                  >
+                    Envoyer ma demande
+                  </Button>
+
+                  <Text size="xs" c="dimmed" ta="center">
+                    Questions ? Écrivez à{' '}
+                    <Anchor href="mailto:contact@ossawayas.com" c="blue.6" size="xs">
+                      contact@ossawayas.com
+                    </Anchor>
+                  </Text>
+                </Stack>
+              </form>
+            )}
+          </Box>
+        </Paper>
       </Container>
     </Box>
   );

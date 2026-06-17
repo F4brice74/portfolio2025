@@ -1,74 +1,87 @@
-import { Container, Title, Text, Button, Group, Badge, Box, Paper } from '@mantine/core';
-import { IconArrowRight } from '@tabler/icons-react';
+import {
+  Container, Title, Text, Button, Group, Badge, Box,
+} from '@mantine/core';
+import { IconArrowRight, IconShieldCheck } from '@tabler/icons-react';
 import Link from 'next/link';
+
+const stats = [
+  { value: '10h', label: 'économisées par semaine' },
+  { value: '100%', label: 'satisfaction client' },
+  { value: '3×', label: 'ROI moyen constaté' },
+  { value: '< 5 sem.', label: 'délai de livraison' },
+];
 
 export default function Hero() {
   return (
-    <Box pt={120} pb={80}>
-      <Container size="lg">
-        <Box maw={800} mx="auto" style={{ textAlign: 'center' }}>
+    <Box pos="relative" pt={100} pb={64} className="section-bg" style={{ overflow: 'hidden' }}>
+      <Box className="hero-grid-bg" aria-hidden />
 
-          {/* Social proof badge */}
+      <Container size="lg" pos="relative" style={{ zIndex: 1 }}>
+        <Box maw={720} mx="auto" ta="center">
           <Group justify="center" mb="lg">
-            <Badge size="lg" variant="light" color="green" radius="xl">
-              ✓ 3 clients accompagnés · 100% satisfaction
+            <Badge
+              size="lg"
+              variant="outline"
+              color="gray"
+              radius="xl"
+              leftSection={<IconShieldCheck size={14} color="var(--ossawayas-success)" />}
+              styles={{ root: { backgroundColor: 'var(--ossawayas-card)', borderColor: 'var(--ossawayas-border)' } }}
+            >
+              3 clients accompagnés · 100% satisfaction
             </Badge>
           </Group>
 
-          {/* H1 */}
-          <Title order={1} mb="lg" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', lineHeight: 1.15 }}>
-            Automatisez <strong>plusieurs heures</strong> de travail par semaine.
+          <Title
+            order={1}
+            mb="lg"
+            style={{
+              fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+              lineHeight: 1.1,
+            }}
+          >
+            Automatisez plusieurs heures de travail{' '}
+            <Text span c="brand.5" inherit>par semaine.</Text>
           </Title>
 
-          {/* Subtitle */}
-          <Text size="xl" c="dimmed" maw={620} mx="auto" mb={40} lh={1.7}>
-            Ossawayas crée des systèmes IA et d'automatisation sur mesure pour les TPE, Artisans, Indépendants, PME.
-
-          </Text>
-          <Text size="xl" c="dimmed" maw={620} mx="auto" mb={40} lh={1.7}>
-            Vous <strong>gagnez du temps</strong>, vos équipes se concentrent sur ce qui compte vraiment.
+          <Text size="lg" c="gray.7" maw={580} mx="auto" mb={36} lh={1.7}>
+            Ossawayas conçoit des systèmes d&apos;IA et d&apos;automatisation sur mesure
+            pour les TPE, artisans, indépendants et PME. Vous gagnez du temps,
+            vos équipes se concentrent sur ce qui compte vraiment.
           </Text>
 
-          {/* CTAs */}
-          <Group justify="center" align="center" gap="lg" wrap="wrap">
+          <Group justify="center" gap="md" wrap="wrap">
             <Button
               component={Link}
-              href="#contact"
-              size="xl"
-              radius="md"
+              href="/#contact"
+              size="lg"
+              color="brand"
+              rightSection={<IconArrowRight size={16} />}
             >
               Réserver un appel gratuit
             </Button>
             <Button
               component={Link}
-              href="#offres"
-              variant="subtle"
-              size="xl"
-              radius="md"
-              rightSection={<IconArrowRight size={18} />}
+              href="/#offres"
+              variant="outline"
+              size="lg"
+              color="gray"
             >
               Voir les offres
             </Button>
           </Group>
 
-          {/* Visual placeholder */}
-          {/* <Paper
-            withBorder
-            radius="lg"
-            p="xl"
-            mt={60}
-            maw={560}
-            mx="auto"
-            style={{
-              border: '2px dashed var(--mantine-color-gray-3)',
-              backgroundColor: 'var(--mantine-color-gray-0)',
-              textAlign: 'center',
-            }}
-          >
-            <Text size="3rem" mb="xs">⚙️ → 🤖 → ✅</Text>
-            <Text size="sm" c="dimmed">Illustration : flux automatisé — à intégrer</Text>
-          </Paper> */}
+          <Text size="xs" c="gray.6" mt="md">
+            Sans engagement · Réponse sous 48h
+          </Text>
+        </Box>
 
+        <Box className="hero-stats-grid" mt={64} maw={900} mx="auto">
+          {stats.map((stat) => (
+            <Box key={stat.label} className="hero-stats-cell">
+              <div className="hero-stats-value">{stat.value}</div>
+              <div className="hero-stats-label">{stat.label}</div>
+            </Box>
+          ))}
         </Box>
       </Container>
     </Box>

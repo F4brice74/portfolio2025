@@ -1,0 +1,28 @@
+'use client';
+
+import { AppShell } from '@mantine/core';
+import Header from '@/components/landing/Header';
+import Hero from '@/components/landing/Hero';
+import OffersSection from '@/components/landing/OffersSection';
+import ProcessSection from '@/components/landing/ProcessSection';
+import UseCasesSection from '@/components/landing/UseCasesSection';
+import TestimonialsSection from '@/components/landing/TestimonialsSection';
+import FinalCTA from '@/components/landing/FinalCTA';
+import Footer from '@/components/landing/Footer';
+
+export default function HomePage() {
+  return (
+    <AppShell header={{ height: 64 }} padding={0}>
+      <Header />
+      <AppShell.Main>
+        <Hero />
+        <OffersSection />
+        <ProcessSection />
+        <UseCasesSection />
+        <TestimonialsSection />
+        <FinalCTA />
+        <Footer />
+      </AppShell.Main>
+    </AppShell>
+  );
+}

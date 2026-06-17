@@ -1,15 +1,15 @@
 'use client';
 
-import { AppShell, Group, Button, Text, Burger, Drawer, Stack, Anchor } from '@mantine/core';
+import { AppShell, Group, Button, Text, Burger, Drawer, Stack, Anchor, Box } from '@mantine/core';
 import { useDisclosure, useWindowScroll } from '@mantine/hooks';
-import { IconRobot } from '@tabler/icons-react';
 import Link from 'next/link';
 
 const navLinks = [
-  { href: '#offres', label: 'Offres' },
-  { href: '#processus', label: 'Processus' },
-  { href: '#cas-usage', label: "Cas d'usage" },
-  { href: '#contact', label: 'Contact' },
+  { href: '/#offres', label: 'Offres' },
+  { href: '/#processus', label: 'Processus' },
+  { href: '/#cas-usage', label: "Cas d'usage" },
+  { href: '/blog', label: 'Blog' },
+  { href: '/#contact', label: 'Contact' },
 ];
 
 export default function Header() {
@@ -21,20 +21,39 @@ export default function Header() {
     <>
       <AppShell.Header
         style={{
-          boxShadow: scrolled ? 'var(--mantine-shadow-sm)' : '0 1px 0 var(--mantine-color-gray-2)',
-          transition: 'box-shadow 0.3s ease',
+          backgroundColor: scrolled ? 'rgba(250, 249, 247, 0.85)' : 'var(--ossawayas-bg)',
+          backdropFilter: 'blur(12px)',
+          borderBottom: '1px solid var(--ossawayas-border)',
+          transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+          boxShadow: scrolled ? 'var(--mantine-shadow-xs)' : 'none',
         }}
       >
-        <Group h="100%" px="xl" justify="space-between">
-          {/* Logo */}
+        <Group h="100%" px="xl" justify="space-between" maw={1152} mx="auto" w="100%">
           <Anchor component={Link} href="/" underline="never">
-            <Group gap="xs">
-              <IconRobot size={28} color="var(--mantine-color-blue-6)" />
-              <Text fw={700} size="xl" c="dark">Ossawayas</Text>
+            <Group gap="sm">
+              <Box
+                w={32}
+                h={32}
+                bg="navy.7"
+                c="white"
+                className="font-heading"
+                style={{
+                  borderRadius: 'var(--mantine-radius-md)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 600,
+                  fontSize: '1.125rem',
+                }}
+              >
+                O
+              </Box>
+              <Text fw={600} size="lg" c="dark" className="font-heading" style={{ letterSpacing: '-0.02em' }}>
+                Ossawayas
+              </Text>
             </Group>
           </Anchor>
 
-          {/* Nav desktop */}
           <Group gap="xl" visibleFrom="md">
             {navLinks.map(link => (
               <Anchor
@@ -44,8 +63,9 @@ export default function Header() {
                 underline="never"
                 c="dimmed"
                 fw={500}
+                size="sm"
                 style={{ transition: 'color 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--mantine-color-blue-6)')}
+                onMouseEnter={e => (e.currentTarget.style.color = 'var(--mantine-color-dark-7)')}
                 onMouseLeave={e => (e.currentTarget.style.color = '')}
               >
                 {link.label}
@@ -53,17 +73,14 @@ export default function Header() {
             ))}
           </Group>
 
-          {/* CTA desktop */}
-          <Button component={Link} href="#contact" visibleFrom="md">
+          <Button component={Link} href="/#contact" color="navy" visibleFrom="md">
             Réserver un appel
           </Button>
 
-          {/* Burger mobile */}
-          <Burger opened={drawerOpened} onClick={toggle} hiddenFrom="md" />
+          <Burger opened={drawerOpened} onClick={toggle} hiddenFrom="md" aria-label="Ouvrir le menu" />
         </Group>
       </AppShell.Header>
 
-      {/* Drawer mobile */}
       <Drawer opened={drawerOpened} onClose={close} title="Menu" size="sm">
         <Stack>
           {navLinks.map(link => (
@@ -71,7 +88,7 @@ export default function Header() {
               key={link.href}
               component={Link}
               href={link.href}
-              size="lg"
+              size="md"
               fw={500}
               c="dark"
               underline="never"
@@ -80,7 +97,7 @@ export default function Header() {
               {link.label}
             </Anchor>
           ))}
-          <Button component={Link} href="#contact" mt="md" onClick={close} fullWidth>
+          <Button component={Link} href="/#contact" color="navy" mt="md" onClick={close} fullWidth>
             Réserver un appel
           </Button>
         </Stack>

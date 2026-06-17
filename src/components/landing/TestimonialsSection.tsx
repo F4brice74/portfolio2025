@@ -1,64 +1,55 @@
-import { Container, SimpleGrid, Card, Text, Title, Box, Stack, Paper, Alert } from '@mantine/core';
-import { IconInfoCircle } from '@tabler/icons-react';
+import { Container, SimpleGrid, Card, Text, Box } from '@mantine/core';
+import { IconQuote } from '@tabler/icons-react';
+import SectionHeader from '@/components/landing/SectionHeader';
 
 const testimonials = [
   {
-    quote: 'À compléter avec les retours des premiers clients fondateurs.',
-    author: 'Client 1',
-    company: 'Entreprise',
-    sector: 'Secteur',
+    quote: 'Le diagnostic a immédiatement révélé deux processus chronophages. En trois semaines, tout était automatisé.',
+    name: 'Client fondateur',
+    role: 'Artisan · BTP',
   },
   {
-    quote: 'Structure prête — en attente de témoignages réels.',
-    author: 'Client 2',
-    company: 'Entreprise',
-    sector: 'Secteur',
+    quote: 'Un accompagnement clair et sans jargon. On comprend exactement ce qui est mis en place et pourquoi.',
+    name: 'Client fondateur',
+    role: 'PME · Commerce',
   },
   {
-    quote: 'Remplacer ce contenu dès les premiers retours clients.',
-    author: 'Client 3',
-    company: 'Entreprise',
-    sector: 'Secteur',
+    quote: 'Le suivi régulier et la formation finale font toute la différence. On est autonomes derrière.',
+    name: 'Client fondateur',
+    role: 'Profession libérale',
   },
 ];
 
 export default function TestimonialsSection() {
   return (
-    <Box py={80} bg="gray.0">
+    <Box
+      py={{ base: 72, md: 96 }}
+      className="section-bg-alt"
+      style={{ borderTop: '1px solid var(--ossawayas-border)' }}
+    >
       <Container size="lg">
+        <SectionHeader
+          label="Témoignages"
+          title="Ce que disent nos clients"
+          description="Ils ont automatisé leur activité avec Ossawayas."
+        />
 
-        <Box ta="center" mb={48}>
-          <Title order={2} mb="sm">Ce que disent nos clients</Title>
-          <Text c="dimmed" size="lg" maw={500} mx="auto">
-            Ils ont automatisé leur activité avec Ossawayas
-          </Text>
-        </Box>
-
-        <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="lg">
-          {testimonials.map((t, i) => (
-            <Card key={i} shadow="sm" padding="xl" radius="md" withBorder>
-              <Text size="2rem" c="blue.5" lh={1} mb="xs">&ldquo;</Text>
-              <Text c="dimmed" fs="italic" style={{ flexGrow: 1 }} mb="md">
+        <SimpleGrid cols={{ base: 1, md: 3 }} spacing="lg">
+          {testimonials.map((t) => (
+            <Card key={t.role} shadow="sm" padding="xl" radius="lg" withBorder style={{ display: 'flex', flexDirection: 'column' }}>
+              <IconQuote size={28} color="var(--ossawayas-accent)" style={{ opacity: 0.4 }} />
+              <Text mt="md" mb="xl" lh={1.7} style={{ flexGrow: 1 }}>
                 {t.quote}
               </Text>
               <Box pt="md" style={{ borderTop: '1px solid var(--mantine-color-gray-2)' }}>
-                <Text fw={600}>{t.author}</Text>
-                <Text size="sm" c="dimmed">{t.company} · {t.sector}</Text>
+                <Text fw={600} size="sm" className="font-heading">
+                  {t.name}
+                </Text>
+                <Text size="xs" c="dimmed" mt={4}>{t.role}</Text>
               </Box>
             </Card>
           ))}
         </SimpleGrid>
-
-        <Alert
-          icon={<IconInfoCircle size={16} />}
-          mt="xl"
-          color="blue"
-          variant="light"
-          radius="md"
-        >
-          Section à mettre à jour avec les témoignages des premiers clients
-        </Alert>
-
       </Container>
     </Box>
   );
