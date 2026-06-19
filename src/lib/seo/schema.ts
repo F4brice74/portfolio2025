@@ -16,7 +16,7 @@ export function organizationSchema() {
     description: SITE_DESCRIPTION,
     logo: {
       '@type': 'ImageObject',
-      url: absoluteUrl('/opengraph-image'),
+      url: absoluteUrl('/icon'),
     },
   };
 }

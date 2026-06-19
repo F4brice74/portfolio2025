@@ -1,8 +1,9 @@
 'use client';
 
-import { AppShell, Group, Button, Text, Burger, Drawer, Stack, Anchor, Box } from '@mantine/core';
+import { AppShell, Group, Button, Burger, Drawer, Stack, Anchor } from '@mantine/core';
 import { useDisclosure, useWindowScroll } from '@mantine/hooks';
 import Link from 'next/link';
+import { OssawayasLogo } from '@/components/brand/OssawayasLogo';
 
 const navLinks = [
   { href: '/#offres', label: 'Offres' },
@@ -29,29 +30,8 @@ export default function Header() {
         }}
       >
         <Group h="100%" px="xl" justify="space-between" maw={1152} mx="auto" w="100%">
-          <Anchor component={Link} href="/" underline="never">
-            <Group gap="sm">
-              <Box
-                w={32}
-                h={32}
-                bg="navy.7"
-                c="white"
-                className="font-heading"
-                style={{
-                  borderRadius: 'var(--mantine-radius-md)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 600,
-                  fontSize: '1.125rem',
-                }}
-              >
-                O
-              </Box>
-              <Text fw={600} size="lg" c="dark" className="font-heading" style={{ letterSpacing: '-0.02em' }}>
-                Ossawayas
-              </Text>
-            </Group>
+          <Anchor component={Link} href="/" underline="never" aria-label="Ossawayas — Accueil">
+            <OssawayasLogo variant="horizontal" height={36} priority />
           </Anchor>
 
           <Group gap="xl" visibleFrom="md">

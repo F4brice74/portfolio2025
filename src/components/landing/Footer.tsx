@@ -1,5 +1,6 @@
-import { Box, Container, SimpleGrid, Text, Anchor, Group, Stack, Divider } from '@mantine/core';
+import { Box, Container, SimpleGrid, Text, Anchor, Stack, Divider } from '@mantine/core';
 import Link from 'next/link';
+import { OssawayasLogo } from '@/components/brand/OssawayasLogo';
 
 const navLinks = [
   { href: '/#offres', label: 'Offres' },
@@ -15,28 +16,9 @@ export default function Footer() {
       <Container size="lg">
         <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="xl" mb={48}>
           <Stack gap="md">
-            <Group gap="sm">
-              <Box
-                w={32}
-                h={32}
-                className="font-heading"
-                style={{
-                  borderRadius: 'var(--mantine-radius-md)',
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 600,
-                  fontSize: '1.125rem',
-                  color: 'white',
-                }}
-              >
-                O
-              </Box>
-              <Text fw={600} size="lg" c="white" className="font-heading">
-                Ossawayas
-              </Text>
-            </Group>
+            <Anchor component={Link} href="/" underline="never" aria-label="Ossawayas — Accueil">
+              <OssawayasLogo variant="vertical" height={130} light />
+            </Anchor>
             <Text size="sm" c="gray.5" maw={280} lh={1.6}>
               Systèmes d&apos;IA et d&apos;automatisation sur mesure pour TPE, artisans,
               indépendants et PME.

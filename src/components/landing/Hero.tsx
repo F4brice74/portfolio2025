@@ -1,8 +1,9 @@
 import {
-  Container, Title, Text, Button, Group, Badge, Box,
+  Container, Title, Text, Button, Group, Box,
 } from '@mantine/core';
-import { IconArrowRight, IconShieldCheck } from '@tabler/icons-react';
+import { IconArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
+import { OssawayasLogo } from '@/components/brand/OssawayasLogo';
 
 const stats = [
   { value: '10h', label: 'économisées par semaine' },
@@ -13,23 +14,14 @@ const stats = [
 
 export default function Hero() {
   return (
-    <Box pos="relative" pt={100} pb={64} className="section-bg" style={{ overflow: 'hidden' }}>
+    <Box pos="relative" pt={{ base: 56, md: 60 }} pb={64} className="section-bg" style={{ overflow: 'hidden' }}>
       <Box className="hero-grid-bg" aria-hidden />
 
       <Container size="lg" pos="relative" style={{ zIndex: 1 }}>
         <Box maw={720} mx="auto" ta="center">
-          <Group justify="center" mb="lg">
-            <Badge
-              size="lg"
-              variant="outline"
-              color="gray"
-              radius="xl"
-              leftSection={<IconShieldCheck size={14} color="var(--ossawayas-success)" />}
-              styles={{ root: { backgroundColor: 'var(--ossawayas-card)', borderColor: 'var(--ossawayas-border)' } }}
-            >
-              3 clients accompagnés · 100% satisfaction
-            </Badge>
-          </Group>
+          <Box mb="lg" w="100%" style={{ display: 'flex', justifyContent: 'center' }}>
+            <OssawayasLogo variant="horizontal" height={100} priority />
+          </Box>
 
           <Title
             order={1}
