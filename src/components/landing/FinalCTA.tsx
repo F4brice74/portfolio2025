@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Container, Title, Text, Box, Group, Badge, Anchor, Button,
-  Stack, TextInput, Textarea, SimpleGrid, Loader, Paper,
+  Stack, TextInput, Textarea, SimpleGrid, Paper,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCircleCheck, IconSend, IconCalendar } from '@tabler/icons-react';
+import Cal, { getCalApi } from '@calcom/embed-react';
 
 const CAL_LINK = 'fabrice-miquet-sage/20min';
 
@@ -20,75 +21,23 @@ interface LeadForm {
   besoins: string;
 }
 
-type CalFunction = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (...args: any[]): void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  q?: any[][];
-  loaded?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ns?: Record<string, any>;
-};
-
-declare global {
-  interface Window {
-    Cal?: CalFunction;
-  }
-}
-
 function CalEmbed() {
-  const calRef = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
-
   useEffect(() => {
-    if (!window.Cal) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const cal: CalFunction = function (...args: any[]) {
-        cal.q = cal.q || [];
-        cal.q.push(args);
-      };
-      cal.q = [];
-      window.Cal = cal;
-      const s = document.createElement('script');
-      s.src = 'https://app.cal.com/embed/embed.js';
-      s.async = true;
-      document.head.appendChild(s);
-    }
-
-    window.Cal!('init', 'audit', { origin: 'https://cal.com' });
-    window.Cal!('inline', 'audit', {
-      elementOrSelector: '#cal-inline',
-      calLink: CAL_LINK,
-      layout: 'month_view',
-    });
-    window.Cal!('ui', 'audit', {
-      hideEventTypeDetails: false,
-      layout: 'month_view',
-    });
-
-    const timer = setTimeout(() => setReady(true), 800);
-    return () => clearTimeout(timer);
+    (async () => {
+      const cal = await getCalApi();
+      cal('ui', {
+        hideEventTypeDetails: false,
+        layout: 'month_view',
+      });
+    })();
   }, []);
 
   return (
-    <Box pos="relative">
-      {!ready && (
-        <Stack align="center" py="xl">
-          <Loader size="md" />
-          <Text size="sm" c="dimmed">Chargement du calendrier…</Text>
-        </Stack>
-      )}
-      <div
-        id="cal-inline"
-        ref={calRef}
-        style={{
-          width: '100%',
-          minHeight: '600px',
-          opacity: ready ? 1 : 0,
-          transition: 'opacity 0.3s ease',
-        }}
-      />
-    </Box>
+    <Cal
+      calLink={CAL_LINK}
+      style={{ width: '100%', minHeight: 600, overflow: 'auto' }}
+      config={{ layout: 'month_view' }}
+    />
   );
 }
 
@@ -103,7 +52,6 @@ export default function FinalCTA() {
       nom: (v) => v.trim().length < 2 ? 'Nom requis' : null,
       prenom: (v) => v.trim().length < 2 ? 'Prénom requis' : null,
       telephone: (v) => v.trim().length < 6 ? 'Téléphone requis' : null,
-      besoins: (v) => v.trim().length < 10 ? 'Décrivez brièvement vos besoins (10 car. min)' : null,
     },
   });
 
@@ -136,7 +84,7 @@ export default function FinalCTA() {
             <Text size="sm" maw={420} mx="auto" mt="sm" c="gray.3" lh={1.6}>
               {submitted
                 ? 'Choisissez maintenant votre créneau ci-dessous.'
-                : 'Remplissez le formulaire — nous revenons vers vous sous 48h pour caler un appel découverte.'}
+                : 'Remplissez le formulaire pour accéder au planning d\'appel.'}
             </Text>
             {!submitted && (
               <Group justify="center" gap="xs" mt="lg">
@@ -185,6 +133,17 @@ export default function FinalCTA() {
                 </Text>
                 <Box w="100%" mt="md">
                   <CalEmbed />
+                  <Text size="xs" c="dimmed" ta="center" mt="sm">
+                    Problème d&apos;affichage ?{' '}
+                    <Anchor
+                      href={`https://cal.com/${CAL_LINK}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="xs"
+                    >
+                      Ouvrir le calendrier dans un nouvel onglet
+                    </Anchor>
+                  </Text>
                 </Box>
               </Stack>
             ) : (
@@ -237,7 +196,7 @@ export default function FinalCTA() {
                     rightSection={<IconSend size={16} />}
                     fullWidth
                   >
-                    Envoyer ma demande
+                    Accéder au planning
                   </Button>
 
                   <Text size="xs" c="dimmed" ta="center">

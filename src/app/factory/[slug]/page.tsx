@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FactoryProject } from '@/components/FactoryProject';
 import { getFactoryProject, getAllFactoryProjectSlugs } from '@/data/factory-projects';
 import type { Metadata } from 'next';
+import { absoluteUrl } from '@/lib/seo/config';
 
 type FactoryProjectPageProps = {
     params: Promise<{
@@ -19,44 +20,32 @@ export async function generateMetadata({ params }: FactoryProjectPageProps): Pro
     if (!project) {
         return {
             title: 'Projet non trouvé',
+            robots: { index: false, follow: false },
         };
     }
 
-    const keywords = [
-        ...project.technologies,
-        'projet',
-        'portfolio',
-        'développement',
-        'web',
-    ].join(', ');
+    const ogImage = project.featuredImage
+        ? absoluteUrl(project.featuredImage)
+        : absoluteUrl('/opengraph-image');
 
     return {
-        title: `${project.title} | Factory - OSSAWAYAS`,
+        title: project.title,
         description: project.description,
-        keywords,
-        authors: [{ name: 'OSSAWAYAS' }],
+        alternates: {
+            canonical: `/factory/${resolvedParams.slug}`,
+        },
         openGraph: {
             title: project.title,
             description: project.description,
             type: 'article',
-            images: project.featuredImage ? [
-                {
-                    url: project.featuredImage,
-                    width: 1200,
-                    height: 600,
-                    alt: project.title,
-                }
-            ] : [],
-            siteName: 'OSSAWAYAS',
+            url: `/factory/${resolvedParams.slug}`,
+            images: [{ url: ogImage, width: 1200, height: 630, alt: project.title }],
         },
         twitter: {
             card: 'summary_large_image',
             title: project.title,
             description: project.description,
-            images: project.featuredImage ? [project.featuredImage] : [],
-        },
-        alternates: {
-            canonical: `/factory/${resolvedParams.slug}`,
+            images: [ogImage],
         },
     };
 }

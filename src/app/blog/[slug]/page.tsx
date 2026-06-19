@@ -1,9 +1,13 @@
 import { Anchor, Badge, Box, Breadcrumbs, Button, Container, Divider, Group, Stack, Text, Title } from "@mantine/core"
 import { IconArrowLeft, IconCalendar, IconClock, IconUser } from "@tabler/icons-react"
 import Link from "next/link"
+import type { Metadata } from "next"
 import { ArticleService } from "@/lib/articles"
 import { MarkdownRenderer } from "@/components/MarkdownRenderer"
 import LandingShell from "@/components/landing/LandingShell"
+import { JsonLd } from "@/components/seo/JsonLd"
+import { absoluteUrl } from "@/lib/seo/config"
+import { articleSchema, breadcrumbSchema, buildGraphSchema } from "@/lib/seo/schema"
 
 type BlogPostPageProps = {
     params: Promise<{
@@ -69,8 +73,18 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         { title: article.title, href: '#' },
     ]
 
+    const structuredData = buildGraphSchema(
+        breadcrumbSchema([
+            { name: 'Accueil', path: '/' },
+            { name: 'Blog', path: '/blog' },
+            { name: article.title, path: `/blog/${article.slug}` },
+        ]),
+        articleSchema(article),
+    )
+
     return (
         <LandingShell>
+            <JsonLd data={structuredData} />
             <Box py={48} style={{ backgroundColor: 'var(--ossawayas-bg)', minHeight: '60vh' }}>
                 <Container size="md">
                     <Breadcrumbs mb="lg">
@@ -177,7 +191,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     )
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps) {
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
     const resolvedParams = await params
 
     try {
@@ -186,25 +200,43 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
         if (!article || !article.published) {
             return {
                 title: 'Article non trouvé',
+                robots: { index: false, follow: false },
             }
         }
 
+        const ogImage = article.featuredImage
+            ? absoluteUrl(article.featuredImage)
+            : absoluteUrl('/opengraph-image')
+
         return {
-            title: `${article.title} | Ossawayas`,
+            title: article.title,
             description: article.excerpt,
+            alternates: {
+                canonical: `/blog/${article.slug}`,
+            },
             openGraph: {
                 title: article.title,
                 description: article.excerpt,
                 type: 'article',
+                url: `/blog/${article.slug}`,
                 publishedTime: article.publishedAt || undefined,
+                modifiedTime: article.updatedAt,
                 authors: [article.authorName],
                 tags: article.tags,
+                images: [{ url: ogImage, width: 1200, height: 630, alt: article.title }],
+            },
+            twitter: {
+                card: 'summary_large_image',
+                title: article.title,
+                description: article.excerpt,
+                images: [ogImage],
             },
         }
     } catch (error) {
         console.error('Error generating metadata:', error)
         return {
             title: 'Article non trouvé',
+            robots: { index: false, follow: false },
         }
     }
 }

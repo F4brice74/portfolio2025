@@ -6,8 +6,16 @@ import type { Metadata } from 'next';
 const ARTICLES_PER_PAGE = 6;
 
 export const metadata: Metadata = {
-  title: 'Blog | Ossawayas',
-  description: 'Conseils et retours d\'expérience sur l\'automatisation, l\'IA et la productivité pour TPE et PME.',
+  title: 'Blog',
+  description: "Conseils et retours d'expérience sur l'automatisation, l'IA et la productivité pour TPE et PME.",
+  alternates: {
+    canonical: '/blog',
+  },
+  openGraph: {
+    title: 'Blog | Ossawayas',
+    description: "Conseils et retours d'expérience sur l'automatisation, l'IA et la productivité pour TPE et PME.",
+    url: '/blog',
+  },
 };
 
 interface BlogPageProps {

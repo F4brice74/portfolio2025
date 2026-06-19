@@ -4,6 +4,9 @@ import "./globals.css";
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import { createOssawayasTheme } from '@/theme/ossawayas';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { defaultMetadata } from '@/lib/seo/config';
+import { buildGraphSchema, organizationSchema, webSiteSchema } from '@/lib/seo/schema';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,17 +26,9 @@ const theme = createOssawayasTheme({
   heading: fraunces.style.fontFamily,
 });
 
-export const metadata: Metadata = {
-  title: "Ossawayas — Automatisation IA pour TPE et PME",
-  description: "Ossawayas conçoit des systèmes d'IA et d'automatisation sur mesure pour les TPE, artisans, indépendants et PME. Gagnez plusieurs heures par semaine.",
-  keywords: ["automatisation", "IA", "intelligence artificielle", "TPE", "PME", "Artisans", "Indépendants", "Make", "n8n", "agent IA"],
-  openGraph: {
-    title: "Ossawayas — Automatisation IA pour TPE et PME",
-    description: "Automatisez plusieurs heures de travail répétitif par semaine avec des solutions sur mesure.",
-    type: "website",
-    locale: "fr_FR",
-  },
-};
+export const metadata: Metadata = defaultMetadata;
+
+const siteSchema = buildGraphSchema(organizationSchema(), webSiteSchema());
 
 export default function RootLayout({
   children,
@@ -42,7 +37,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" data-mantine-color-scheme="light">
-      <head />
+      <head>
+        <JsonLd data={siteSchema} />
+      </head>
       <body className={`${inter.variable} ${fraunces.variable} ${inter.className}`} suppressHydrationWarning>
         <MantineProvider theme={theme} defaultColorScheme="light">
           {children}

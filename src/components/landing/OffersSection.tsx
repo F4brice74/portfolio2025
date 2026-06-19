@@ -20,7 +20,7 @@ const offers = [
     icon: IconBolt,
     title: 'Automatisation Clé en Main',
     price: 'à partir de 1 500 €',
-    description: 'Un processus douloureux transformé en flux automatisé. Make / n8n, livré documenté et avec formation.',
+    description: 'Un processus douloureux transformé en flux automatisé. Solution sur mesure livrée documentée et avec formation.',
     duration: '3 à 5 semaines',
     cta: 'Réserver un appel',
     highlighted: true,
