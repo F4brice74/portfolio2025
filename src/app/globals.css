@@ -23,6 +23,12 @@ html {
   scroll-margin-top: 80px;
 }
 
+/* Fraunces + scroll mobile = traînées de texte ; Inter dans le bandeau uniquement */
+.contact-banner,
+.contact-banner .mantine-Title-root {
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
 body {
   background-color: var(--ossawayas-bg);
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;

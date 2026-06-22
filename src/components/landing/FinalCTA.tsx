@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Container, Title, Text, Box, Group, Anchor, Button,
+  Container, Title, Text, Box, Group, Badge, Anchor, Button,
   Stack, TextInput, Textarea, SimpleGrid, Paper,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -10,33 +10,7 @@ import { IconCircleCheck, IconSend, IconCalendar } from '@tabler/icons-react';
 import Cal, { getCalApi } from '@calcom/embed-react';
 
 const CAL_LINK = 'fabrice-miquet-sage/20min';
-
 const badges = ['Gratuit', '20 minutes', 'Sans engagement'];
-
-function TrustBadge({ label }: { label: string }) {
-  return (
-    <Box
-      component="span"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 6,
-        padding: '6px 14px',
-        borderRadius: 999,
-        border: '1px solid rgba(255,255,255,0.15)',
-        backgroundColor: 'rgba(255,255,255,0.08)',
-        color: 'white',
-        fontSize: 13,
-        fontWeight: 600,
-        lineHeight: 1.2,
-        whiteSpace: 'nowrap',
-      }}
-    >
-      <IconCircleCheck size={12} style={{ flexShrink: 0 }} />
-      {label}
-    </Box>
-  );
-}
 
 interface LeadForm {
   nom: string;
@@ -46,30 +20,17 @@ interface LeadForm {
   besoins: string;
 }
 
-function CalEmbed() {
-  useEffect(() => {
-    (async () => {
-      const cal = await getCalApi();
-      cal('ui', {
-        hideEventTypeDetails: false,
-        layout: 'month_view',
-      });
-    })();
-  }, []);
-
-  return (
-    <Cal
-      calLink={CAL_LINK}
-      style={{ width: '100%', minHeight: 600, overflow: 'auto' }}
-      config={{ layout: 'month_view' }}
-    />
-  );
-}
-
 export default function FinalCTA() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!submitted) return;
+    getCalApi().then((cal) => {
+      cal('ui', { hideEventTypeDetails: false, layout: 'month_view' });
+    });
+  }, [submitted]);
 
   const form = useForm<LeadForm>({
     initialValues: { nom: '', prenom: '', societe: '', telephone: '', besoins: '' },
@@ -101,8 +62,8 @@ export default function FinalCTA() {
   return (
     <Box id="contact" py={{ base: 72, md: 96 }} className="section-bg" style={{ borderTop: '1px solid var(--ossawayas-border)' }}>
       <Container size="sm">
-        <Paper shadow="lg" radius="xl" withBorder style={{ overflow: 'hidden', backgroundColor: 'var(--ossawayas-card)' }}>
-          <Box bg="navy.7" px={{ base: 'md', sm: 'xl' }} py={{ base: 32, sm: 40 }} ta="center" c="white">
+        <Paper shadow="lg" radius="xl" withBorder style={{ backgroundColor: 'var(--ossawayas-card)' }}>
+          <Box className="contact-banner" bg="navy.7" px="xl" py={40} ta="center" c="white">
             <Title order={2} c="white">
               Prêt à récupérer vos 10h par semaine ?
             </Title>
@@ -114,13 +75,29 @@ export default function FinalCTA() {
             {!submitted && (
               <Group justify="center" gap="xs" mt="lg" wrap="wrap">
                 {badges.map((label) => (
-                  <TrustBadge key={label} label={label} />
+                  <Badge
+                    key={label}
+                    variant="outline"
+                    color="gray"
+                    size="lg"
+                    radius="xl"
+                    leftSection={<IconCircleCheck size={12} />}
+                    styles={{
+                      root: {
+                        backgroundColor: 'rgba(255,255,255,0.08)',
+                        borderColor: 'rgba(255,255,255,0.15)',
+                        color: 'white',
+                      },
+                    }}
+                  >
+                    {label}
+                  </Badge>
                 ))}
               </Group>
             )}
           </Box>
 
-          <Box px={{ base: 'md', sm: 'xl' }} py={{ base: 'lg', sm: 'xl' }}>
+          <Box px="xl" py="xl">
             {submitted ? (
               <Stack align="center" gap="md">
                 <Box
@@ -141,15 +118,14 @@ export default function FinalCTA() {
                   Merci. Choisissez votre créneau pour l&apos;appel découverte gratuit.
                 </Text>
                 <Box w="100%" mt="md">
-                  <CalEmbed />
+                  <Cal
+                    calLink={CAL_LINK}
+                    style={{ width: '100%', minHeight: 600, overflow: 'auto' }}
+                    config={{ layout: 'month_view' }}
+                  />
                   <Text size="xs" c="dimmed" ta="center" mt="sm">
                     Problème d&apos;affichage ?{' '}
-                    <Anchor
-                      href={`https://cal.com/${CAL_LINK}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      size="xs"
-                    >
+                    <Anchor href={`https://cal.com/${CAL_LINK}`} target="_blank" rel="noopener noreferrer" size="xs">
                       Ouvrir le calendrier dans un nouvel onglet
                     </Anchor>
                   </Text>
@@ -159,34 +135,19 @@ export default function FinalCTA() {
               <form onSubmit={form.onSubmit(handleSubmit)} noValidate>
                 <Stack gap="md">
                   <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-                    <TextInput
-                      label="Prénom"
-                      placeholder="Marie"
-                      required
-                      {...form.getInputProps('prenom')}
-                    />
-                    <TextInput
-                      label="Nom"
-                      placeholder="Dupont"
-                      required
-                      {...form.getInputProps('nom')}
-                    />
+                    <TextInput label="Prénom" placeholder="Marie" required {...form.getInputProps('prenom')} />
+                    <TextInput label="Nom" placeholder="Dupont" required {...form.getInputProps('nom')} />
                   </SimpleGrid>
-
                   <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-                    <TextInput
-                      label="Société"
-                      placeholder="Votre entreprise"
-                      {...form.getInputProps('societe')}
-                    />
+                    <TextInput label="Société" placeholder="Votre entreprise" {...form.getInputProps('societe')} />
                     <TextInput
                       label="Téléphone"
                       placeholder="+33 6 00 00 00 00"
                       required
+                      type="tel"
                       {...form.getInputProps('telephone')}
                     />
                   </SimpleGrid>
-
                   <Textarea
                     label="Vos besoins"
                     placeholder="Décrivez en quelques mots le processus qui vous fait perdre le plus de temps…"
@@ -194,25 +155,13 @@ export default function FinalCTA() {
                     autosize
                     {...form.getInputProps('besoins')}
                   />
-
                   {error && <Text c="red" size="sm">{error}</Text>}
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    color="navy"
-                    loading={loading}
-                    rightSection={<IconSend size={16} />}
-                    fullWidth
-                  >
+                  <Button type="submit" size="lg" color="navy" loading={loading} rightSection={<IconSend size={16} />} fullWidth>
                     Accéder au planning
                   </Button>
-
                   <Text size="xs" c="dimmed" ta="center">
                     Questions ? Écrivez à{' '}
-                    <Anchor href="mailto:contact@ossawayas.com" c="blue.6" size="xs">
-                      contact@ossawayas.com
-                    </Anchor>
+                    <Anchor href="mailto:contact@ossawayas.com" c="blue.6" size="xs">contact@ossawayas.com</Anchor>
                   </Text>
                 </Stack>
               </form>

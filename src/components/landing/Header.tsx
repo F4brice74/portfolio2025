@@ -1,7 +1,7 @@
 'use client';
 
 import { AppShell, Group, Button, Burger, Drawer, Stack, Anchor } from '@mantine/core';
-import { useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import Link from 'next/link';
 import { OssawayasLogo } from '@/components/brand/OssawayasLogo';
 
@@ -15,23 +15,13 @@ const navLinks = [
 
 export default function Header() {
   const [drawerOpened, { toggle, close }] = useDisclosure(false);
-  const [scroll] = useWindowScroll();
-  const scrolled = scroll.y > 20;
-  const isMobile = useMediaQuery('(max-width: 48em)');
 
   return (
     <>
       <AppShell.Header
         style={{
-          backgroundColor: isMobile
-            ? 'var(--ossawayas-bg)'
-            : scrolled
-              ? 'rgba(250, 249, 247, 0.85)'
-              : 'var(--ossawayas-bg)',
-          backdropFilter: isMobile ? undefined : 'blur(12px)',
+          backgroundColor: 'var(--ossawayas-bg)',
           borderBottom: '1px solid var(--ossawayas-border)',
-          transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
-          boxShadow: scrolled ? 'var(--mantine-shadow-xs)' : 'none',
         }}
       >
         <Group h="100%" px={{ base: 'md', sm: 'xl' }} justify="space-between" maw={1152} mx="auto" w="100%">
@@ -49,9 +39,6 @@ export default function Header() {
                 c="dimmed"
                 fw={500}
                 size="sm"
-                style={{ transition: 'color 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--mantine-color-dark-7)')}
-                onMouseLeave={e => (e.currentTarget.style.color = '')}
               >
                 {link.label}
               </Anchor>
