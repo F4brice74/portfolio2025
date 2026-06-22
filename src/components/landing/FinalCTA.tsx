@@ -1,16 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import {
-  Container, Title, Text, Box, Group, Badge, Anchor, Button,
+  Container, Title, Text, Box, Anchor, Button,
   Stack, TextInput, Textarea, SimpleGrid, Paper,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCircleCheck, IconSend, IconCalendar } from '@tabler/icons-react';
-import Cal, { getCalApi } from '@calcom/embed-react';
 
 const CAL_LINK = 'fabrice-miquet-sage/20min';
 const badges = ['Gratuit', '20 minutes', 'Sans engagement'];
+
+const CalBooking = dynamic(
+  () => import('./CalBooking'),
+  { ssr: false, loading: () => <Text size="sm" c="dimmed" ta="center" py="xl">Chargement du calendrier…</Text> },
+);
 
 interface LeadForm {
   nom: string;
@@ -24,13 +29,6 @@ export default function FinalCTA() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!submitted) return;
-    getCalApi().then((cal) => {
-      cal('ui', { hideEventTypeDetails: false, layout: 'month_view' });
-    });
-  }, [submitted]);
 
   const form = useForm<LeadForm>({
     initialValues: { nom: '', prenom: '', societe: '', telephone: '', besoins: '' },
@@ -63,41 +61,26 @@ export default function FinalCTA() {
     <Box id="contact" py={{ base: 72, md: 96 }} className="section-bg" style={{ borderTop: '1px solid var(--ossawayas-border)' }}>
       <Container size="sm">
         <Paper shadow="lg" radius="xl" withBorder style={{ backgroundColor: 'var(--ossawayas-card)' }}>
-          <Box className="contact-banner" bg="navy.7" px="xl" py={40} ta="center" c="white">
-            <Title order={2} c="white">
-              Prêt à récupérer vos 10h par semaine ?
-            </Title>
-            <Text size="sm" maw={420} mx="auto" mt="sm" c="gray.3" lh={1.6}>
+          <Box className="contact-banner" px={{ base: 'md', sm: 'xl' }} py={{ base: 32, sm: 40 }}>
+            <h2>Prêt à récupérer vos 10h par semaine ?</h2>
+            <p>
               {submitted
                 ? 'Choisissez maintenant votre créneau ci-dessous.'
                 : 'Remplissez le formulaire pour accéder au planning d\'appel.'}
-            </Text>
+            </p>
             {!submitted && (
-              <Group justify="center" gap="xs" mt="lg" wrap="wrap">
+              <div className="contact-pills">
                 {badges.map((label) => (
-                  <Badge
-                    key={label}
-                    variant="outline"
-                    color="gray"
-                    size="lg"
-                    radius="xl"
-                    leftSection={<IconCircleCheck size={12} />}
-                    styles={{
-                      root: {
-                        backgroundColor: 'rgba(255,255,255,0.08)',
-                        borderColor: 'rgba(255,255,255,0.15)',
-                        color: 'white',
-                      },
-                    }}
-                  >
+                  <span key={label} className="contact-pill">
+                    <IconCircleCheck size={12} />
                     {label}
-                  </Badge>
+                  </span>
                 ))}
-              </Group>
+              </div>
             )}
           </Box>
 
-          <Box px="xl" py="xl">
+          <Box px={{ base: 'md', sm: 'xl' }} py={{ base: 'lg', sm: 'xl' }}>
             {submitted ? (
               <Stack align="center" gap="md">
                 <Box
@@ -105,7 +88,7 @@ export default function FinalCTA() {
                   h={56}
                   style={{
                     borderRadius: '50%',
-                    backgroundColor: 'color-mix(in srgb, var(--ossawayas-success) 12%, transparent)',
+                    backgroundColor: 'rgba(16, 185, 129, 0.12)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -118,11 +101,7 @@ export default function FinalCTA() {
                   Merci. Choisissez votre créneau pour l&apos;appel découverte gratuit.
                 </Text>
                 <Box w="100%" mt="md">
-                  <Cal
-                    calLink={CAL_LINK}
-                    style={{ width: '100%', minHeight: 600, overflow: 'auto' }}
-                    config={{ layout: 'month_view' }}
-                  />
+                  <CalBooking calLink={CAL_LINK} />
                   <Text size="xs" c="dimmed" ta="center" mt="sm">
                     Problème d&apos;affichage ?{' '}
                     <Anchor href={`https://cal.com/${CAL_LINK}`} target="_blank" rel="noopener noreferrer" size="xs">
