@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Container, Title, Text, Box, Group, Badge, Anchor, Button,
+  Container, Title, Text, Box, Group, Anchor, Button,
   Stack, TextInput, Textarea, SimpleGrid, Paper,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -12,6 +12,31 @@ import Cal, { getCalApi } from '@calcom/embed-react';
 const CAL_LINK = 'fabrice-miquet-sage/20min';
 
 const badges = ['Gratuit', '20 minutes', 'Sans engagement'];
+
+function TrustBadge({ label }: { label: string }) {
+  return (
+    <Box
+      component="span"
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '6px 14px',
+        borderRadius: 999,
+        border: '1px solid rgba(255,255,255,0.15)',
+        backgroundColor: 'rgba(255,255,255,0.08)',
+        color: 'white',
+        fontSize: 13,
+        fontWeight: 600,
+        lineHeight: 1.2,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      <IconCircleCheck size={12} style={{ flexShrink: 0 }} />
+      {label}
+    </Box>
+  );
+}
 
 interface LeadForm {
   nom: string;
@@ -77,7 +102,7 @@ export default function FinalCTA() {
     <Box id="contact" py={{ base: 72, md: 96 }} className="section-bg" style={{ borderTop: '1px solid var(--ossawayas-border)' }}>
       <Container size="sm">
         <Paper shadow="lg" radius="xl" withBorder style={{ overflow: 'hidden', backgroundColor: 'var(--ossawayas-card)' }}>
-          <Box bg="navy.7" px="xl" py={40} ta="center" c="white">
+          <Box bg="navy.7" px={{ base: 'md', sm: 'xl' }} py={{ base: 32, sm: 40 }} ta="center" c="white">
             <Title order={2} c="white">
               Prêt à récupérer vos 10h par semaine ?
             </Title>
@@ -87,31 +112,15 @@ export default function FinalCTA() {
                 : 'Remplissez le formulaire pour accéder au planning d\'appel.'}
             </Text>
             {!submitted && (
-              <Group justify="center" gap="xs" mt="lg">
+              <Group justify="center" gap="xs" mt="lg" wrap="wrap">
                 {badges.map((label) => (
-                  <Badge
-                    key={label}
-                    variant="outline"
-                    color="gray"
-                    size="lg"
-                    radius="xl"
-                    leftSection={<IconCircleCheck size={12} />}
-                    styles={{
-                      root: {
-                        backgroundColor: 'rgba(255,255,255,0.08)',
-                        borderColor: 'rgba(255,255,255,0.15)',
-                        color: 'white',
-                      },
-                    }}
-                  >
-                    {label}
-                  </Badge>
+                  <TrustBadge key={label} label={label} />
                 ))}
               </Group>
             )}
           </Box>
 
-          <Box px="xl" py="xl">
+          <Box px={{ base: 'md', sm: 'xl' }} py={{ base: 'lg', sm: 'xl' }}>
             {submitted ? (
               <Stack align="center" gap="md">
                 <Box

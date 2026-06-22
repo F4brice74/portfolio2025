@@ -1,7 +1,7 @@
 'use client';
 
 import { AppShell, Group, Button, Burger, Drawer, Stack, Anchor } from '@mantine/core';
-import { useDisclosure, useWindowScroll } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks';
 import Link from 'next/link';
 import { OssawayasLogo } from '@/components/brand/OssawayasLogo';
 
@@ -17,19 +17,24 @@ export default function Header() {
   const [drawerOpened, { toggle, close }] = useDisclosure(false);
   const [scroll] = useWindowScroll();
   const scrolled = scroll.y > 20;
+  const isMobile = useMediaQuery('(max-width: 48em)');
 
   return (
     <>
       <AppShell.Header
         style={{
-          backgroundColor: scrolled ? 'rgba(250, 249, 247, 0.85)' : 'var(--ossawayas-bg)',
-          backdropFilter: 'blur(12px)',
+          backgroundColor: isMobile
+            ? 'var(--ossawayas-bg)'
+            : scrolled
+              ? 'rgba(250, 249, 247, 0.85)'
+              : 'var(--ossawayas-bg)',
+          backdropFilter: isMobile ? undefined : 'blur(12px)',
           borderBottom: '1px solid var(--ossawayas-border)',
           transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
           boxShadow: scrolled ? 'var(--mantine-shadow-xs)' : 'none',
         }}
       >
-        <Group h="100%" px="xl" justify="space-between" maw={1152} mx="auto" w="100%">
+        <Group h="100%" px={{ base: 'md', sm: 'xl' }} justify="space-between" maw={1152} mx="auto" w="100%">
           <Anchor component={Link} href="/" underline="never" aria-label="Ossawayas — Accueil">
             <OssawayasLogo variant="horizontal" height={36} priority />
           </Anchor>

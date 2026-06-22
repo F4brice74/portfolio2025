@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const NOTION_API_KEY = process.env.NOTION_API_KEY!;
-const NOTION_LEADS_PAGE_ID = process.env.NOTION_LEADS_PAGE_ID!;
+const NOTION_API_KEY = process.env.NOTION_API_KEY?.trim();
+const NOTION_LEADS_PAGE_ID = process.env.NOTION_LEADS_PAGE_ID?.trim();
 
 interface LeadPayload {
   // Format natif (formulaire Mantine)
@@ -120,6 +120,13 @@ function callout(text: string, color: string) {
 
 export async function POST(req: NextRequest) {
   try {
+    if (!NOTION_API_KEY || !NOTION_LEADS_PAGE_ID) {
+      return NextResponse.json(
+        { success: false, error: 'Configuration serveur incomplète' },
+        { status: 503 }
+      );
+    }
+
     const contentType = req.headers.get('content-type') || '';
     let payload: LeadPayload;
 
