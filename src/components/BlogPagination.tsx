@@ -26,7 +26,7 @@ export default function BlogPagination({ totalPages, currentPage }: BlogPaginati
         }
 
         const queryString = params.toString()
-        const newUrl = queryString ? `/?${queryString}` : '/'
+        const newUrl = queryString ? `/blog?${queryString}` : '/blog'
 
         router.push(newUrl)
     }
@@ -39,8 +39,8 @@ export default function BlogPagination({ totalPages, currentPage }: BlogPaginati
                 onChange={handlePageChange}
                 styles={{
                     control: {
-                        '&[dataActive]': {
-                            backgroundColor: 'var(--mantine-color-blue-6)',
+                        '&[data-active]': {
+                            backgroundColor: 'var(--ossawayas-navy)',
                         },
                     },
                 }}

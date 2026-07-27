@@ -71,7 +71,7 @@ export function toArticle(dbArticle: DbArticleWithCategory): Article {
  * Convertit plusieurs articles DB en articles unifiés
  */
 export function toArticles(dbArticles: DbArticleWithCategory[]): Article[] {
-  return dbArticles.map(toArticle);
+  return dbArticles.map(toArticle).sort((a, b) => new Date(b.updatedAt ?? '').getTime() - new Date(a.updatedAt ?? '').getTime());
 }
 
 /**

@@ -1,9 +1,15 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { UserButton } from "@clerk/nextjs";
+import type { Metadata } from "next";
 import { Container, Title, Group, Button, Alert } from "@mantine/core";
 import { IconArrowLeft, IconSettings, IconArticle, IconDashboard, IconAlertCircle, IconCategory } from "@tabler/icons-react";
 import Link from "next/link";
 import { isAdmin } from "@/lib/auth/admin-check";
+import { AdminSignIn } from "@/components/admin/AdminSignIn";
+
+export const metadata: Metadata = {
+    robots: { index: false, follow: false },
+};
 
 export default async function AdminLayout({
     children,
@@ -14,7 +20,7 @@ export default async function AdminLayout({
     const { userId } = await auth();
 
     if (!userId) {
-        redirect("/");
+        return <AdminSignIn />;
     }
 
     // Vérifier si l'utilisateur est admin
@@ -118,6 +124,7 @@ export default async function AdminLayout({
                             >
                                 Retour au site
                             </Button>
+                            <UserButton afterSignOutUrl="/" />
                         </Group>
                     </Group>
                 </Container>

@@ -25,6 +25,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@calcom/embed-react": "^1.5.3",
     "@clerk/nextjs": "^6.32.2",
     "@mantine/core": "^8.2.8",
     "@mantine/form": "^8.2.8",
@@ -37,7 +38,7 @@
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.5",
     "drizzle-orm": "^0.44.5",
-    "next": "15.5.2",
+    "next": "15.3.9",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
