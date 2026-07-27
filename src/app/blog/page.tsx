@@ -3,7 +3,7 @@ import BlogSection from '@/components/landing/BlogSection';
 import { ArticleService, CategoryService } from '@/lib/articles';
 import type { Metadata } from 'next';
 
-const ARTICLES_PER_PAGE = 6;
+const ARTICLES_PER_PAGE = 15;
 
 export const metadata: Metadata = {
   title: 'Blog',

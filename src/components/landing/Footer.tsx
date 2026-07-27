@@ -1,4 +1,4 @@
-import { Box, Container, SimpleGrid, Text, Anchor, Stack, Divider } from '@mantine/core';
+import { Box, Container, SimpleGrid, Text, Anchor, Stack, Divider, Group } from '@mantine/core';
 import Link from 'next/link';
 import { OssawayasLogo } from '@/components/brand/OssawayasLogo';
 
@@ -44,9 +44,24 @@ export default function Footer() {
 
         <Divider color="rgba(255,255,255,0.1)" mb="md" />
 
-        <Text ta="center" size="xs" c="gray.6">
-          © {new Date().getFullYear()} Ossawayas. Tous droits réservés.
-        </Text>
+        <Group justify="center" gap="xs">
+          <Text ta="center" size="xs" c="gray.6">
+            © {new Date().getFullYear()} Ossawayas. Tous droits réservés.
+          </Text>
+          <Text size="xs" c="gray.7" aria-hidden>
+            ·
+          </Text>
+          <Anchor
+            component={Link}
+            href="/admin"
+            size="xs"
+            c="gray.7"
+            underline="never"
+            style={{ opacity: 0.55 }}
+          >
+            Admin
+          </Anchor>
+        </Group>
       </Container>
     </Box>
   );

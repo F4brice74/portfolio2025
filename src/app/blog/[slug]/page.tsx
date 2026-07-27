@@ -1,12 +1,13 @@
-import { Anchor, Badge, Box, Breadcrumbs, Button, Container, Divider, Group, Stack, Text, Title } from "@mantine/core"
+import { Anchor, Badge, Box, Breadcrumbs, Button, Container, Divider, Group, Paper, Stack, Text, Title } from "@mantine/core"
 import { IconArrowLeft, IconCalendar, IconClock, IconUser } from "@tabler/icons-react"
 import Link from "next/link"
 import type { Metadata } from "next"
 import { ArticleService } from "@/lib/articles"
+import { ArticleFeaturedImage } from "@/components/ArticleFeaturedImage"
 import { MarkdownRenderer } from "@/components/MarkdownRenderer"
 import LandingShell from "@/components/landing/LandingShell"
 import { JsonLd } from "@/components/seo/JsonLd"
-import { absoluteUrl } from "@/lib/seo/config"
+import { ARTICLE_OG_HEIGHT, ARTICLE_OG_WIDTH, resolveArticleOgImage } from "@/lib/images"
 import { articleSchema, breadcrumbSchema, buildGraphSchema } from "@/lib/seo/schema"
 
 type BlogPostPageProps = {
@@ -145,17 +146,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <Divider mb="xl" />
 
                     {article.featuredImage && (
-                        <Box mb="xl">
-                            <Box
-                                style={{
-                                    height: 400,
-                                    backgroundImage: `url(${article.featuredImage})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    borderRadius: 'var(--mantine-radius-lg)',
-                                }}
+                        <Paper
+                            mb="xl"
+                            shadow="sm"
+                            radius="lg"
+                            withBorder
+                            style={{ overflow: 'hidden' }}
+                        >
+                            <ArticleFeaturedImage
+                                src={article.featuredImage}
+                                alt={article.title}
+                                variant="hero"
+                                priority
                             />
-                        </Box>
+                        </Paper>
                     )}
 
                     <Box>
@@ -204,9 +208,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
             }
         }
 
-        const ogImage = article.featuredImage
-            ? absoluteUrl(article.featuredImage)
-            : absoluteUrl('/opengraph-image')
+        const ogImage = resolveArticleOgImage(article)
 
         return {
             title: article.title,
@@ -223,13 +225,13 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
                 modifiedTime: article.updatedAt,
                 authors: [article.authorName],
                 tags: article.tags,
-                images: [{ url: ogImage, width: 1200, height: 630, alt: article.title }],
+                images: [{ url: ogImage.url, width: ARTICLE_OG_WIDTH, height: ARTICLE_OG_HEIGHT, alt: article.title }],
             },
             twitter: {
                 card: 'summary_large_image',
                 title: article.title,
                 description: article.excerpt,
-                images: [ogImage],
+                images: [ogImage.url],
             },
         }
     } catch (error) {

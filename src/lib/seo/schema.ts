@@ -1,4 +1,5 @@
 import type { Article } from '@/lib/articles/types';
+import { resolveArticleOgImage } from '@/lib/images';
 import { absoluteUrl, SITE_DESCRIPTION, SITE_EMAIL, SITE_NAME, getSiteUrl } from './config';
 
 type BreadcrumbItem = {
@@ -61,9 +62,7 @@ export function articleSchema(article: Article) {
       '@type': 'WebPage',
       '@id': absoluteUrl(`/blog/${article.slug}`),
     },
-    ...(article.featuredImage
-      ? { image: [absoluteUrl(article.featuredImage)] }
-      : {}),
+    image: [resolveArticleOgImage(article).url],
     ...(article.tags.length > 0
       ? { keywords: article.tags.join(', ') }
       : {}),

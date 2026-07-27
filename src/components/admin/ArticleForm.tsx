@@ -234,8 +234,9 @@ export function ArticleForm({ initialData, isEditing = false, articleId, onArtic
                             </GridCol>
                             <GridCol span={{ base: 12, md: 4 }}>
                                 <TextInput
-                                    label="Image à la une (URL)"
-                                    placeholder="https://example.com/image.jpg"
+                                    label="Image à la une (URL Cloudinary)"
+                                    placeholder="https://res.cloudinary.com/..."
+                                    description="Format recommandé : 1600×840 px (ratio 1.91:1). Servie en WebP/AVIF sur le site et en 1200×630 pour LinkedIn."
                                     {...form.getInputProps('featuredImage')}
                                 />
                             </GridCol>

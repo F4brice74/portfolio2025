@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 import {
   Container, Title, Text, Box, Anchor, Button,
   Stack, TextInput, Textarea, SimpleGrid, Paper,
+  Flex,
+  Badge,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCircleCheck, IconSend, IconCalendar } from '@tabler/icons-react';
@@ -69,14 +71,13 @@ export default function FinalCTA() {
                 : 'Remplissez le formulaire pour accéder au planning d\'appel.'}
             </p>
             {!submitted && (
-              <div className="contact-pills">
+               <Flex align="center" justify="center" gap="md" style={{ marginTop: '1rem' }}>
                 {badges.map((label) => (
-                  <span key={label} className="contact-pill">
-                    <IconCircleCheck size={12} />
+                  <Badge key={label}>                  
                     {label}
-                  </span>
+                  </Badge>
                 ))}
-              </div>
+               </Flex>
             )}
           </Box>
 

@@ -33,8 +33,11 @@ test.describe('Blog Page - US-002', () => {
     const firstArticle = articleCards.first();
     await expect(firstArticle).toBeVisible();
     
-    // Check article image
-    await expect(firstArticle.locator('img')).toBeVisible();
+    // Check article image when a featured image is configured
+    const articleImage = firstArticle.getByTestId('article-image');
+    if (await articleImage.count()) {
+      await expect(articleImage.locator('img')).toBeVisible();
+    }
     
     // Check article title (using the actual structure)
     await expect(firstArticle.locator('p[data-size="lg"]')).toHaveCount(1);

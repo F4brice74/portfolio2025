@@ -3,6 +3,7 @@ import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { ClerkProvider } from '@clerk/nextjs';
 import { createOssawayasTheme } from '@/theme/ossawayas';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { defaultMetadata } from '@/lib/seo/config';
@@ -41,9 +42,11 @@ export default function RootLayout({
         <JsonLd data={siteSchema} />
       </head>
       <body className={`${inter.variable} ${fraunces.variable} ${inter.className}`} suppressHydrationWarning>
-        <MantineProvider theme={theme} defaultColorScheme="light">
-          {children}
-        </MantineProvider>
+        <ClerkProvider>
+          <MantineProvider theme={theme} defaultColorScheme="light">
+            {children}
+          </MantineProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 import { Article } from '@/lib/articles/types';
-import { Badge, Card, CardSection, Group, Image, Stack, Text } from '@mantine/core';
+import { ArticleFeaturedImage } from '@/components/ArticleFeaturedImage';
+import { Badge, Card, CardSection, Group, Stack, Text } from '@mantine/core';
 import Link from 'next/link';
 import { IconClock } from '@tabler/icons-react';
 
@@ -23,14 +24,15 @@ export default function ArticleCard({ article }: { article: Article }) {
       component={Link}
       href={`/blog/${article.slug}`}
     >
-      <CardSection>
-        <Image
-          src={article.featuredImage || `https://picsum.photos/400/200?random=${article.id}`}
-          height={200}
-          alt={article.title}
-          fit="cover"
-        />
-      </CardSection>
+      {article.featuredImage && (
+        <CardSection>
+          <ArticleFeaturedImage
+            src={article.featuredImage}
+            alt={article.title}
+            variant="card"
+          />
+        </CardSection>
+      )}
 
       <Stack gap="sm" style={{ flex: 1 }}>
         <Group justify="space-between" mt="md">
