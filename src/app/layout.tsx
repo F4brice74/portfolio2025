@@ -3,6 +3,8 @@ import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+// ‼️ styles du carousel à importer après ceux du package core
+import '@mantine/carousel/styles.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { createOssawayasTheme } from '@/theme/ossawayas';
 import { JsonLd } from '@/components/seo/JsonLd';

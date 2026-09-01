@@ -141,3 +141,79 @@ body {
   line-height: 1.5;
   color: var(--mantine-color-dimmed);
 }
+
+/* Carrousel articles (@mantine/carousel) — indicateurs déportés sous les cartes */
+
+/* Sur mobile le swipe suffit : les flèches masqueraient le contenu des cartes */
+@media (max-width: 47.99em) {
+  .blog-carousel .blog-carousel-controls {
+    display: none;
+  }
+}
+
+/* Flèches alignées sur la bande image des cartes (ratio 1200/630, largeur de carte
+   plafonnée par le Container lg) pour ne jamais recouvrir le texte */
+.blog-carousel .blog-carousel-controls {
+  top: 84px;
+}
+
+.blog-carousel .blog-carousel-control {
+  background-color: var(--ossawayas-card);
+  border: 1px solid var(--ossawayas-border);
+  color: var(--ossawayas-navy);
+  box-shadow: var(--mantine-shadow-md);
+  opacity: 1;
+}
+
+.blog-carousel .blog-carousel-indicators {
+  bottom: -32px;
+}
+
+.blog-carousel .blog-carousel-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background-color: var(--ossawayas-border);
+  box-shadow: none;
+  opacity: 1;
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.blog-carousel .blog-carousel-indicator[data-active] {
+  width: 26px;
+  background-color: var(--ossawayas-brand);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blog-carousel .blog-carousel-indicator {
+    transition: none;
+  }
+}
+
+.uc-figure {
+  font-family: var(--font-fraunces), Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ossawayas-navy);
+}
+
+.uc-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.uc-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uc-card {
+    transition: none;
+  }
+
+  .uc-card:hover {
+    transform: none;
+  }
+}

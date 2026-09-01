@@ -19,7 +19,7 @@ const offers = [
   {
     icon: IconBolt,
     title: 'Automatisation Clé en Main',
-    price: 'à partir de 1 500 €',
+    price: 'à partir de 1 490 €',
     description: 'Un processus douloureux transformé en flux automatisé. Solution sur mesure livrée documentée et avec formation.',
     duration: '3 à 5 semaines',
     cta: 'Réserver un appel',
@@ -29,12 +29,12 @@ const offers = [
   {
     icon: IconRobot,
     title: 'Agent IA Sur Mesure',
-    price: 'à partir de 2 500 €',
-    description: 'Un assistant IA connecté à vos outils métier. Qualification de leads, traitement de demandes, génération de contenus.',
+    price: 'à partir de 2 490 €',
+    description: 'Développeemnt d\'un assistant IA connecté à vos outils métier existants. Formation et support inclus.',
     duration: '6 à 10 semaines',
     cta: 'En savoir plus',
     highlighted: false,
-    points: ['IA connectée à vos outils', 'Qualification de leads', 'Support inclus'],
+    points: ['IA connectée à vos outils', 'Documentation incluse', 'Formation de vos équipes', 'Support inclus'],
   },
 ];
 
@@ -49,7 +49,7 @@ export default function OffersSection() {
       <Container size="lg">
         <SectionHeader
           label="Nos offres"
-          title="Ce que je construis pour vous"
+          title="Ce que nous construisons pour vous"
           description="Des solutions concrètes pour automatiser votre activité, à votre rythme et selon vos priorités."
         />
 
