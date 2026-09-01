@@ -18,7 +18,7 @@ const steps = [
   {
     icon: IconCode,
     title: 'Développement',
-    desc: 'Je construis la solution avec des points réguliers.',
+    desc: 'Nous construisons la solution avec des points réguliers.',
   },
   {
     icon: IconPackage,

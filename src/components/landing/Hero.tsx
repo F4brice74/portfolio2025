@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { OssawayasLogo } from '@/components/brand/OssawayasLogo';
 
 const stats = [
-  { value: '10h', label: 'économisées par semaine' },
+  { value: '+10h', label: 'économisées par semaine' },
   { value: '100%', label: 'satisfaction client' },
   { value: '3×', label: 'ROI moyen constaté' },
   { value: '< 5 sem.', label: 'délai de livraison' },
