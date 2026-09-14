@@ -14,13 +14,13 @@ const stats = [
 
 export default function Hero() {
   return (
-    <Box pos="relative" pt={{ base: 56, md: 60 }} pb={64} className="section-bg" style={{ overflow: 'hidden' }}>
+    <Box pos="relative" pt={{ base: 56, md: 60 }} pb={64} className="section-bg-hero" style={{ overflow: 'hidden' }}>
       <Box className="hero-grid-bg" aria-hidden />
 
       <Container size="lg" pos="relative" style={{ zIndex: 1 }}>
         <Box maw={720} mx="auto" ta="center">
           <Box mb="lg" w="100%" style={{ display: 'flex', justifyContent: 'center' }}>
-            <OssawayasLogo variant="horizontal" height={100} priority />
+            <OssawayasLogo variant="horizontal" height={100} light priority />
           </Box>
 
           <Title
@@ -29,13 +29,14 @@ export default function Hero() {
             style={{
               fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
               lineHeight: 1.1,
+              color: 'white',
             }}
           >
             Automatisez plusieurs heures de travail{' '}
             <Text span c="brand.5" inherit>par semaine.</Text>
           </Title>
 
-          <Text size="lg" c="gray.7" maw={580} mx="auto" mb={36} lh={1.7}>
+          <Text size="lg" c="white" maw={580} mx="auto" mb={36} lh={1.7}>
             Ossawayas conçoit des systèmes d&apos;IA et d&apos;automatisation sur mesure
             pour les TPE, artisans, indépendants et PME. Vous gagnez du temps,
             vos équipes se concentrent sur ce qui compte vraiment.
@@ -56,7 +57,7 @@ export default function Hero() {
               href="/#offres"
               variant="outline"
               size="lg"
-              color="gray"
+              color="white"
             >
               Voir les offres
             </Button>

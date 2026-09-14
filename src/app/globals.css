@@ -82,6 +82,9 @@ body {
   font-family: var(--font-fraunces), Georgia, 'Times New Roman', serif;
 }
 
+.section-bg-hero {
+  background-color: var(--ossawayas-navy);
+}
 .section-bg {
   background-color: var(--ossawayas-bg);
 }

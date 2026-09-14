@@ -30,7 +30,7 @@ const offers = [
     icon: IconRobot,
     title: 'Agent IA Sur Mesure',
     price: 'à partir de 2 490 €',
-    description: 'Développeemnt d\'un assistant IA connecté à vos outils métier existants. Formation et support inclus.',
+    description: 'Développement d\'un assistant IA connecté à vos outils métier existants. Formation et support inclus.',
     duration: '6 à 10 semaines',
     cta: 'En savoir plus',
     highlighted: false,
@@ -94,7 +94,7 @@ export default function OffersSection() {
                   </ThemeIcon>
 
                   <Title order={3} mb={4}>{offer.title}</Title>
-                  <Text fw={600} size="lg" c="blue.6" mb="sm">{offer.price}</Text>
+                  {/* <Text fw={600} size="lg" c="blue.6" mb="sm">{offer.price}</Text> */}
                   <Text c="dimmed" size="sm" lh={1.6} mb="md">{offer.description}</Text>
 
                   <List

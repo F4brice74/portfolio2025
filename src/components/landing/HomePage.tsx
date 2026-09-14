@@ -25,8 +25,8 @@ export default function HomePage({ latestArticles }: HomePageProps) {
         <LatestArticlesSection articles={latestArticles} />
         <OffersSection />
         <ProcessSection />
-        <UseCasesSection />
-        <TestimonialsSection />
+        <UseCasesSection />       
+        {/* <TestimonialsSection /> */}
         <FinalCTA />
         <Footer />
       </AppShell.Main>
