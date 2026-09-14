@@ -4,6 +4,7 @@ import {
 import { IconSearch, IconBolt, IconRobot, IconCheck } from '@tabler/icons-react';
 import Link from 'next/link';
 import SectionHeader from '@/components/landing/SectionHeader';
+import Reveal from '@/components/landing/Reveal';
 
 const offers = [
   {
@@ -54,36 +55,39 @@ export default function OffersSection() {
         />
 
         <SimpleGrid cols={{ base: 1, md: 3 }} spacing="lg" style={{ overflow: 'visible' }}>
-          {offers.map((offer) => {
+          {offers.map((offer, index) => {
             const Icon = offer.icon;
             return (
-              <Box key={offer.title} pos="relative" pt={offer.highlighted ? 14 : 0}>
-                {offer.highlighted && (
-                  <Badge
-                    color="brand"
-                    variant="filled"
-                    pos="absolute"
-                    top={0}
-                    left={28}
-                    style={{ zIndex: 2 }}
+              <Reveal key={offer.title} delay={index * 90}>
+                <Box pos="relative" pt={offer.highlighted ? 14 : 0}>
+                  {offer.highlighted && (
+                    <Badge
+                      color="brand"
+                      variant="filled"
+                      pos="absolute"
+                      top={0}
+                      left={28}
+                      style={{ zIndex: 2 }}
+                    >
+                      Recommandé
+                    </Badge>
+                  )}
+                  <Card
+                    className="motion-card"
+                    shadow={offer.highlighted ? 'md' : 'sm'}
+                    padding="xl"
+                    radius="lg"
+                    withBorder
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      borderColor: offer.highlighted ? 'var(--ossawayas-brand)' : undefined,
+                      borderWidth: offer.highlighted ? 2 : 1,
+                      overflow: 'visible',
+                    }}
                   >
-                    Recommandé
-                  </Badge>
-                )}
-                <Card
-                  shadow={offer.highlighted ? 'md' : 'sm'}
-                  padding="xl"
-                  radius="lg"
-                  withBorder
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    borderColor: offer.highlighted ? 'var(--ossawayas-brand)' : undefined,
-                    borderWidth: offer.highlighted ? 2 : 1,
-                    overflow: 'visible',
-                  }}
-                >
                   <ThemeIcon
+                    className="motion-icon"
                     size={44}
                     radius="md"
                     variant={offer.highlighted ? 'filled' : 'light'}
@@ -115,6 +119,7 @@ export default function OffersSection() {
                   <Button
                     component={Link}
                     href="/#contact"
+                    className="motion-button"
                     variant={offer.highlighted ? 'filled' : 'outline'}
                     color={offer.highlighted ? 'brand' : 'gray'}
                     fullWidth
@@ -122,8 +127,9 @@ export default function OffersSection() {
                   >
                     {offer.cta}
                   </Button>
-                </Card>
-              </Box>
+                  </Card>
+                </Box>
+              </Reveal>
             );
           })}
         </SimpleGrid>

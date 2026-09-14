@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconCircleCheck, IconSend, IconCalendar } from '@tabler/icons-react';
+import Reveal from '@/components/landing/Reveal';
 
 const CAL_LINK = 'fabrice-miquet-sage/20min';
 const badges = ['Gratuit', '20 minutes', 'Sans engagement'];
@@ -62,7 +63,8 @@ export default function FinalCTA() {
   return (
     <Box id="contact" py={{ base: 72, md: 96 }} className="section-bg" style={{ borderTop: '1px solid var(--ossawayas-border)' }}>
       <Container size="sm">
-        <Paper shadow="lg" radius="xl" withBorder style={{ backgroundColor: 'var(--ossawayas-card)' }}>
+        <Reveal>
+          <Paper shadow="lg" radius="xl" withBorder style={{ backgroundColor: 'var(--ossawayas-card)' }}>
           <Box className="contact-banner" px={{ base: 'md', sm: 'xl' }} py={{ base: 32, sm: 40 }}>
             <h2>Prêt à récupérer vos 10h par semaine ?</h2>
             <p>
@@ -136,7 +138,7 @@ export default function FinalCTA() {
                     {...form.getInputProps('besoins')}
                   />
                   {error && <Text c="red" size="sm">{error}</Text>}
-                  <Button type="submit" size="lg" color="navy" loading={loading} rightSection={<IconSend size={16} />} fullWidth>
+                  <Button className="motion-button" type="submit" size="lg" color="navy" loading={loading} rightSection={<IconSend size={16} />} fullWidth>
                     Accéder au planning
                   </Button>
                   <Text size="xs" c="dimmed" ta="center">
@@ -147,7 +149,8 @@ export default function FinalCTA() {
               </form>
             )}
           </Box>
-        </Paper>
+          </Paper>
+        </Reveal>
       </Container>
     </Box>
   );

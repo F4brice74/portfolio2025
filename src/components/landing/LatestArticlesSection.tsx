@@ -9,6 +9,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import Link from 'next/link';
 import ArticleCard from '@/components/ArticleCard';
 import SectionHeader from '@/components/landing/SectionHeader';
+import Reveal from '@/components/landing/Reveal';
 import type { Article } from '@/lib/articles/types';
 
 interface LatestArticlesSectionProps {
@@ -41,32 +42,34 @@ export default function LatestArticlesSection({ articles }: LatestArticlesSectio
           description="Nos derniers conseils et retours d'expérience pour faire gagner du temps à votre activité."
         />
 
-        <Carousel
-          aria-label="Derniers articles du blog"
-          slideSize={{ base: '86%', sm: '50%', md: '33.333333%' }}
-          slideGap="lg"
-          emblaOptions={{ loop: true, align: 'start' }}
-          plugins={plugins}
-          withControls
-          withIndicators
-          controlSize={38}
-          controlsOffset="xs"
-          previousControlProps={{ 'aria-label': 'Articles précédents' }}
-          nextControlProps={{ 'aria-label': 'Articles suivants' }}
-          classNames={{
-            root: 'blog-carousel',
-            controls: 'blog-carousel-controls',
-            control: 'blog-carousel-control',
-            indicators: 'blog-carousel-indicators',
-            indicator: 'blog-carousel-indicator',
-          }}
-        >
-          {articles.map((article) => (
-            <Carousel.Slide key={article.id}>
-              <ArticleCard article={article} />
-            </Carousel.Slide>
-          ))}
-        </Carousel>
+        <Reveal>
+          <Carousel
+            aria-label="Derniers articles du blog"
+            slideSize={{ base: '86%', sm: '50%', md: '33.333333%' }}
+            slideGap="lg"
+            emblaOptions={{ loop: true, align: 'start' }}
+            plugins={plugins}
+            withControls
+            withIndicators
+            controlSize={38}
+            controlsOffset="xs"
+            previousControlProps={{ 'aria-label': 'Articles précédents' }}
+            nextControlProps={{ 'aria-label': 'Articles suivants' }}
+            classNames={{
+              root: 'blog-carousel',
+              controls: 'blog-carousel-controls',
+              control: 'blog-carousel-control',
+              indicators: 'blog-carousel-indicators',
+              indicator: 'blog-carousel-indicator',
+            }}
+          >
+            {articles.map((article) => (
+              <Carousel.Slide key={article.id}>
+                <ArticleCard article={article} />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </Reveal>
 
         <Group justify="center" mt={64}>
           <Button
@@ -74,6 +77,7 @@ export default function LatestArticlesSection({ articles }: LatestArticlesSectio
             href="/blog"
             variant="outline"
             color="gray"
+            className="motion-button"
             rightSection={<IconArrowRight size={16} />}
           >
             Voir tous les articles

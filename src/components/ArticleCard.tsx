@@ -15,6 +15,7 @@ const formatDate = (date: string) => {
 export default function ArticleCard({ article }: { article: Article }) {
   return (
     <Card
+      className="motion-card"
       shadow="sm"
       padding="lg"
       radius="lg"

@@ -19,6 +19,38 @@ html {
   scroll-behavior: smooth;
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-enter {
+  opacity: 0;
+  animation: hero-reveal 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--hero-delay, 0ms);
+}
+
+@keyframes hero-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 #contact {
   scroll-margin-top: 80px;
 }
@@ -104,6 +136,14 @@ body {
   background-size: 32px 32px;
   mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 60%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 0%, #000 60%, transparent 100%);
+  animation: hero-grid-drift 16s ease-in-out infinite alternate;
+}
+
+@keyframes hero-grid-drift {
+  to {
+    transform: scale(1.06) translateY(8px);
+    opacity: 0.72;
+  }
 }
 
 .hero-stats-grid {
@@ -127,6 +167,75 @@ body {
   background-color: var(--ossawayas-card);
   padding: 1.75rem 1rem;
   text-align: center;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+
+.hero-stats-cell:hover {
+  position: relative;
+  z-index: 1;
+  transform: translateY(-4px);
+  background-color: color-mix(in srgb, var(--ossawayas-brand) 5%, white);
+}
+
+.motion-card {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.motion-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: var(--mantine-shadow-lg);
+}
+
+.motion-card:hover .motion-icon {
+  transform: rotate(-4deg) scale(1.08);
+}
+
+.motion-icon {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.motion-button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.motion-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+.motion-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.nav-link-motion {
+  position: relative;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-link-motion::after {
+  position: absolute;
+  right: 0;
+  bottom: -6px;
+  left: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--ossawayas-brand);
+  content: '';
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.25s ease;
+}
+
+.nav-link-motion:hover {
+  transform: translateY(-1px);
+}
+
+.nav-link-motion:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .hero-stats-value {
@@ -188,6 +297,44 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .hero-enter {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+
+  .hero-grid-bg {
+    animation: none;
+  }
+
+  .motion-card,
+  .motion-button,
+  .motion-icon,
+  .nav-link-motion,
+  .hero-stats-cell {
+    transition: none;
+  }
+
+  .motion-card:hover,
+  .motion-button:hover,
+  .motion-button:active,
+  .nav-link-motion:hover,
+  .hero-stats-cell:hover {
+    transform: none;
+  }
+
+  .motion-card:hover .motion-icon {
+    transform: none;
+  }
+
   .blog-carousel .blog-carousel-indicator {
     transition: none;
   }

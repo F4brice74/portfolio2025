@@ -6,6 +6,7 @@ import {
   IconX, IconCheck, IconBolt, IconArrowRight, IconArrowDown,
 } from '@tabler/icons-react';
 import SectionHeader from '@/components/landing/SectionHeader';
+import Reveal from '@/components/landing/Reveal';
 
 const useCases = [
   {
@@ -156,21 +157,21 @@ export default function UseCasesSection() {
         />
 
         <Stack gap="lg">
-          {useCases.map((uc) => {
+          {useCases.map((uc, index) => {
             const Icon = uc.icon;
             const saved = uc.before.hours - uc.after.hours;
             return (
-              <Card
-                key={uc.sector}
-                className="uc-card"
-                shadow="sm"
-                padding="xl"
-                radius="lg"
-                withBorder
-              >
+              <Reveal key={uc.sector} delay={index * 70}>
+                <Card
+                  className="uc-card motion-card"
+                  shadow="sm"
+                  padding="xl"
+                  radius="lg"
+                  withBorder
+                >
                 <Group justify="space-between" align="center" mb="lg" gap="md">
                   <Group gap="md" wrap="nowrap">
-                    <ThemeIcon size={44} radius="md" variant="light" color="navy">
+                    <ThemeIcon className="motion-icon" size={44} radius="md" variant="light" color="navy">
                       <Icon size={22} />
                     </ThemeIcon>
                     <Box>
@@ -278,7 +279,8 @@ export default function UseCasesSection() {
                     </Panel>
                   </Grid.Col>
                 </Grid>
-              </Card>
+                </Card>
+              </Reveal>
             );
           })}
         </Stack>

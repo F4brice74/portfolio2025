@@ -3,6 +3,7 @@ import {
   IconPhone, IconFileText, IconCode, IconPackage,
 } from '@tabler/icons-react';
 import SectionHeader from '@/components/landing/SectionHeader';
+import Reveal from '@/components/landing/Reveal';
 
 const steps = [
   {
@@ -54,16 +55,25 @@ export default function ProcessSection() {
           />
 
           <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="lg" pos="relative" style={{ zIndex: 1 }}>
-            {steps.map((step) => {
+            {steps.map((step, index) => {
               const Icon = step.icon;
               return (
-                <Card key={step.title} padding="lg" radius="lg" withBorder shadow="sm" style={{ backgroundColor: 'var(--ossawayas-card)' }}>
-                  <ThemeIcon size={48} radius="xl" variant="filled" color="navy" mb="md">
-                    <Icon size={22} />
-                  </ThemeIcon>
-                  <Title order={3} size="h4" mb="xs">{step.title}</Title>
-                  <Text c="dimmed" size="sm" lh={1.6}>{step.desc}</Text>
-                </Card>
+                <Reveal key={step.title} delay={index * 80}>
+                  <Card
+                    className="motion-card"
+                    padding="lg"
+                    radius="lg"
+                    withBorder
+                    shadow="sm"
+                    style={{ backgroundColor: 'var(--ossawayas-card)' }}
+                  >
+                    <ThemeIcon className="motion-icon" size={48} radius="xl" variant="filled" color="navy" mb="md">
+                      <Icon size={22} />
+                    </ThemeIcon>
+                    <Title order={3} size="h4" mb="xs">{step.title}</Title>
+                    <Text c="dimmed" size="sm" lh={1.6}>{step.desc}</Text>
+                  </Card>
+                </Reveal>
               );
             })}
           </SimpleGrid>

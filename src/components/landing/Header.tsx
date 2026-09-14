@@ -25,7 +25,7 @@ export default function Header() {
         }}
       >
         <Group h="100%" px={{ base: 'md', sm: 'xl' }} justify="space-between" maw={1152} mx="auto" w="100%">
-          <Anchor component={Link} href="/" underline="never" aria-label="Ossawayas — Accueil">
+          <Anchor component={Link} href="/" underline="never" aria-label="Ossawayas — Accueil" className="motion-button">
             <OssawayasLogo variant="horizontal" height={36} priority />
           </Anchor>
 
@@ -39,13 +39,14 @@ export default function Header() {
                 c="dimmed"
                 fw={500}
                 size="sm"
+                className="nav-link-motion"
               >
                 {link.label}
               </Anchor>
             ))}
           </Group>
 
-          <Button component={Link} href="/#contact" color="navy" visibleFrom="md">
+          <Button component={Link} href="/#contact" color="navy" visibleFrom="md" className="motion-button">
             Réserver un appel
           </Button>
 
